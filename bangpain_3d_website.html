@@ -1264,13 +1264,22 @@ nav {
   padding: 120px 80px 80px !important;
 }
 .hero h1 { line-height: 1.0 !important; }
-.hero h1 .line1, .hero h1 .line3 { color: white !important; font-weight: 700 !important; }
-.hero h1 .line2 {
-  background: linear-gradient(90deg, var(--gold-light), var(--gold)) !important;
+.hero h1 .line1, .hero h1 .line3 {
+  background: linear-gradient(90deg, #4de8f0, #00e5c8, #38f0ff) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  font-style: italic !important;
+  filter: drop-shadow(0 0 16px rgba(0,229,200,0.75)) drop-shadow(0 0 42px rgba(56,240,255,0.5)) !important;
+  font-weight: 800 !important;
+}
+.hero h1 .line2 {
+  background: linear-gradient(90deg, #00f5cc, #38f0ff, #00d8f0) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-style: normal !important;
+  filter: drop-shadow(0 0 22px rgba(0,245,204,0.85)) drop-shadow(0 0 55px rgba(56,240,255,0.55)) !important;
+  font-weight: 900 !important;
 }
 .hero-badge {
   background: rgba(201,169,110,0.12) !important;
