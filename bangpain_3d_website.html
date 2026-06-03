@@ -1330,7 +1330,7 @@ section { position: relative; z-index: 1; }
 #process       { background: var(--bg) !important; padding: 120px 80px !important; }
 #why           { background: var(--cream) !important; padding: 120px 80px !important; }
 #gallery       { background: var(--bg) !important; padding: 120px 80px !important; }
-#contact       { background: var(--navy) !important; padding: 120px 80px !important; }
+#contact       { background: linear-gradient(135deg, #0bbfa8 0%, #0dd6c8 40%, #18c9e8 100%) !important; padding: 120px 80px !important; }
 
 /* ── Section header ── */
 .section-tag {
@@ -1447,31 +1447,32 @@ section { position: relative; z-index: 1; }
 }
 .gallery-cta-btn { border-radius: 2px !important; background: var(--gold) !important; color: var(--navy) !important; font-size: 12px !important; letter-spacing: 0.1em !important; text-transform: uppercase !important; }
 
-/* ── CONTACT (dark bg) ── */
-#contact .section-header h2 { color: white !important; }
-#contact .section-header h2 span { font-style: italic !important; color: var(--gold-light) !important; -webkit-text-fill-color: var(--gold-light) !important; background: none !important; }
-#contact .section-tag { color: var(--gold) !important; }
-#contact .section-header p { color: rgba(255,255,255,0.5) !important; }
-.contact-brand { color: white !important; }
-.contact-brand span { color: var(--gold) !important; }
-.contact-tagline { color: rgba(255,255,255,0.45) !important; }
+/* ── CONTACT (bright teal bg) ── */
+#contact .section-header h2 { color: #fff !important; text-shadow: 0 2px 20px rgba(0,0,0,0.15) !important; }
+#contact .section-header h2 span { font-style: italic !important; color: #fff !important; -webkit-text-fill-color: #fff !important; background: none !important; opacity:0.85; }
+#contact .section-tag { color: rgba(255,255,255,0.85) !important; }
+#contact .section-header p { color: rgba(255,255,255,0.75) !important; }
+.contact-brand { color: #fff !important; }
+.contact-brand span { color: #fff !important; font-style: italic; }
+.contact-tagline { color: rgba(255,255,255,0.7) !important; }
 .contact-item {
-  background: rgba(255,255,255,0.05) !important;
-  border: 1px solid rgba(255,255,255,0.07) !important;
-  border-radius: 2px !important;
-  backdrop-filter: blur(10px) !important;
-  transition: background 0.3s, border-color 0.3s !important;
+  background: rgba(255,255,255,0.18) !important;
+  border: 1px solid rgba(255,255,255,0.3) !important;
+  border-radius: 12px !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s !important;
 }
-.contact-item:hover { background: rgba(201,169,110,0.08) !important; border-color: rgba(201,169,110,0.2) !important; }
-.c-label { color: rgba(255,255,255,0.4) !important; letter-spacing: 1.5px !important; font-size: 11px !important; text-transform: uppercase !important; }
-.c-val   { color: white !important; font-weight: 300 !important; }
-.c-icon  { background: rgba(201,169,110,0.1) !important; border: 1px solid rgba(201,169,110,0.15) !important; }
-.map-box { border-radius: 2px !important; border-color: rgba(255,255,255,0.1) !important; }
+.contact-item:hover { background: rgba(255,255,255,0.28) !important; border-color: rgba(255,255,255,0.5) !important; transform: translateX(4px) !important; }
+.c-label { color: rgba(255,255,255,0.7) !important; letter-spacing: 1.5px !important; font-size: 11px !important; text-transform: uppercase !important; }
+.c-val   { color: #fff !important; font-weight: 400 !important; }
+.c-icon  { background: rgba(255,255,255,0.2) !important; border: 1px solid rgba(255,255,255,0.3) !important; }
+.map-box { border-radius: 12px !important; border-color: rgba(255,255,255,0.3) !important; overflow: hidden !important; }
 
 /* ── FOOTER ── */
 footer {
   background: #070f1a !important;
-  border-top: 1px solid rgba(201,169,110,0.15) !important;
+  border-top: 2px solid rgba(0,200,180,0.3) !important;
   padding: 28px 80px !important;
 }
 footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; letter-spacing: 0.08em !important; }
