@@ -1255,6 +1255,147 @@ footer p { color: rgba(255,255,255,0.45); }
   </div>
 </section>
 
+<!-- ══════════════════ DOCTOR INTRO ══════════════════ -->
+<section id="doctor" style="padding:0;background:white;position:relative;z-index:1;overflow:hidden;">
+
+  <!-- Decorative top wave -->
+  <div style="background:linear-gradient(160deg,#dbeeff 0%,#eef6ff 50%,#d6f0ff 100%);height:60px;clip-path:ellipse(55% 100% at 50% 0%)"></div>
+
+  <div style="
+    max-width:1100px; margin:0 auto;
+    padding:0 80px 72px;
+    display:grid; grid-template-columns:420px 1fr; gap:64px;
+    align-items:center;
+  " class="doctor-grid-wrap">
+
+    <!-- PHOTO SIDE -->
+    <div style="position:relative;" class="reveal">
+      <!-- Decorative circles -->
+      <div style="
+        position:absolute; width:380px; height:380px; border-radius:50%;
+        background:linear-gradient(135deg,#e3f4ff,#b3e0ff);
+        top:50%; left:50%; transform:translate(-50%,-50%);
+        z-index:0;
+      "></div>
+      <div style="
+        position:absolute; width:420px; height:420px; border-radius:50%;
+        border:2px dashed rgba(2,136,209,0.2);
+        top:50%; left:50%; transform:translate(-50%,-50%);
+        z-index:0; animation:ring-rotate 12s linear infinite;
+      "></div>
+      <!-- Photo -->
+      <div style="
+        position:relative; z-index:1;
+        width:340px; height:340px; margin:40px auto;
+        border-radius:50%;
+        overflow:hidden;
+        border:5px solid white;
+        box-shadow: 0 16px 60px rgba(2,136,209,0.22), 0 0 0 10px rgba(2,136,209,0.08);
+      ">
+        <img src="photos/doctor.webp" alt="Dr.Nawarat Paewpisakul"
+             style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;">
+      </div>
+      <!-- Name card badge -->
+      <div style="
+        position:absolute; bottom:24px; left:50%; transform:translateX(-50%);
+        background:linear-gradient(135deg,#0a2d6e,#0288d1);
+        color:white; padding:10px 24px; border-radius:50px;
+        font-family:'Prompt',sans-serif; font-size:13px; font-weight:700;
+        white-space:nowrap; z-index:2;
+        box-shadow:0 4px 16px rgba(2,136,209,0.35);
+        display:flex; align-items:center; gap:8px;
+      ">
+        <span style="font-size:16px">🦷</span>
+        Dr. Nawarat Paewpisakul
+      </div>
+    </div>
+
+    <!-- TEXT SIDE -->
+    <div class="reveal" style="transition-delay:0.15s">
+      <div style="
+        display:inline-flex; align-items:center; gap:8px;
+        background:rgba(2,136,209,0.08); border:1px solid rgba(2,136,209,0.2);
+        color:#0288d1; padding:5px 16px; border-radius:50px;
+        font-family:'Prompt',sans-serif; font-size:11px; font-weight:700;
+        letter-spacing:2px; text-transform:uppercase; margin-bottom:16px;
+      ">
+        <span style="width:6px;height:6px;border-radius:50%;background:#0288d1;animation:pulse-dot 1.5s infinite;"></span>
+        ทันตแพทย์ผู้เชี่ยวชาญ
+      </div>
+
+      <h2 style="
+        font-family:'Prompt',sans-serif; font-size:38px; font-weight:900;
+        line-height:1.15; margin-bottom:6px; color:#0a2d6e;
+      ">ทพญ. นวรัตน์<br>
+        <span style="background:linear-gradient(135deg,#0288d1,#00897b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+          แพ้วพิสัคุล
+        </span>
+      </h2>
+
+      <div style="
+        font-family:'Prompt',sans-serif; font-size:14px; color:#0288d1;
+        font-weight:600; letter-spacing:0.5px; margin-bottom:24px;
+      ">Dr. Nawarat Paewpisakul · D.D.S. Chiangmai University</div>
+
+      <p style="font-size:15px;color:#263c5a;line-height:1.8;margin-bottom:28px;">
+        ทันตแพทย์ผู้เชี่ยวชาญด้านทันตกรรมครบวงจร ประสบการณ์กว่า <strong style="color:#0288d1">25 ปี</strong>
+        เชี่ยวชาญพิเศษด้านรากฟันเทียม การรักษารากฟัน และทันตกรรมเพื่อความสวยงาม
+        ด้วยเทคโนโลยีทันสมัยและการดูแลที่ใส่ใจผู้ป่วยเป็นหลัก
+      </p>
+
+      <!-- Credential badges -->
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px;">
+        <div style="
+          display:flex; align-items:center; gap:8px;
+          background:#f0f9ff; border:1px solid rgba(2,136,209,0.2);
+          padding:8px 16px; border-radius:10px;
+          font-family:'Prompt',sans-serif; font-size:13px; font-weight:600; color:#0a2d6e;
+        ">🎓 ทพ.บ. มหาวิทยาลัยเชียงใหม่</div>
+        <div style="
+          display:flex; align-items:center; gap:8px;
+          background:#f0fdf4; border:1px solid rgba(0,137,123,0.2);
+          padding:8px 16px; border-radius:10px;
+          font-family:'Prompt',sans-serif; font-size:13px; font-weight:600; color:#00695c;
+        ">🦷 ชำนาญรากฟันเทียม</div>
+        <div style="
+          display:flex; align-items:center; gap:8px;
+          background:#fff8f0; border:1px solid rgba(255,160,0,0.2);
+          padding:8px 16px; border-radius:10px;
+          font-family:'Prompt',sans-serif; font-size:13px; font-weight:600; color:#e65100;
+        ">⭐ 25+ ปีประสบการณ์</div>
+      </div>
+
+      <a href="#" onclick="openBooking();return false;" style="
+        display:inline-flex; align-items:center; gap:10px;
+        background:linear-gradient(135deg,#0288d1,#00897b);
+        color:white; padding:14px 32px; border-radius:50px;
+        font-family:'Prompt',sans-serif; font-size:15px; font-weight:800;
+        text-decoration:none;
+        box-shadow:0 6px 24px rgba(2,136,209,0.3);
+        transition:transform 0.3s,box-shadow 0.3s;
+      " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 10px 32px rgba(2,136,209,0.45)'"
+         onmouseout="this.style.transform='';this.style.boxShadow='0 6px 24px rgba(2,136,209,0.3)'">
+        📅 นัดหมายกับทันตแพทย์
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+@media(max-width:900px){
+  .doctor-grid-wrap {
+    grid-template-columns: 1fr !important;
+    padding: 0 24px 48px !important;
+    gap: 32px !important;
+  }
+  .doctor-grid-wrap > div:first-child div[style*="340px"] {
+    width: 260px !important;
+    height: 260px !important;
+  }
+  .doctor-grid-wrap h2 { font-size: 28px !important; }
+}
+</style>
+
 <!-- ══════════════════ SERVICES ══════════════════ -->
 <section id="services">
   <div class="section-header reveal">
