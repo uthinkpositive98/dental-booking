@@ -3238,67 +3238,236 @@ createVideoScene('vid-2', 0x00c8ff, (scene, camera, pl) => {
   }};
 });
 
-// Vid 3: root canal
-createVideoScene('vid-3', 0xb06aff, (scene, camera, pl) => {
-  const group = new THREE.Group();
-  scene.add(group);
-  camera.position.set(2, 1.5, 6);
-  camera.lookAt(0, 0, 0);
+// ══ Vid 3: ROOT CANAL — Cinematic Motion Graphic ══
+createVideoScene('vid-3', 0x7c3aed, (scene, camera, pl) => {
+  // Camera: front-facing cross-section view
+  camera.position.set(0, 0.5, 7.5);
+  camera.lookAt(0, -0.5, 0);
+  camera.fov = 38; camera.updateProjectionMatrix();
 
-  const toothMat = new THREE.MeshStandardMaterial({ color: 0xf4f0e8, metalness: 0, roughness: 0.25 });
+  // Enhanced lighting
+  scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+  const key = new THREE.DirectionalLight(0xeef4ff, 2.8);
+  key.position.set(4, 6, 5); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xb06aff, 1.4);
+  fill.position.set(-4, 2, 3); scene.add(fill);
+  const bot = new THREE.PointLight(0x4488ff, 2, 12);
+  bot.position.set(0, -4, 3); scene.add(bot);
 
-  // tooth with visible cross section
-  const outerGeo = new THREE.CylinderGeometry(0.9, 0.7, 0.6, 32);
-  group.add(new THREE.Mesh(outerGeo, toothMat));
-  const domeGeo = new THREE.SphereGeometry(0.9, 32, 16, 0, Math.PI*2, 0, Math.PI*0.6);
-  const domeMesh = new THREE.Mesh(domeGeo, toothMat);
-  domeMesh.position.y = 0.3;
-  group.add(domeMesh);
+  // ── MATERIALS ──
+  const enamelMat = new THREE.MeshStandardMaterial({
+    color: 0xf8f4ee, metalness: 0.02, roughness: 0.1
+  });
+  const dentinMat = new THREE.MeshStandardMaterial({
+    color: 0xe8d8b8, metalness: 0, roughness: 0.4
+  });
+  const pulpMat = new THREE.MeshStandardMaterial({
+    color: 0xcc2244, emissive: 0x880022, emissiveIntensity: 0.5,
+    transparent: true, opacity: 0.9, metalness: 0, roughness: 0.6
+  });
+  const cleanMat = new THREE.MeshStandardMaterial({
+    color: 0xfff8f0, metalness: 0, roughness: 0.3, transparent: true, opacity: 0
+  });
+  const gpMat = new THREE.MeshStandardMaterial({
+    color: 0xe8a080, metalness: 0, roughness: 0.5, transparent: true, opacity: 0
+  });
+  const fileMat = new THREE.MeshStandardMaterial({
+    color: 0xccccaa, metalness: 0.92, roughness: 0.06
+  });
+  const crownMat = new THREE.MeshStandardMaterial({
+    color: 0xf5f0eb, metalness: 0.04, roughness: 0.08, transparent: true, opacity: 0
+  });
+  const gumMat = new THREE.MeshStandardMaterial({
+    color: 0xe87878, metalness: 0, roughness: 0.7, transparent: true, opacity: 0.6
+  });
 
-  // roots (2)
-  const rootMat = toothMat.clone();
-  for (let side of [-0.35, 0.35]) {
-    const r = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.06, 2.2, 12), rootMat);
-    r.position.set(side, -1.4, 0);
-    r.rotation.z = side > 0 ? 0.2 : -0.2;
-    group.add(r);
+  // ── TOOTH CROSS-SECTION (cut in half on Z) ──
+  const toothGroup = new THREE.Group();
+  scene.add(toothGroup);
+
+  // Enamel crown (outer)
+  const crownOuter = new THREE.Mesh(
+    new THREE.CylinderGeometry(1.1, 0.9, 1.0, 32), enamelMat
+  );
+  crownOuter.position.y = 1.0; toothGroup.add(crownOuter);
+  const crownDome = new THREE.Mesh(
+    new THREE.SphereGeometry(1.1, 32, 16, 0, Math.PI*2, 0, Math.PI*0.55), enamelMat
+  );
+  crownDome.position.y = 1.55; toothGroup.add(crownDome);
+
+  // Dentin layer (slightly smaller)
+  const dentinCrown = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.85, 0.72, 0.95, 32), dentinMat
+  );
+  dentinCrown.position.y = 1.02; toothGroup.add(dentinCrown);
+
+  // Root 1 (left)
+  const root1 = new THREE.Group();
+  root1.add(new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.08, 2.8, 16), enamelMat));
+  const rootDentin1 = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.04, 2.7, 16), dentinMat);
+  root1.add(rootDentin1);
+  root1.position.set(-0.5, -1.5, 0);
+  root1.rotation.z = 0.18;
+  toothGroup.add(root1);
+
+  // Root 2 (right)
+  const root2 = root1.clone();
+  root2.position.set(0.5, -1.5, 0);
+  root2.rotation.z = -0.18;
+  toothGroup.add(root2);
+
+  // Gum
+  const gum = new THREE.Mesh(new THREE.BoxGeometry(4, 0.5, 2.5), gumMat);
+  gum.position.y = 0.2; scene.add(gum);
+
+  // ── PULP: infected (red glow) ──
+  const pulpChamber = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.28, 0.1, 0.8, 12), pulpMat
+  );
+  pulpChamber.position.y = 0.9; scene.add(pulpChamber);
+
+  const pulpRoot1 = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.03, 2.4, 8), pulpMat);
+  pulpRoot1.position.set(-0.5, -1.4, 0); pulpRoot1.rotation.z = 0.18; scene.add(pulpRoot1);
+  const pulpRoot2 = pulpRoot1.clone();
+  pulpRoot2.position.set(0.5, -1.4, 0); pulpRoot2.rotation.z = -0.18; scene.add(pulpRoot2);
+
+  // Infected glow point
+  const infLight = new THREE.PointLight(0xff2244, 3, 4);
+  infLight.position.set(0, 0.8, 0.5); scene.add(infLight);
+
+  // ── ROTARY FILE (NiTi instrument) ──
+  const fileGroup = new THREE.Group();
+  const fileShank = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.012, 3.2, 8), fileMat);
+  fileGroup.add(fileShank);
+  // Helical flutes (visual spiral)
+  for (let i = 0; i < 20; i++) {
+    const flute = new THREE.Mesh(
+      new THREE.TorusGeometry(0.062, 0.016, 6, 12), fileMat
+    );
+    flute.rotation.x = Math.PI/2;
+    flute.position.y = 1.4 - i * 0.15;
+    fileGroup.add(flute);
+  }
+  // File handle
+  const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.4, 16), 
+    new THREE.MeshStandardMaterial({color:0x334466,metalness:0.6,roughness:0.2}));
+  handle.position.y = 1.85; fileGroup.add(handle);
+  fileGroup.position.set(-0.5, 3.5, 0); // starts above tooth
+  fileGroup.rotation.z = 0.18;
+  scene.add(fileGroup);
+
+  // ── CLEAN CANAL (after cleaning) ──
+  const cleanCanal1 = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.04, 2.4, 12), cleanMat);
+  cleanCanal1.position.set(-0.5, -1.4, 0); cleanCanal1.rotation.z = 0.18; scene.add(cleanCanal1);
+  const cleanCanal2 = cleanCanal1.clone(); cleanCanal2.position.set(0.5, -1.4, 0); 
+  cleanCanal2.rotation.z = -0.18; scene.add(cleanCanal2);
+
+  // ── GUTTA-PERCHA FILL ──
+  const gp1 = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.03, 2.3, 12), gpMat);
+  gp1.position.set(-0.5, -1.4, 0); gp1.rotation.z = 0.18; scene.add(gp1);
+  const gp2 = gp1.clone(); gp2.position.set(0.5, -1.4, 0);
+  gp2.rotation.z = -0.18; scene.add(gp2);
+
+  // ── CERAMIC CROWN (final) ──
+  const finalCrown = new THREE.Mesh(
+    new THREE.CylinderGeometry(1.15, 0.95, 1.05, 32), crownMat
+  );
+  finalCrown.position.y = 1.0; scene.add(finalCrown);
+  const finalDome = new THREE.Mesh(
+    new THREE.SphereGeometry(1.15, 32, 16, 0, Math.PI*2, 0, Math.PI*0.55), crownMat
+  );
+  finalDome.position.y = 1.58; scene.add(finalDome);
+
+  // ── SCAN RING (hi-tech overlay) ──
+  const scanRing = new THREE.Mesh(
+    new THREE.TorusGeometry(1.8, 0.012, 8, 80),
+    new THREE.MeshBasicMaterial({color:0xaa44ff, transparent:true, opacity:0})
+  );
+  scanRing.rotation.x = Math.PI/2; scene.add(scanRing);
+
+  // ── STEP LABELS via canvas textures ──
+  function makeLabel(text, color) {
+    const cv = document.createElement('canvas');
+    cv.width = 512; cv.height = 80;
+    const ctx2 = cv.getContext('2d');
+    ctx2.fillStyle = 'rgba(0,0,0,0)';
+    ctx2.clearRect(0,0,512,80);
+    ctx2.font = 'bold 36px Prompt, sans-serif';
+    ctx2.fillStyle = color;
+    ctx2.textAlign = 'center';
+    ctx2.fillText(text, 256, 52);
+    const tex = new THREE.CanvasTexture(cv);
+    const mat = new THREE.MeshBasicMaterial({map:tex, transparent:true, opacity:0, side:THREE.DoubleSide, depthTest:false});
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(3.5, 0.55), mat);
+    return mesh;
   }
 
-  // pulp chamber
-  const pulpMat = new THREE.MeshStandardMaterial({ color: 0xff4466, emissive: 0xff2244, emissiveIntensity: 0.4, transparent: true, opacity: 0.8 });
-  const pulp = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.08, 1.8, 12), pulpMat);
-  pulp.position.set(-0.35, -0.9, 0);
-  pulp.rotation.z = 0.2;
-  scene.add(pulp);
+  const lbl1 = makeLabel('STEP 1 · โพรงประสาทฟันติดเชื้อ', '#ff6688');
+  lbl1.position.set(0, 3.2, 0); scene.add(lbl1);
+  const lbl2 = makeLabel('STEP 2 · Rotary File ทำความสะอาด', '#88ccff');
+  lbl2.position.set(0, 3.2, 0); scene.add(lbl2);
+  const lbl3 = makeLabel('STEP 3 · อุด Gutta-Percha', '#ffcc88');
+  lbl3.position.set(0, 3.2, 0); scene.add(lbl3);
+  const lbl4 = makeLabel('STEP 4 · ครอบฟัน Ceramic', '#88ffcc');
+  lbl4.position.set(0, 3.2, 0); scene.add(lbl4);
 
-  // canal files
-  const fileMat = new THREE.MeshStandardMaterial({ color: 0xddddaa, metalness: 0.85, roughness: 0.15 });
-  const file1 = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.018, 2.0, 8), fileMat);
-  file1.position.set(-0.35, -0.9, 0);
-  file1.rotation.z = 0.2;
-  scene.add(file1);
-  for (let i = 0; i < 14; i++) {
-    const tr = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.015, 4, 10), fileMat);
-    tr.rotation.x = Math.PI/2;
-    const y = -0.1 - i * 0.12;
-    tr.position.set(-0.35 + Math.sin(0.2)*y, -0.9 + y, 0);
-    scene.add(tr);
-  }
+  // ── CYCLE PHASES ──
+  // 0-4s: infected tooth visible, label 1
+  // 4-8s: file drills down, label 2
+  // 8-12s: gutta-percha fills, label 3
+  // 12-16s: crown appears, label 4
+  // 16-20s: restart
 
-  // gutta-percha fill (pink)
-  const gpMat = new THREE.MeshStandardMaterial({ color: 0xff9999, metalness: 0, roughness: 0.7, transparent: true, opacity: 0 });
-  const gp = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.07, 1.8, 12), gpMat);
-  gp.position.set(-0.35, -0.9, 0);
-  gp.rotation.z = 0.2;
-  scene.add(gp);
+  let fileY = 3.5; // file starts above
 
   return { animate: (t) => {
-    group.rotation.y = t * 0.35;
-    file1.rotation.y = t * 5;
-    const phase = t % 10;
-    pulp.material.opacity = phase < 4 ? 0.8 : Math.max(0, 0.8 - (phase-4)*0.4);
-    gp.material.opacity = phase > 6 ? Math.min(0.9, (phase-6)*0.45) : 0;
-    pl.intensity = 4 + Math.sin(t*1.8)*1.2;
+    const cycle = 20;
+    const phase = t % cycle;
+
+    // ── Phase 1 (0-4): infected ──
+    const p1 = Math.min(1, phase / 0.5); // fade in fast
+    pulpMat.opacity = phase < 8 ? 0.9 : Math.max(0, 0.9 - (phase-8)*0.4);
+    infLight.intensity = phase < 8 ? 2.5 + Math.sin(t*3)*1.0 : 0;
+    lbl1.material.opacity = phase < 4 ? Math.min(0.95, phase*0.4) : Math.max(0, 1-(phase-4)*2);
+
+    // ── Phase 2 (4-8): file drills ──
+    if (phase >= 3.5 && phase < 9) {
+      const drill = Math.min(1, (phase-3.5)/4.5);
+      fileY = 3.5 - drill * 5.0; // drill down to -1.5
+    } else if (phase < 3.5) {
+      fileY = 3.5;
+    } else {
+      fileY = 3.5; // reset
+    }
+    fileGroup.position.y = fileY;
+    fileGroup.rotation.y = t * 8; // fast spin
+    const fileVisible = phase >= 3.5 && phase < 10;
+    fileGroup.visible = fileVisible;
+    lbl2.material.opacity = phase >= 4 && phase < 8 ? Math.min(0.95, (phase-4)*0.5) : Math.max(0, 1-(Math.max(0,phase-8))*2);
+
+    // Scan ring during drilling
+    scanRing.position.y = fileY - 0.5;
+    scanRing.material.opacity = fileVisible ? 0.5 + Math.sin(t*4)*0.25 : 0;
+
+    // ── Phase 3 (8-12): GP fill ──
+    const gpFill = phase >= 9 ? Math.min(1, (phase-9)/3) : 0;
+    gpMat.opacity = gpFill * 0.9;
+    cleanMat.opacity = phase >= 8 ? Math.min(0.4, (phase-8)*0.15) : 0;
+    lbl3.material.opacity = phase >= 9 && phase < 13 ? Math.min(0.95, (phase-9)*0.5) : Math.max(0, 1-(Math.max(0,phase-13))*2);
+
+    // ── Phase 4 (12-16): crown ──
+    const crownFill = phase >= 13 ? Math.min(1, (phase-13)/2.5) : 0;
+    crownMat.opacity = crownFill * 0.95;
+    finalCrown.material.opacity = crownMat.opacity;
+    finalDome.material.opacity = crownMat.opacity;
+    lbl4.material.opacity = phase >= 13 && phase < 18 ? Math.min(0.95, (phase-13)*0.5) : Math.max(0, 1-(Math.max(0,phase-18))*2);
+
+    // Gentle tooth sway
+    toothGroup.rotation.y = Math.sin(t * 0.3) * 0.12;
+
+    // Update light
+    pl.intensity = 2.5 + Math.sin(t*1.2)*0.5;
+    bot.intensity = 1.5 + Math.sin(t*0.8)*0.4;
   }};
 });
 
