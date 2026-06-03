@@ -1708,23 +1708,7 @@ footer p { color: rgba(255,255,255,0.45); }
   </div>
 </section>
 
-<!-- ══════════════════ FREE PROMO ══════════════════ -->
-<section id="promo">
-  <div class="promo-card reveal">
-    <div class="promo-tag">🎉 โปรโมชันพิเศษ</div>
-    <h2>ตรวจฟัน + <em>ขูดหินปูน</em><br>ฟรี! ไม่มีเงื่อนไข</h2>
-    <p>สำหรับผู้ป่วยใหม่ทุกท่าน พร้อมรับคำปรึกษาจากทันตแพทย์ฟรี ไม่จำกัดจำนวน</p>
-    <div class="promo-services">
-      <div class="promo-svc">🦷 ตรวจฟัน X-ray</div>
-      <div class="promo-svc">💎 ขูดหินปูน</div>
-      <div class="promo-svc">💬 ปรึกษาแพทย์</div>
-      <div class="promo-svc">📋 วางแผนรักษา</div>
-    </div>
-    <a href="#" onclick="openBooking();return false;" class="btn-primary" style="font-size:17px; padding:16px 44px; display:inline-flex; gap:10px; align-items:center;">
-      📞 จองสิทธิ์ฟรีทันที
-    </a>
-  </div>
-</section>
+
 
 <!-- ══════════════════ CONTACT ══════════════════ -->
 <section id="contact">
@@ -1941,184 +1925,279 @@ footer p { color: rgba(255,255,255,0.45); }
 })();
 
 // ═══════════════════════════════════════════════
-// 2. HERO 3D TOOTH (Three.js)
+// 2. HERO 3D — HI-TECH IMPLANT SCENE
 // ═══════════════════════════════════════════════
 (function() {
   const canvas = document.getElementById('tooth-canvas');
-  const scene = new THREE.Scene();
-  const W = canvas.parentElement.offsetWidth;
+  if (!canvas) return;
+  const W = canvas.parentElement.offsetWidth || 600;
   const H = canvas.parentElement.offsetHeight || 600;
+
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setSize(W, H);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.4;
 
-  const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 100);
-  camera.position.set(0, 1, 8);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
+  camera.position.set(0, 1.5, 9);
 
-  // Lights
-  const ambient = new THREE.AmbientLight(0xffffff, 0.3);
-  scene.add(ambient);
-  const dirLight = new THREE.DirectionalLight(0x00e5b0, 2);
-  dirLight.position.set(3, 5, 5);
-  dirLight.castShadow = true;
-  scene.add(dirLight);
-  const pointLight1 = new THREE.PointLight(0x00c8ff, 3, 20);
-  pointLight1.position.set(-4, 2, 3);
-  scene.add(pointLight1);
-  const pointLight2 = new THREE.PointLight(0xffffff, 1.5, 15);
-  pointLight2.position.set(4, -2, 4);
-  scene.add(pointLight2);
+  // === LIGHTING ===
+  scene.add(new THREE.AmbientLight(0xffffff, 0.15));
 
-  // Materials
-  const toothMat = new THREE.MeshStandardMaterial({
-    color: 0xf0f0f0,
-    metalness: 0.05,
-    roughness: 0.2,
-    envMapIntensity: 1
+  const keyLight = new THREE.DirectionalLight(0xe8f4ff, 2.5);
+  keyLight.position.set(4, 6, 5);
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.width = 1024;
+  scene.add(keyLight);
+
+  const rimLight = new THREE.DirectionalLight(0x00d4ff, 1.8);
+  rimLight.position.set(-5, 3, -3);
+  scene.add(rimLight);
+
+  const fillLight = new THREE.PointLight(0x4ade80, 2.5, 18);
+  fillLight.position.set(0, -2, 4);
+  scene.add(fillLight);
+
+  const scanLight = new THREE.PointLight(0x00aaff, 0, 12);
+  scanLight.position.set(0, 3, 2);
+  scene.add(scanLight);
+
+  // === MATERIALS ===
+  const titaniumMat = new THREE.MeshStandardMaterial({
+    color: 0x9ab8d4, metalness: 0.98, roughness: 0.05,
+    envMapIntensity: 2.0
   });
-  const implantMat = new THREE.MeshStandardMaterial({
-    color: 0x8ab4d4,
-    metalness: 0.9,
-    roughness: 0.1,
+  const ceramicMat = new THREE.MeshStandardMaterial({
+    color: 0xf5f0eb, metalness: 0.02, roughness: 0.12,
+    envMapIntensity: 1.5
+  });
+  const boneMat = new THREE.MeshStandardMaterial({
+    color: 0xdcc89a, metalness: 0, roughness: 0.75
   });
   const gumMat = new THREE.MeshStandardMaterial({
-    color: 0xff8fa3,
-    metalness: 0,
-    roughness: 0.7,
-    transparent: true, opacity: 0.85
+    color: 0xff8fa3, metalness: 0, roughness: 0.6,
+    transparent: true, opacity: 0.7
+  });
+  const glowMat = new THREE.MeshBasicMaterial({
+    color: 0x00d4ff, transparent: true, opacity: 0.08,
+    side: THREE.BackSide
   });
 
-  // === TOOTH GROUP ===
-  const toothGroup = new THREE.Group();
-  scene.add(toothGroup);
-
-  // Crown (tooth body)
-  const crownGeo = new THREE.SphereGeometry(0.85, 32, 24, 0, Math.PI*2, 0, Math.PI*0.65);
-  const crown = new THREE.Mesh(crownGeo, toothMat);
-  crown.position.y = 0.5;
-  crown.castShadow = true;
-  toothGroup.add(crown);
-
-  // Crown top flat
-  const topGeo = new THREE.CylinderGeometry(0.75, 0.85, 0.15, 32);
-  const top = new THREE.Mesh(topGeo, toothMat);
-  top.position.y = 1.2;
-  toothGroup.add(top);
-
-  // Cusps (bumps on top)
-  const cuspPositions = [
-    [0.3, 1.35, 0.3], [-0.3, 1.35, 0.3], [0.3, 1.35, -0.3], [-0.3, 1.35, -0.3], [0, 1.38, 0]
-  ];
-  cuspPositions.forEach(([x,y,z]) => {
-    const cg = new THREE.SphereGeometry(0.2, 16, 12);
-    const c = new THREE.Mesh(cg, toothMat);
-    c.position.set(x, y, z);
-    toothGroup.add(c);
+  // === TECH GRID FLOOR ===
+  const gridGeo = new THREE.PlaneGeometry(20, 20, 24, 24);
+  const gridMat = new THREE.MeshBasicMaterial({
+    color: 0x0088cc, wireframe: true, transparent: true, opacity: 0.07
   });
+  const grid = new THREE.Mesh(gridGeo, gridMat);
+  grid.rotation.x = -Math.PI / 2;
+  grid.position.y = -3.2;
+  scene.add(grid);
 
-  // Root 1
-  const r1 = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.06, 1.4, 16), toothMat);
-  r1.position.set(0.25, -0.7, 0);
-  r1.rotation.z = 0.15;
-  toothGroup.add(r1);
+  // === IMPLANT ASSEMBLY GROUP ===
+  const mainGroup = new THREE.Group();
+  scene.add(mainGroup);
 
-  // Root 2
-  const r2 = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.06, 1.4, 16), toothMat);
-  r2.position.set(-0.25, -0.7, 0);
-  r2.rotation.z = -0.15;
-  toothGroup.add(r2);
+  // --- BONE BLOCK ---
+  const boneGroup = new THREE.Group();
+  const boneGeom = new THREE.BoxGeometry(7, 1.6, 3.5);
+  const bone = new THREE.Mesh(boneGeom, boneMat);
+  bone.castShadow = true;
+  bone.receiveShadow = true;
+  boneGroup.add(bone);
+  // Bone detail lines
+  for (let i = -3; i <= 3; i += 0.5) {
+    const lg = new THREE.PlaneGeometry(0.02, 1.6);
+    const lm = new THREE.Mesh(lg, new THREE.MeshBasicMaterial({ color: 0xc4a46a, transparent: true, opacity: 0.25 }));
+    lm.position.set(i, 0, 1.76);
+    boneGroup.add(lm);
+  }
+  boneGroup.position.y = -1.8;
+  mainGroup.add(boneGroup);
 
-  // Root 3 (back)
-  const r3 = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.05, 1.2, 16), toothMat);
-  r3.position.set(0, -0.65, -0.3);
-  toothGroup.add(r3);
+  // --- GUM LAYER ---
+  const gumGeom = new THREE.BoxGeometry(7, 0.55, 3.5);
+  const gum = new THREE.Mesh(gumGeom, gumMat);
+  gum.position.y = -0.75;
+  mainGroup.add(gum);
 
-  // Implant screw (titanium)
-  const screwGeo = new THREE.CylinderGeometry(0.14, 0.1, 1.8, 8);
-  const screw = new THREE.Mesh(screwGeo, implantMat);
-  screw.position.set(2.2, -0.3, 0);
-  scene.add(screw);
+  // === IMPLANT SCREW (titanium) ===
+  function buildImplant(xPos) {
+    const g = new THREE.Group();
+    g.position.x = xPos;
 
-  // Screw threads
-  for (let i = 0; i < 14; i++) {
-    const tg = new THREE.TorusGeometry(0.17, 0.028, 8, 20);
-    const t = new THREE.Mesh(tg, implantMat);
-    t.position.set(2.2, -1.0 + i * 0.14, 0);
-    t.rotation.x = Math.PI / 2;
-    scene.add(t);
+    // Screw body
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.18, 3.0, 16), titaniumMat);
+    body.castShadow = true;
+    g.add(body);
+
+    // Threads
+    for (let i = 0; i < 22; i++) {
+      const tr = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.045, 8, 24), titaniumMat);
+      tr.rotation.x = Math.PI / 2;
+      tr.position.y = -1.3 + i * 0.13;
+      g.add(tr);
+    }
+
+    // Hex head
+    const head = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.3, 6), titaniumMat);
+    head.position.y = 1.65;
+    g.add(head);
+
+    // Abutment
+    const ab = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.22, 0.6, 16), titaniumMat);
+    ab.position.y = 2.1;
+    g.add(ab);
+
+    // Crown
+    const crownBody = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.5, 0.85, 32), ceramicMat);
+    crownBody.position.y = 2.75;
+    crownBody.castShadow = true;
+    g.add(crownBody);
+
+    // Crown top dome
+    const dome = new THREE.Mesh(new THREE.SphereGeometry(0.55, 24, 12, 0, Math.PI*2, 0, Math.PI*0.5), ceramicMat);
+    dome.position.y = 3.18;
+    g.add(dome);
+
+    // Glow halo around crown
+    const halo = new THREE.Mesh(new THREE.CylinderGeometry(0.65, 0.6, 0.9, 32), glowMat);
+    halo.position.y = 2.75;
+    g.add(halo);
+
+    return g;
   }
 
-  // Crown on implant
-  const iCrown = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.32, 0.28, 0.55, 32),
-    new THREE.MeshStandardMaterial({ color: 0xe8e0f0, metalness: 0.1, roughness: 0.15 })
+  const implant1 = buildImplant(-1.6);
+  const implant2 = buildImplant(1.6);
+  mainGroup.add(implant1, implant2);
+
+  // === SCANNER BEAM ===
+  const beamGeo = new THREE.CylinderGeometry(0.008, 0.008, 10, 8);
+  const beamMat = new THREE.MeshBasicMaterial({ color: 0x00d4ff, transparent: true, opacity: 0.6 });
+  const beam = new THREE.Mesh(beamGeo, beamMat);
+  beam.rotation.z = Math.PI / 2;
+  beam.position.set(0, 0, 1.8);
+  scene.add(beam);
+
+  // Scanner glow plane
+  const scanPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(8, 0.05),
+    new THREE.MeshBasicMaterial({ color: 0x00d4ff, transparent: true, opacity: 0.18, side: THREE.DoubleSide })
   );
-  iCrown.position.set(2.2, 0.72, 0);
-  scene.add(iCrown);
+  scanPlane.rotation.y = Math.PI / 2;
+  scanPlane.position.z = 1.8;
+  scene.add(scanPlane);
 
-  // Gum plane (translucent pink)
-  const gumGeo = new THREE.BoxGeometry(6, 0.4, 3);
-  const gum = new THREE.Mesh(gumGeo, gumMat);
-  gum.position.set(0, -0.2, 0);
-  scene.add(gum);
-
-  // Bone lines
-  const boneMat = new THREE.LineBasicMaterial({ color: 0x4080a0, transparent: true, opacity: 0.3 });
-  for (let i = 0; i < 12; i++) {
-    const pts = [];
-    const x = -3 + i * 0.5;
-    pts.push(new THREE.Vector3(x, -0.4, -1));
-    pts.push(new THREE.Vector3(x + 0.1, -2.0, -1 + Math.random() * 0.3));
-    const geo = new THREE.BufferGeometry().setFromPoints(pts);
-    scene.add(new THREE.Line(geo, boneMat));
+  // === FLOATING DATA PARTICLES ===
+  const ptGeo = new THREE.BufferGeometry();
+  const ptPos = [];
+  for (let i = 0; i < 200; i++) {
+    ptPos.push(
+      (Math.random() - 0.5) * 14,
+      (Math.random() - 0.5) * 10,
+      (Math.random() - 0.5) * 6
+    );
   }
+  ptGeo.setAttribute('position', new THREE.Float32BufferAttribute(ptPos, 3));
+  const particles = new THREE.Points(ptGeo,
+    new THREE.PointsMaterial({ color: 0x00d4ff, size: 0.035, transparent: true, opacity: 0.5 })
+  );
+  scene.add(particles);
 
-  // Floating particles around tooth
-  const sparkGeo = new THREE.BufferGeometry();
-  const sparkPos = [];
-  for (let i = 0; i < 60; i++) {
-    sparkPos.push((Math.random()-0.5)*6, (Math.random()-0.5)*5, (Math.random()-0.5)*3);
+  // === ORBIT RINGS ===
+  function addRing(r, rx, ry, color, opacity) {
+    const m = new THREE.Mesh(
+      new THREE.TorusGeometry(r, 0.012, 8, 100),
+      new THREE.MeshBasicMaterial({ color, transparent: true, opacity })
+    );
+    m.rotation.x = rx; m.rotation.y = ry;
+    scene.add(m);
+    return m;
   }
-  sparkGeo.setAttribute('position', new THREE.Float32BufferAttribute(sparkPos, 3));
-  const sparkMat = new THREE.PointsMaterial({ color: 0x00e5b0, size: 0.06, transparent: true, opacity: 0.7 });
-  const sparks = new THREE.Points(sparkGeo, sparkMat);
-  scene.add(sparks);
-
-  // Orbit ring
-  const ringGeo = new THREE.TorusGeometry(2.8, 0.01, 8, 120);
-  const ringMat = new THREE.MeshBasicMaterial({ color: 0x00e5b0, transparent: true, opacity: 0.2 });
-  const ring = new THREE.Mesh(ringGeo, ringMat);
-  ring.rotation.x = Math.PI / 2.5;
-  scene.add(ring);
+  const ring1 = addRing(3.8, Math.PI/2.5, 0, 0x00d4ff, 0.25);
+  const ring2 = addRing(4.5, Math.PI/3, Math.PI/4, 0x4ade80, 0.15);
+  const ring3 = addRing(3.2, Math.PI/2, Math.PI/6, 0x60a5fa, 0.12);
 
   // Orbit dot
   const orbitDot = new THREE.Mesh(
-    new THREE.SphereGeometry(0.08, 12, 12),
-    new THREE.MeshBasicMaterial({ color: 0x00e5b0 })
+    new THREE.SphereGeometry(0.1, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0x00d4ff })
   );
-  scene.add(orbitDot);
+  const orbitDot2 = new THREE.Mesh(
+    new THREE.SphereGeometry(0.07, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0x4ade80 })
+  );
+  scene.add(orbitDot, orbitDot2);
 
-  let time = 0;
+  // === HOLOGRAM X-RAY PLANE ===
+  const xrayPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(3.8, 4.2),
+    new THREE.MeshBasicMaterial({
+      color: 0x0044ff, transparent: true, opacity: 0.04,
+      side: THREE.DoubleSide
+    })
+  );
+  xrayPlane.position.set(0, 0.5, -1);
+  scene.add(xrayPlane);
+
+  let t = 0;
   function animate() {
     requestAnimationFrame(animate);
-    time += 0.01;
-    toothGroup.rotation.y = Math.sin(time * 0.5) * 0.3;
-    toothGroup.position.y = Math.sin(time * 0.7) * 0.1;
-    screw.rotation.y = time * 0.5;
-    sparks.rotation.y = time * 0.08;
-    sparks.rotation.x = time * 0.04;
-    ring.rotation.z = time * 0.2;
+    t += 0.012;
+
+    // Slow group float
+    mainGroup.rotation.y = Math.sin(t * 0.3) * 0.25;
+    mainGroup.position.y = Math.sin(t * 0.5) * 0.12;
+
+    // Scanner beam sweeps Y
+    const scanY = Math.sin(t * 0.8) * 3.5;
+    beam.position.y = scanY;
+    scanPlane.position.y = scanY;
+    scanLight.position.y = scanY;
+    scanLight.intensity = 1.5 + Math.sin(t * 2) * 0.5;
+
+    // Rings rotate
+    ring1.rotation.z = t * 0.18;
+    ring2.rotation.z = -t * 0.12;
+    ring3.rotation.y = t * 0.22;
+
+    // Orbit dots
     orbitDot.position.set(
-      Math.cos(time * 0.4) * 2.8 * Math.cos(ring.rotation.x),
-      Math.sin(time * 0.4) * 2.8 * Math.sin(ring.rotation.x) * 1.2,
-      Math.sin(time * 0.4) * 2.8 * Math.cos(ring.rotation.x) * 0.4
+      Math.cos(t * 0.5) * 3.8,
+      Math.sin(t * 0.5) * 3.8 * Math.sin(ring1.rotation.x),
+      Math.sin(t * 0.5) * 3.8 * Math.cos(ring1.rotation.x) * 0.5
     );
-    pointLight1.intensity = 2.5 + Math.sin(time * 1.2) * 0.5;
+    orbitDot2.position.set(
+      Math.cos(t * 0.35 + 2) * 4.5 * 0.7,
+      Math.sin(t * 0.35 + 2) * 4.5 * 0.5,
+      Math.cos(t * 0.35) * 4.5 * 0.6
+    );
+
+    // Implant screws slight spin
+    implant1.rotation.y = t * 0.4;
+    implant2.rotation.y = -t * 0.4;
+
+    // Particles drift
+    particles.rotation.y = t * 0.04;
+    particles.rotation.x = t * 0.02;
+
+    // Pulsing fill light
+    fillLight.intensity = 2.0 + Math.sin(t * 1.5) * 0.8;
+    rimLight.intensity = 1.5 + Math.sin(t * 0.7 + 1) * 0.5;
+
+    // X-ray plane flicker
+    xrayPlane.material.opacity = 0.03 + Math.sin(t * 3) * 0.015;
+
     renderer.render(scene, camera);
   }
   animate();
 })();
+
+
 
 // ═══════════════════════════════════════════════
 // 3. SERVICE CARD CANVASES (mini 3D scenes)
@@ -2153,210 +2232,260 @@ function createMiniScene(canvasId, buildFn) {
   loop();
 }
 
-// Implant card scene
+// ═══ CARD SCENE: IMPLANT — Hi-Tech Titanium ═══
 createMiniScene('canvas-implant', (scene) => {
   const group = new THREE.Group();
   scene.add(group);
 
-  const pl = new THREE.PointLight(0x00e5b0, 4, 15);
-  pl.position.set(2, 2, 3);
-  scene.add(pl);
+  // Setup ACES tonemapping per-renderer is done in createMiniScene
+  const aLight = new THREE.AmbientLight(0xffffff, 0.2);
+  scene.add(aLight);
+  const key = new THREE.DirectionalLight(0xe8f4ff, 2.5);
+  key.position.set(3,4,4); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x00d4ff, 2.0);
+  rim.position.set(-3,1,-2); scene.add(rim);
+  const pl = new THREE.PointLight(0x4ade80, 3, 12);
+  pl.position.set(0,2,3); scene.add(pl);
 
-  // screw body
-  const mat = new THREE.MeshStandardMaterial({ color: 0x88aacc, metalness: 0.95, roughness: 0.05 });
-  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.22, 3.2, 12), mat);
+  const tiMat = new THREE.MeshStandardMaterial({ color:0x9ab8d4, metalness:0.97, roughness:0.04 });
+  const cerMat = new THREE.MeshStandardMaterial({ color:0xf5f0eb, metalness:0.02, roughness:0.10 });
+
+  // Screw
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.32,0.2,3.4,16), tiMat);
   group.add(body);
-  for (let i = 0; i < 20; i++) {
-    const tr = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.05, 6, 20), mat);
-    tr.rotation.x = Math.PI/2;
-    tr.position.y = -1.4 + i * 0.16;
-    group.add(tr);
+  for(let i=0;i<24;i++){
+    const tr=new THREE.Mesh(new THREE.TorusGeometry(0.35,0.048,8,24),tiMat);
+    tr.rotation.x=Math.PI/2; tr.position.y=-1.5+i*0.14; group.add(tr);
   }
-  // crown
-  const crown = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.55, 0.5, 0.9, 32),
-    new THREE.MeshStandardMaterial({ color: 0xf0ece8, metalness: 0.08, roughness: 0.2 })
-  );
-  crown.position.y = 2.0;
-  group.add(crown);
-  // abutment
-  const ab = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.35, 0.7, 16),
-    new THREE.MeshStandardMaterial({ color: 0xaaaaaa, metalness: 0.8, roughness: 0.1 }));
-  ab.position.y = 1.55;
-  group.add(ab);
-  // glow
-  const glow = new THREE.PointLight(0x00c8ff, 3, 8);
-  glow.position.set(0, 0, 2);
-  scene.add(glow);
+  // Hex head
+  const hex=new THREE.Mesh(new THREE.CylinderGeometry(0.24,0.24,0.32,6),tiMat);
+  hex.position.y=1.75; group.add(hex);
+  // Abutment
+  const ab=new THREE.Mesh(new THREE.CylinderGeometry(0.32,0.24,0.65,16),tiMat);
+  ab.position.y=2.25; group.add(ab);
+  // Crown
+  const crown=new THREE.Mesh(new THREE.CylinderGeometry(0.58,0.52,0.9,32),cerMat);
+  crown.position.y=2.9; group.add(crown);
+  const dome=new THREE.Mesh(new THREE.SphereGeometry(0.58,24,12,0,Math.PI*2,0,Math.PI*0.5),cerMat);
+  dome.position.y=3.35; group.add(dome);
 
-  return { group, animate: (t, g) => {
-    g.rotation.y = t * 0.6;
-    g.position.y = Math.sin(t * 0.8) * 0.15;
-    glow.intensity = 2.5 + Math.sin(t * 1.5) * 0.8;
+  // Scan ring
+  const scanRing=new THREE.Mesh(new THREE.TorusGeometry(1.2,0.012,8,80),
+    new THREE.MeshBasicMaterial({color:0x00d4ff,transparent:true,opacity:0.7}));
+  scanRing.rotation.x=Math.PI/2; scene.add(scanRing);
+
+  // Glow halo
+  const halo=new THREE.Mesh(new THREE.CylinderGeometry(0.68,0.62,0.95,32),
+    new THREE.MeshBasicMaterial({color:0x00d4ff,transparent:true,opacity:0.06,side:THREE.BackSide}));
+  halo.position.y=2.9; scene.add(halo);
+
+  // Particles
+  const pg=new THREE.BufferGeometry();
+  const pp=[];
+  for(let i=0;i<80;i++) pp.push((Math.random()-.5)*6,(Math.random()-.5)*5,(Math.random()-.5)*3);
+  pg.setAttribute('position',new THREE.Float32BufferAttribute(pp,3));
+  const pts=new THREE.Points(pg,new THREE.PointsMaterial({color:0x00d4ff,size:0.045,transparent:true,opacity:0.6}));
+  scene.add(pts);
+
+  return { group, animate: (t,g) => {
+    g.rotation.y = t*0.55;
+    g.position.y = Math.sin(t*0.8)*0.18;
+    scanRing.position.y = Math.sin(t*1.2)*3.5;
+    scanRing.material.opacity = 0.5+Math.sin(t*3)*0.3;
+    pl.intensity = 2.5+Math.sin(t*1.8)*0.8;
+    pts.rotation.y = t*0.12;
+    halo.material.opacity = 0.04+Math.sin(t*2)*0.03;
   }};
 });
 
-// Scaling card scene
+// ═══ CARD SCENE: SCALING — Ultrasonic Clean ═══
 createMiniScene('canvas-scaling', (scene) => {
   const group = new THREE.Group();
   scene.add(group);
 
-  scene.add(new THREE.PointLight(0x00c8ff, 4, 12));
+  scene.add(new THREE.AmbientLight(0xffffff,0.25));
+  const key=new THREE.DirectionalLight(0xddeeff,2.5); key.position.set(3,4,4); scene.add(key);
+  const pl=new THREE.PointLight(0x00aaff,3,12); pl.position.set(0,2,3); scene.add(pl);
 
-  // tooth shape
-  const toothMat = new THREE.MeshStandardMaterial({ color: 0xfffde7, metalness: 0.0, roughness: 0.25 });
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.7, 0.5, 32), toothMat);
-  base.position.y = 0.3;
-  group.add(base);
-  const dome = new THREE.Mesh(new THREE.SphereGeometry(0.9, 32, 16, 0, Math.PI*2, 0, Math.PI*0.6), toothMat);
-  dome.position.y = 0.5;
-  group.add(dome);
-  // root
-  const root = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.08, 1.5, 16), toothMat);
-  root.position.y = -0.95;
-  group.add(root);
+  const tMat=new THREE.MeshStandardMaterial({color:0xfff8e7,metalness:0.0,roughness:0.18});
+  const tartarMat=new THREE.MeshStandardMaterial({color:0x8b7240,metalness:0,roughness:0.9});
+  const cleanMat=new THREE.MeshStandardMaterial({color:0xffffff,metalness:0.05,roughness:0.08});
 
-  // tartar (brownish patches)
-  const tartarMat = new THREE.MeshStandardMaterial({ color: 0x8b7355, metalness: 0, roughness: 0.9 });
-  for (let i = 0; i < 6; i++) {
-    const a = (i / 6) * Math.PI * 2;
-    const t2 = new THREE.Mesh(new THREE.SphereGeometry(0.14, 8, 6), tartarMat);
-    t2.position.set(Math.cos(a)*0.75, 0.1 + Math.random()*0.3, Math.sin(a)*0.75);
-    group.add(t2);
+  // Tooth body
+  const base=new THREE.Mesh(new THREE.CylinderGeometry(1.0,0.8,0.6,32),tMat);
+  base.position.y=0.3; group.add(base);
+  const dome=new THREE.Mesh(new THREE.SphereGeometry(1.0,32,16,0,Math.PI*2,0,Math.PI*0.6),tMat);
+  dome.position.y=0.6; group.add(dome);
+  const root=new THREE.Mesh(new THREE.CylinderGeometry(0.35,0.08,1.6,16),tMat);
+  root.position.y=-1.1; group.add(root);
+
+  // Tartar patches
+  const tartarMeshes=[];
+  for(let i=0;i<8;i++){
+    const a=(i/8)*Math.PI*2;
+    const tm=new THREE.Mesh(new THREE.SphereGeometry(0.16,8,6),tartarMat.clone());
+    tm.position.set(Math.cos(a)*0.9,0.1+Math.random()*0.4,Math.sin(a)*0.9);
+    group.add(tm); tartarMeshes.push(tm);
   }
 
-  // sparkle particles (cleaning)
-  const sparkGeo = new THREE.BufferGeometry();
-  const pos = [];
-  for (let i = 0; i < 40; i++) {
-    const a = Math.random() * Math.PI * 2;
-    const r = 0.7 + Math.random() * 0.6;
-    pos.push(Math.cos(a)*r, Math.random()*1.5 - 0.5, Math.sin(a)*r);
-  }
-  sparkGeo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-  const sparkPts = new THREE.Points(sparkGeo, new THREE.PointsMaterial({ color: 0x00c8ff, size: 0.1, transparent: true, opacity: 0.8 }));
-  group.add(sparkPts);
+  // Clean sparkle particles
+  const sg=new THREE.BufferGeometry();
+  const sp=[];
+  for(let i=0;i<100;i++){const a=Math.random()*Math.PI*2,r=0.7+Math.random()*0.7;
+    sp.push(Math.cos(a)*r,Math.random()*1.6-0.5,Math.sin(a)*r);}
+  sg.setAttribute('position',new THREE.Float32BufferAttribute(sp,3));
+  const sparkPts=new THREE.Points(sg,new THREE.PointsMaterial({color:0x00d4ff,size:0.09,transparent:true,opacity:0}));
+  scene.add(sparkPts);
 
-  return { group, animate: (t, g) => {
-    g.rotation.y = t * 0.5;
-    g.position.y = Math.sin(t) * 0.1;
-    sparkPts.material.opacity = 0.5 + Math.sin(t*2)*0.4;
-    sparkPts.rotation.y = -t * 0.8;
+  // Ultrasonic scaler tool
+  const scalerMat=new THREE.MeshStandardMaterial({color:0xcccccc,metalness:0.9,roughness:0.1});
+  const scaler=new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.03,2.0,8),scalerMat);
+  scaler.position.set(1.6,0.5,0.9); scaler.rotation.z=0.65; scene.add(scaler);
+  // Scaler tip glow
+  const tipGlow=new THREE.PointLight(0x00aaff,0,5);
+  tipGlow.position.set(0.8,0.9,0.4); scene.add(tipGlow);
+
+  return { group, animate: (t,g) => {
+    g.rotation.y = t*0.35;
+    const phase = t%8;
+    tartarMeshes.forEach((tm,i)=>{
+      const f=Math.max(0,Math.min(1,(phase-i*0.3)/2.5));
+      tm.material.opacity=1-f; tm.scale.setScalar(1-f*0.9);
+    });
+    sparkPts.material.opacity = phase>3 ? Math.min(0.85,(phase-3)*0.3) : 0;
+    sparkPts.rotation.y = t*0.6;
+    // scaler vibrates
+    scaler.rotation.z = 0.65+Math.sin(t*12)*0.04;
+    tipGlow.intensity = phase<5 ? 2+Math.sin(t*8)*1.5 : 0;
+    pl.intensity = 2.5+Math.sin(t*1.5)*0.8;
   }};
 });
 
-// Root canal scene
+// ═══ CARD SCENE: ROOT CANAL — Precision Rotary ═══
 createMiniScene('canvas-root', (scene) => {
   const group = new THREE.Group();
   scene.add(group);
 
-  const pl = new THREE.PointLight(0xb06aff, 5, 12);
-  pl.position.set(1, 2, 3);
-  scene.add(pl);
+  scene.add(new THREE.AmbientLight(0xffffff,0.2));
+  const key=new THREE.DirectionalLight(0xeeeeff,2.2); key.position.set(3,4,4); scene.add(key);
+  const pl=new THREE.PointLight(0xaa44ff,4,14); pl.position.set(1,2,3); scene.add(pl);
 
-  const toothMat = new THREE.MeshStandardMaterial({ color: 0xf5f0ea, metalness: 0.0, roughness: 0.3 });
-  // cut-open tooth cross section look
-  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.65, 1.2, 32), toothMat);
-  body.position.y = 0.6;
-  group.add(body);
+  const tMat=new THREE.MeshStandardMaterial({color:0xf4f0e8,metalness:0,roughness:0.25});
+  const canalMat=new THREE.MeshStandardMaterial({color:0xff4488,metalness:0,roughness:0.5,transparent:true,opacity:0.85});
+  const fileMat=new THREE.MeshStandardMaterial({color:0xddddaa,metalness:0.88,roughness:0.12});
 
-  // canal visualization
-  const canalMat = new THREE.MeshStandardMaterial({ color: 0xff6b9d, metalness: 0, roughness: 0.5, transparent: true, opacity: 0.85 });
-  const canal = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.04, 2.0, 12), canalMat);
-  canal.position.y = -0.4;
-  group.add(canal);
-
-  // file (rotary instrument)
-  const fileMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, metalness: 0.9, roughness: 0.1 });
-  const file = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.02, 2.5, 8), fileMat);
-  file.position.set(0.8, 0, 0);
-  group.add(file);
-  for (let i = 0; i < 16; i++) {
-    const t2 = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.018, 4, 8), fileMat);
-    t2.position.set(0.8, -0.9 + i * 0.12, 0);
-    t2.rotation.x = Math.PI/2;
-    group.add(t2);
+  // Tooth
+  const tbody=new THREE.Mesh(new THREE.CylinderGeometry(0.92,0.72,0.65,32),tMat);
+  tbody.position.y=0.6; group.add(tbody);
+  const tdome=new THREE.Mesh(new THREE.SphereGeometry(0.92,32,16,0,Math.PI*2,0,Math.PI*0.6),tMat);
+  tdome.position.y=0.95; group.add(tdome);
+  for(let s2 of [-0.38,0.38]){
+    const r=new THREE.Mesh(new THREE.CylinderGeometry(0.28,0.07,2.4,12),tMat);
+    r.position.set(s2,-1.5,0); r.rotation.z=s2>0?0.2:-0.2; group.add(r);
   }
 
-  // glow tube
-  const glowTube = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.12, 0.06, 1.8, 12),
-    new THREE.MeshStandardMaterial({ color: 0xb06aff, transparent: true, opacity: 0.3, emissive: 0xb06aff, emissiveIntensity: 0.5 })
-  );
-  glowTube.position.y = -0.3;
-  group.add(glowTube);
+  // Canal channel
+  const canal=new THREE.Mesh(new THREE.CylinderGeometry(0.1,0.04,2.0,12),canalMat);
+  canal.position.set(-0.38,-0.9,0); canal.rotation.z=0.2; scene.add(canal);
 
-  return { group, animate: (t, g) => {
-    g.rotation.y = t * 0.4;
-    file.rotation.y = t * 3;
-    g.position.y = Math.sin(t * 0.9) * 0.1;
-    pl.intensity = 4 + Math.sin(t * 2) * 1;
+  // Rotary file
+  const fileBody=new THREE.Mesh(new THREE.CylinderGeometry(0.062,0.02,2.2,8),fileMat);
+  fileBody.position.set(0.75,0,0); scene.add(fileBody);
+  for(let i=0;i<16;i++){
+    const tr=new THREE.Mesh(new THREE.TorusGeometry(0.09,0.018,4,10),fileMat);
+    tr.rotation.x=Math.PI/2; tr.position.set(0.75,-0.9+i*0.12,0); scene.add(tr);
+  }
+
+  // Gutta percha fill
+  const gpMat=new THREE.MeshStandardMaterial({color:0xff9999,metalness:0,roughness:0.7,transparent:true,opacity:0});
+  const gp=new THREE.Mesh(new THREE.CylinderGeometry(0.085,0.035,1.9,12),gpMat);
+  gp.position.set(-0.38,-0.9,0); gp.rotation.z=0.2; scene.add(gp);
+
+  // Scan ring
+  const scanR=new THREE.Mesh(new THREE.TorusGeometry(1.5,0.01,8,80),
+    new THREE.MeshBasicMaterial({color:0xaa44ff,transparent:true,opacity:0.5}));
+  scene.add(scanR);
+
+  return { group, animate: (t,g) => {
+    g.rotation.y = t*0.32;
+    fileBody.rotation.y = t*6;
+    const phase=t%10;
+    canal.material.opacity = phase<4 ? 0.85 : Math.max(0,0.85-(phase-4)*0.4);
+    gp.material.opacity = phase>6 ? Math.min(0.9,(phase-6)*0.45) : 0;
+    scanR.position.y = Math.sin(t*0.9)*2.5;
+    scanR.material.opacity = 0.3+Math.sin(t*2)*0.25;
+    pl.intensity = 3.5+Math.sin(t*1.8)*1.2;
   }};
 });
 
-// Filling card scene
+// ═══ CARD SCENE: FILLING — UV Composite ═══
 createMiniScene('canvas-fill', (scene) => {
   const group = new THREE.Group();
   scene.add(group);
 
-  scene.add(new THREE.PointLight(0xffb347, 5, 12));
+  scene.add(new THREE.AmbientLight(0xffffff,0.25));
+  const key=new THREE.DirectionalLight(0xfff5e0,2.5); key.position.set(3,4,4); scene.add(key);
+  const pl=new THREE.PointLight(0xffaa00,3,12); pl.position.set(0,2,3); scene.add(pl);
 
-  const toothMat = new THREE.MeshStandardMaterial({ color: 0xfff9f0, metalness: 0.0, roughness: 0.2 });
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.7, 0.5, 32), toothMat);
-  base.position.y = 0.25;
-  group.add(base);
-  const dome = new THREE.Mesh(new THREE.SphereGeometry(0.85, 32, 16, 0, Math.PI*2, 0, Math.PI*0.6), toothMat);
-  dome.position.y = 0.5;
-  group.add(dome);
+  const tMat=new THREE.MeshStandardMaterial({color:0xfff9f0,metalness:0.0,roughness:0.18});
+  const base=new THREE.Mesh(new THREE.CylinderGeometry(0.9,0.75,0.55,32),tMat);
+  base.position.y=0.28; group.add(base);
+  const dome=new THREE.Mesh(new THREE.SphereGeometry(0.9,32,16,0,Math.PI*2,0,Math.PI*0.6),tMat);
+  dome.position.y=0.55; group.add(dome);
+  const rr=new THREE.Mesh(new THREE.CylinderGeometry(0.35,0.08,1.5,16),tMat);
+  rr.position.y=-0.95; group.add(rr);
 
-  // cavity (dark pit)
-  const cavMat = new THREE.MeshStandardMaterial({ color: 0x3a2a1a, metalness: 0, roughness: 1 });
-  const cav = new THREE.Mesh(new THREE.SphereGeometry(0.28, 16, 12), cavMat);
-  cav.position.set(0.2, 1.15, 0.15);
-  group.add(cav);
+  // Cavity
+  const cavMat=new THREE.MeshStandardMaterial({color:0x2a1a0a,metalness:0,roughness:1});
+  const cav=new THREE.Mesh(new THREE.SphereGeometry(0.28,16,12),cavMat);
+  cav.position.set(0.25,1.15,0.18); group.add(cav);
 
-  // filling material (composite resin)
-  const fillMat = new THREE.MeshStandardMaterial({
-    color: 0xffe0b0,
-    metalness: 0.02,
-    roughness: 0.15,
-    emissive: 0xffb347,
-    emissiveIntensity: 0.1
+  // Fill material — composite resin
+  const fillMat=new THREE.MeshStandardMaterial({
+    color:0xffe0b0, metalness:0.02, roughness:0.1,
+    emissive:0xffaa00, emissiveIntensity:0
   });
-  const fill = new THREE.Mesh(new THREE.SphereGeometry(0.27, 16, 12), fillMat);
-  fill.position.set(0.2, 1.15, 0.15);
-  fill.scale.set(0, 0, 0);
-  group.add(fill);
+  const fill=new THREE.Mesh(new THREE.SphereGeometry(0.27,16,12),fillMat);
+  fill.position.set(0.25,1.15,0.18); fill.scale.setScalar(0); group.add(fill);
 
-  // UV light
-  const uvLight = new THREE.PointLight(0x6040ff, 8, 6);
-  uvLight.position.set(1.5, 1.5, 1);
-  scene.add(uvLight);
+  // UV light wand
+  const wandMat=new THREE.MeshStandardMaterial({color:0x4060cc,metalness:0.6,roughness:0.3});
+  const wand=new THREE.Mesh(new THREE.CylinderGeometry(0.14,0.1,1.6,12),wandMat);
+  wand.position.set(1.4,0.9,0.6); wand.rotation.z=-0.8; scene.add(wand);
+  const uvLight=new THREE.PointLight(0x4040ff,0,8);
+  uvLight.position.set(0.8,1.4,0.8); scene.add(uvLight);
 
-  // light wand
-  const wand = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.08, 1.5, 12), new THREE.MeshStandardMaterial({ color: 0x4060aa, metalness: 0.5, roughness: 0.3 }));
-  wand.position.set(1.2, 0.8, 0.5);
-  wand.rotation.z = -0.8;
-  group.add(wand);
+  // UV glow cone from wand tip
+  const coneMat=new THREE.MeshBasicMaterial({color:0x8888ff,transparent:true,opacity:0,side:THREE.DoubleSide});
+  const cone=new THREE.Mesh(new THREE.ConeGeometry(0.4,1.0,16),coneMat);
+  cone.position.set(0.55,1.1,0.55); cone.rotation.z=0.8; scene.add(cone);
 
-  let filled = false;
-  return { group, animate: (t, g) => {
-    g.rotation.y = t * 0.4;
-    // filling animation
-    const phase = (t % 6) / 6;
-    if (phase < 0.5) {
-      cav.visible = true;
-      fill.scale.setScalar(0);
-      uvLight.intensity = 0;
-    } else {
-      cav.visible = false;
-      const s = Math.min(1, (phase - 0.5) * 4);
+  // Sparkle burst on cure
+  const sg=new THREE.BufferGeometry();
+  const sp=[];
+  for(let i=0;i<60;i++) sp.push((Math.random()-.5)*2.5,(Math.random()-.5)*2.5,(Math.random()-.5)*2.5);
+  sg.setAttribute('position',new THREE.Float32BufferAttribute(sp,3));
+  const sparks=new THREE.Points(sg,new THREE.PointsMaterial({color:0xffcc44,size:0.07,transparent:true,opacity:0}));
+  scene.add(sparks);
+
+  return { group, animate: (t,g) => {
+    g.rotation.y = t*0.38;
+    const phase=(t%7)/7;
+    if(phase<0.45){ cav.visible=true; fill.scale.setScalar(0); uvLight.intensity=0; cone.material.opacity=0; sparks.material.opacity=0; }
+    else {
+      cav.visible=false;
+      const s=Math.min(1,(phase-0.45)*5);
       fill.scale.setScalar(s);
-      uvLight.intensity = s * 8;
+      fillMat.emissiveIntensity = s*0.4;
+      uvLight.intensity = s*9;
+      cone.material.opacity = s*0.25;
+      sparks.material.opacity = s>0.8 ? (s-0.8)*4 : 0;
     }
-    g.position.y = Math.sin(t * 0.8) * 0.12;
+    g.position.y=Math.sin(t*0.8)*0.12;
+    pl.intensity=2.5+Math.sin(t*1.5)*0.9;
   }};
 });
+
 
 // ═══════════════════════════════════════════════
 // 4. VIDEO SECTION CANVASES (3D animated previews)
