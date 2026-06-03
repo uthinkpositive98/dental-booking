@@ -1866,40 +1866,40 @@ footer p { color: rgba(255,255,255,0.45); }
         </div>
       </div>
       <div class="contact-items">
-        <div class="contact-item">
-          <div class="c-icon">📍</div>
+        <div class="contact-item contact-item-lg">
+          <div class="c-icon c-icon-lg">📍</div>
           <div>
-            <div class="c-label">ที่อยู่</div>
-            <div class="c-val">บางปะอิน อยุธยา</div>
+            <div class="c-label c-label-lg">ที่อยู่</div>
+            <div class="c-val c-val-lg">บางปะอิน อยุธยา</div>
           </div>
         </div>
-        <div class="contact-item">
-          <div class="c-icon">📞</div>
+        <div class="contact-item contact-item-lg">
+          <div class="c-icon c-icon-lg">📞</div>
           <div>
-            <div class="c-label">โทรศัพท์</div>
-            <div class="c-val">092-359-5963</div>
+            <div class="c-label c-label-lg">โทรศัพท์</div>
+            <div class="c-val c-val-lg">092-359-5963</div>
           </div>
         </div>
-        <div class="contact-item">
-          <div class="c-icon">⏰</div>
+        <div class="contact-item contact-item-lg">
+          <div class="c-icon c-icon-lg">⏰</div>
           <div>
-            <div class="c-label">เวลาทำการ</div>
-            <div class="c-val">เปิดให้บริการทุกวัน จันทร์ – อาทิตย์</div>
-            <div style="font-size:13px;color:#5e7a96;margin-top:3px;font-family:'Prompt',sans-serif;">09:00 – 14:00 น.</div>
+            <div class="c-label c-label-lg">เวลาทำการ</div>
+            <div class="c-val c-val-lg">เปิดให้บริการทุกวัน จันทร์ – อาทิตย์</div>
+            <div style="font-size:16px;color:#5e7a96;margin-top:4px;font-family:'Prompt',sans-serif;font-weight:600;">09:00 – 14:00 น.</div>
           </div>
         </div>
-        <div class="contact-item">
-          <div class="c-icon">👶</div>
+        <div class="contact-item contact-item-lg">
+          <div class="c-icon c-icon-lg">👶</div>
           <div>
-            <div class="c-label">ทันตแพทย์เด็ก &amp; ฟันปลอม</div>
-            <div class="c-val">เข้าวันจันทร์ และ วันพุธ</div>
+            <div class="c-label c-label-lg">ทันตแพทย์เด็ก &amp; ฟันปลอม</div>
+            <div class="c-val c-val-lg">เข้าวันจันทร์ และ วันพุธ</div>
           </div>
         </div>
-        <div class="contact-item">
-          <div class="c-icon">💬</div>
+        <div class="contact-item contact-item-lg">
+          <div class="c-icon c-icon-lg">💬</div>
           <div>
-            <div class="c-label">LINE Official</div>
-            <div class="c-val">@BangpainDental</div>
+            <div class="c-label c-label-lg">LINE Official</div>
+            <div class="c-val c-val-lg">@Bangpainclinic</div>
           </div>
         </div>
       </div>
@@ -3255,6 +3255,20 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 }
 @keyframes bkSpin { to { transform: rotate(360deg); } }
 #bkLoadingOverlay .bk-loading-text { font-size: 15px; color: #1565c0; font-weight: 600; font-family: 'Noto Sans Thai', sans-serif; }
+
+/* ── Contact items larger ── */
+.contact-item-lg {
+  padding: 20px 24px !important;
+  gap: 20px !important;
+  border-radius: 18px !important;
+}
+.c-icon-lg {
+  width: 58px !important; height: 58px !important;
+  font-size: 28px !important;
+  border-radius: 16px !important;
+}
+.c-label-lg { font-size: 14px !important; margin-bottom: 4px !important; }
+.c-val-lg   { font-size: 20px !important; font-weight: 800 !important; }
 </style>
 
 <!-- Loading overlay for booking -->
