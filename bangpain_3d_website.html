@@ -62,13 +62,51 @@ nav {
   box-shadow: 0 2px 16px rgba(21,101,192,0.08);
 }
 .nav-logo {
-  font-family: 'Prompt', sans-serif;
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: default;
 }
-.nav-logo span { color: var(--teal); }
+.nav-logo-icon {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #e3f4ff 0%, #b3e0ff 100%);
+  border: 1.5px solid rgba(2,136,209,0.25);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 12px rgba(2,136,209,0.15);
+}
+.nav-logo-icon svg { width: 22px; height: 22px; }
+.nav-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.nav-logo-main {
+  font-family: 'Prompt', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #0a2d6e 30%, #0288d1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-logo-main span {
+  background: linear-gradient(135deg, #0288d1, #00897b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-logo-sub {
+  font-family: 'Prompt', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  color: #78a8c8;
+  text-transform: uppercase;
+}
 .nav-links { display: flex; gap: 32px; }
 .nav-links a {
   color: var(--text-muted);
@@ -1158,7 +1196,23 @@ footer p { color: rgba(255,255,255,0.45); }
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">BANGPAIN<span>DENTAL</span></div>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C9.5 2 7.5 3.5 6.5 5.5C5.2 5.2 3 6 3 8.5C3 10.5 4.5 12 4.5 12C4.5 16 6 22 8 22C9.5 22 10 20 12 20C14 20 14.5 22 16 22C18 22 19.5 16 19.5 12C19.5 12 21 10.5 21 8.5C21 6 18.8 5.2 17.5 5.5C16.5 3.5 14.5 2 12 2Z" fill="url(#tooth-grad)" stroke="rgba(2,136,209,0.3)" stroke-width="0.5"/>
+        <defs>
+          <linearGradient id="tooth-grad" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#60b8e8"/>
+            <stop offset="100%" stop-color="#0288d1"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="nav-logo-text">
+      <div class="nav-logo-main">BANGPAIN<span>DENTAL</span></div>
+      <div class="nav-logo-sub">DENTAL CLINIC · บางปะอิน</div>
+    </div>
+  </div>
   <div class="nav-links">
     <a href="#services">บริการ</a>
     <a href="#gallery">ผลงาน</a>
