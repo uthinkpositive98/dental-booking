@@ -1197,16 +1197,9 @@ footer p { color: rgba(255,255,255,0.45); }
 <!-- NAV -->
 <nav>
   <div class="nav-logo">
-    <div class="nav-logo-icon">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C9.5 2 7.5 3.5 6.5 5.5C5.2 5.2 3 6 3 8.5C3 10.5 4.5 12 4.5 12C4.5 16 6 22 8 22C9.5 22 10 20 12 20C14 20 14.5 22 16 22C18 22 19.5 16 19.5 12C19.5 12 21 10.5 21 8.5C21 6 18.8 5.2 17.5 5.5C16.5 3.5 14.5 2 12 2Z" fill="url(#tooth-grad)" stroke="rgba(2,136,209,0.3)" stroke-width="0.5"/>
-        <defs>
-          <linearGradient id="tooth-grad" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#60b8e8"/>
-            <stop offset="100%" stop-color="#0288d1"/>
-          </linearGradient>
-        </defs>
-      </svg>
+    <div class="nav-logo-icon" style="padding:0;overflow:hidden;width:46px;height:46px;">
+      <img src="photos/clinic-logo.jpg" alt="Bang Pa-in Dental Clinic Logo"
+           style="width:100%;height:100%;object-fit:cover;display:block;">
     </div>
     <div class="nav-logo-text">
       <div class="nav-logo-main">BANGPAIN<span>DENTAL</span></div>
@@ -1299,13 +1292,14 @@ footer p { color: rgba(255,255,255,0.45); }
       <div style="
         position:absolute; bottom:24px; left:50%; transform:translateX(-50%);
         background:linear-gradient(135deg,#0a2d6e,#0288d1);
-        color:white; padding:10px 24px; border-radius:50px;
+        color:white; padding:8px 20px; border-radius:50px;
         font-family:'Prompt',sans-serif; font-size:13px; font-weight:700;
         white-space:nowrap; z-index:2;
         box-shadow:0 4px 16px rgba(2,136,209,0.35);
         display:flex; align-items:center; gap:8px;
       ">
-        <span style="font-size:16px">🦷</span>
+        <img src="photos/clinic-logo.jpg" alt="logo"
+             style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,0.4);">
         Dr. Nawarat Phaewphisakul
       </div>
     </div>
@@ -1866,8 +1860,16 @@ footer p { color: rgba(255,255,255,0.45); }
 
   <div class="contact-layout">
     <div class="contact-info reveal">
-      <div class="contact-brand">BANGPAIN<span>DENTAL</span></div>
-      <div class="contact-tagline">คลินิกทันตกรรมบางปะอิน</div>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:10px;">
+        <img src="photos/clinic-logo.jpg" alt="Bang Pa-in Dental Clinic Logo"
+             style="width:80px;height:80px;border-radius:50%;object-fit:cover;
+                    border:3px solid rgba(2,136,209,0.2);
+                    box-shadow:0 4px 16px rgba(2,136,209,0.15);">
+        <div>
+          <div class="contact-brand">BANGPAIN<span>DENTAL</span></div>
+          <div class="contact-tagline">คลินิกทันตกรรมบางปะอิน</div>
+        </div>
+      </div>
       <div class="contact-items">
         <div class="contact-item">
           <div class="c-icon">📍</div>
@@ -1928,7 +1930,11 @@ footer p { color: rgba(255,255,255,0.45); }
 </section>
 
 <footer>
-  <p>© 2025 Bangpain Dental Clinic · คลินิกทันตกรรมบางปะอิน · All Rights Reserved</p>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <img src="photos/clinic-logo.jpg" alt="logo"
+         style="width:36px;height:36px;border-radius:50%;object-fit:cover;opacity:0.8;">
+    <p>© 2025 Bang Pa-in Dental Clinic · คลินิกทันตกรรมบางปะอิน · All Rights Reserved</p>
+  </div>
   <p style="color:rgba(0,229,176,0.6)">Made with ❤️ &amp; WebGL 3D</p>
 </footer>
 
