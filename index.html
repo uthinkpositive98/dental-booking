@@ -1897,8 +1897,30 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
       <span class="gz-dot"></span>😊 ผู้ป่วยที่ไว้วางใจเรา — จากทุกมุมโลก
       <span class="gz-count">12 ภาพ</span>
     </div>
-    <div class="happy-track-wrap">
-      <div class="happy-track">
+    <div style="position:relative;">
+      <button onclick="happyScroll(-1)" style="
+        position:absolute;left:-22px;top:50%;transform:translateY(-50%);
+        z-index:10;width:52px;height:52px;border-radius:50%;
+        background:white;border:none;cursor:pointer;
+        box-shadow:0 4px 20px rgba(0,0,0,0.15);
+        font-size:26px;font-weight:300;color:#0b1b2e;
+        display:flex;align-items:center;justify-content:center;
+        transition:box-shadow 0.2s,transform 0.2s;
+      " onmouseover="this.style.boxShadow='0 6px 28px rgba(0,0,0,0.22)';this.style.transform='translateY(-50%) scale(1.1)'"
+         onmouseout="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.15)';this.style.transform='translateY(-50%) scale(1)'">‹</button>
+      <button onclick="happyScroll(1)" style="
+        position:absolute;right:-22px;top:50%;transform:translateY(-50%);
+        z-index:10;width:52px;height:52px;border-radius:50%;
+        background:white;border:none;cursor:pointer;
+        box-shadow:0 4px 20px rgba(0,0,0,0.15);
+        font-size:26px;font-weight:300;color:#0b1b2e;
+        display:flex;align-items:center;justify-content:center;
+        transition:box-shadow 0.2s,transform 0.2s;
+      " onmouseover="this.style.boxShadow='0 6px 28px rgba(0,0,0,0.22)';this.style.transform='translateY(-50%) scale(1.1)'"
+         onmouseout="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.15)';this.style.transform='translateY(-50%) scale(1)'">›</button>
+
+      <div class="happy-track-wrap" id="happyWrap">
+        <div class="happy-track" id="happyTrack">
         <div class="happy-card" onclick="openLightbox('photos/476459567_1901161537326604_5782047335765215602_n.jpg')">
           <img src="photos/476459567_1901161537326604_5782047335765215602_n.jpg" alt="Patient Review — At Clinic">
           <div class="ba-caption">Patient Review — At Clinic</div>
@@ -1963,9 +1985,10 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
           <img src="photos/480410546_1050731920403450_6722516403775793064_n.jpg" alt="Orthodontics — Completed">
           <div class="ba-caption">Orthodontics — Completed</div>
         </div>
-      </div>
-    </div>
-  </div>
+        </div><!-- happy-track -->
+      </div><!-- happy-track-wrap -->
+    </div><!-- relative container -->
+  </div><!-- gallery-zone -->
 
   <!-- ════ ZONE 2: ก่อน & หลัง รากฟันเทียม (3 before + 5 after) ════ -->
   <div class="gallery-zone reveal">
@@ -3586,6 +3609,20 @@ createVideoScene('vid-3', 0x7c3aed, (scene, camera, pl) => {
   }
   animate();
 })();
+
+// ─── Happy Carousel Manual Scroll ───
+let _happyOff = 0;
+function happyScroll(dir) {
+  const track = document.getElementById('happyTrack');
+  const wrap  = document.getElementById('happyWrap');
+  if (!track || !wrap) return;
+  track.style.animationPlayState = 'paused';
+  _happyOff = Math.max(0, _happyOff + dir * 248);
+  const max = track.scrollWidth / 2 - wrap.offsetWidth;
+  if (_happyOff > max) _happyOff = 0;
+  track.style.transition = 'transform 0.45s cubic-bezier(0.16,1,0.3,1)';
+  track.style.transform  = `translateX(-${_happyOff}px)`;
+}
 
 // ═══════════════════════════════════════════════
 // 6. SCROLL REVEAL
