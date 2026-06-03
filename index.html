@@ -1,0 +1,3260 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คลินิกทันตกรรมบางปะอิน | Bangpain Dental Clinic</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Prompt:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="three.min.js"></script>
+<style>
+:root {
+  --navy:        #0a2d6e;
+  --blue:        #1565c0;
+  --cyan:        #0288d1;
+  --teal:        #00897b;
+  --teal-light:  #4db6ac;
+  --gold:        #f59e0b;
+  --white:       #ffffff;
+  --bg:          #eef6ff;
+  --bg2:         #f0f9ff;
+  --bg3:         #e3f2fd;
+  --card-bg:     #ffffff;
+  --glass:       rgba(255,255,255,0.72);
+  --glass-border:rgba(25,118,210,0.15);
+  --text-h:      #0a2d6e;
+  --text-body:   #263c5a;
+  --text-muted:  #5e7a96;
+  --shadow:      0 4px 24px rgba(21,101,192,0.10);
+  --shadow-lg:   0 12px 48px rgba(21,101,192,0.16);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: var(--bg);
+  color: var(--text-body);
+  overflow-x: hidden;
+}
+
+/* ── CANVAS BG ── */
+#bg-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; width: 100%;
+  z-index: 100;
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(25,118,210,0.12);
+  box-shadow: 0 2px 16px rgba(21,101,192,0.08);
+}
+.nav-logo {
+  font-family: 'Prompt', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--navy);
+}
+.nav-logo span { color: var(--teal); }
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-family: 'Prompt', sans-serif;
+  transition: color 0.3s;
+  position: relative;
+  font-weight: 600;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 2px;
+  background: var(--teal);
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+.nav-links a:hover { color: var(--blue); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-cta {
+  background: linear-gradient(135deg, var(--teal), var(--cyan));
+  color: #fff !important;
+  padding: 8px 22px;
+  border-radius: 50px;
+  font-weight: 700 !important;
+}
+.nav-cta::after { display: none !important; }
+
+/* ── SECTIONS ── */
+section { position: relative; z-index: 1; }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 100px 80px 60px;
+  overflow: hidden;
+}
+
+.hero-content {
+  flex: 1;
+  max-width: 580px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,229,176,0.12);
+  border: 1px solid rgba(0,229,176,0.35);
+  color: var(--teal);
+  padding: 6px 18px;
+  border-radius: 50px;
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  font-family: 'Prompt', sans-serif;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+.hero-badge .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse-dot 1.5s infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { opacity:1; transform: scale(1); }
+  50% { opacity:0.4; transform: scale(1.4); }
+}
+
+.hero h1 {
+  font-family: 'Prompt', sans-serif;
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 10px;
+}
+.hero h1 .line1 { color: var(--white); }
+.hero h1 .line2 {
+  background: linear-gradient(90deg, var(--teal), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero h1 .line3 { color: var(--white); font-size: 52px; }
+
+.hero-sub {
+  font-size: 17px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.7;
+  margin: 20px 0 36px;
+}
+.hero-sub strong { color: var(--cyan); }
+
+.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--cyan) 100%);
+  color: var(--navy);
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-family: 'Prompt', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  text-decoration: none;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 0 30px rgba(0,229,176,0.35);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 50px rgba(0,229,176,0.55);
+}
+.btn-outline {
+  border: 2px solid rgba(255,255,255,0.25);
+  color: var(--white);
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-family: 'Prompt', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  transition: border-color 0.3s, background 0.3s;
+}
+.btn-outline:hover {
+  border-color: var(--teal);
+  background: rgba(0,229,176,0.08);
+}
+
+
+/* Hero 3D area */
+.hero-3d {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 600px;
+}
+#tooth-canvas {
+  width: 100%;
+  height: 100%;
+}
+.hero-3d-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.floating-label {
+  position: absolute;
+  background: rgba(5,14,45,0.8);
+  border: 1px solid rgba(0,229,176,0.4);
+  backdrop-filter: blur(12px);
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  animation: float-y 3s ease-in-out infinite;
+}
+.floating-label::before {
+  content: '';
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 12px var(--teal);
+}
+.fl-1 { top: 18%; right: 8%; animation-delay: 0s; }
+.fl-1::before { bottom: -14px; left: 20px; }
+.fl-2 { top: 42%; right: 2%; animation-delay: 0.8s; }
+.fl-2::before { bottom: -14px; left: 20px; }
+.fl-3 { bottom: 28%; right: 10%; animation-delay: 1.5s; }
+.fl-3::before { top: -14px; left: 20px; }
+
+@keyframes float-y {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ── 3D SERVICE CARDS ── */
+#services {
+  padding: 100px 80px;
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+.section-tag {
+  display: inline-block;
+  color: var(--teal);
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-family: 'Prompt', sans-serif;
+  margin-bottom: 12px;
+}
+.section-header h2 {
+  font-family: 'Prompt', sans-serif;
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+.section-header h2 span {
+  background: linear-gradient(90deg, var(--teal), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.section-header p {
+  font-size: 16px;
+  color: rgba(255,255,255,0.55);
+  margin-top: 12px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.service-card-3d {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 40px 36px;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition: transform 0.4s, box-shadow 0.4s, border-color 0.4s;
+  transform-style: preserve-3d;
+}
+.service-card-3d:hover {
+  transform: translateY(-8px) rotateX(2deg);
+  border-color: rgba(0,229,176,0.4);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 40px rgba(0,229,176,0.1);
+}
+.service-card-3d .card-glow {
+  position: absolute;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+.service-card-3d:hover .card-glow { opacity: 1; }
+
+.card-3d-scene {
+  width: 100%;
+  height: 220px;
+  position: relative;
+  margin-bottom: 28px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.3);
+}
+.card-3d-scene canvas { width: 100% !important; height: 100% !important; }
+
+.service-number {
+  position: absolute;
+  top: 16px; right: 20px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 56px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.04);
+  line-height: 1;
+}
+.service-icon-wrap {
+  width: 52px; height: 52px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  margin-bottom: 16px;
+}
+.service-card-3d h3 {
+  font-family: 'Prompt', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.service-card-3d .en-name {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+.service-card-3d p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.service-price-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.service-price {
+  font-family: 'Prompt', sans-serif;
+}
+.price-label { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 2px; }
+.price-val {
+  font-size: 32px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--teal), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.price-unit { font-size: 14px; color: rgba(255,255,255,0.4); }
+.service-badge {
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Prompt', sans-serif;
+}
+.badge-teal { background: rgba(0,229,176,0.15); color: var(--teal); border: 1px solid rgba(0,229,176,0.3); }
+.badge-cyan { background: rgba(0,200,255,0.12); color: var(--cyan); border: 1px solid rgba(0,200,255,0.25); }
+.badge-gold { background: rgba(255,215,0,0.12); color: var(--gold); border: 1px solid rgba(255,215,0,0.25); }
+.badge-red { background: rgba(255,80,80,0.12); color: #ff6b6b; border: 1px solid rgba(255,80,80,0.25); }
+
+/* service colors */
+.s1 { --accent: #00e5b0; }
+.s1 .service-icon-wrap { background: rgba(0,229,176,0.15); }
+.s1 .card-glow { background: radial-gradient(circle, rgba(0,229,176,0.15), transparent 70%); top:-50px; left:-50px; }
+.s2 { --accent: #00c8ff; }
+.s2 .service-icon-wrap { background: rgba(0,200,255,0.15); }
+.s2 .card-glow { background: radial-gradient(circle, rgba(0,200,255,0.15), transparent 70%); top:-50px; left:-50px; }
+.s3 { --accent: #b06aff; }
+.s3 .service-icon-wrap { background: rgba(176,106,255,0.15); }
+.s3 .card-glow { background: radial-gradient(circle, rgba(176,106,255,0.15), transparent 70%); top:-50px; left:-50px; }
+.s4 { --accent: #ffb347; }
+.s4 .service-icon-wrap { background: rgba(255,179,71,0.15); }
+.s4 .card-glow { background: radial-gradient(circle, rgba(255,179,71,0.15), transparent 70%); top:-50px; left:-50px; }
+
+/* ── VIDEO SECTION ── */
+#video-section {
+  padding: 100px 80px;
+  background: rgba(0,0,0,0.3);
+}
+.video-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+.video-main, .video-side { position: relative; border-radius: 20px; overflow: hidden; }
+.video-main { height: 420px; }
+.video-side { display: flex; flex-direction: column; gap: 24px; }
+.video-thumb {
+  flex: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+.video-canvas-wrap {
+  width: 100%; height: 100%;
+  position: relative;
+}
+.video-canvas-wrap canvas { display: block; width: 100%; height: 100%; }
+
+.play-btn {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s, background 0.3s;
+  z-index: 2;
+}
+.play-btn:hover {
+  transform: translate(-50%,-50%) scale(1.12);
+  background: rgba(0,229,176,0.3);
+  border-color: var(--teal);
+}
+.play-btn svg { margin-left: 4px; }
+
+.video-info {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 24px 20px 16px;
+  background: linear-gradient(to top, rgba(5,14,45,0.95), transparent);
+}
+.video-info h4 {
+  font-family: 'Prompt', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.video-info p { font-size: 13px; color: rgba(255,255,255,0.55); }
+
+.video-tag {
+  position: absolute;
+  top: 16px; left: 16px;
+  background: var(--teal);
+  color: var(--navy);
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: 'Prompt', sans-serif;
+  letter-spacing: 1px;
+}
+.video-tag.cyan { background: var(--cyan); }
+.video-tag.purple { background: #b06aff; color: white; }
+
+/* ── 3D PROCESS ── */
+#process {
+  padding: 100px 80px;
+}
+.process-timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 64px;
+}
+.process-timeline::before {
+  content: '';
+  position: absolute;
+  top: 52px;
+  left: 12.5%; right: 12.5%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--cyan), var(--teal));
+  z-index: 0;
+}
+.process-step {
+  text-align: center;
+  padding: 0 16px;
+  position: relative;
+  z-index: 1;
+}
+.step-orb {
+  width: 104px; height: 104px;
+  border-radius: 50%;
+  margin: 0 auto 24px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.step-orb-inner {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: var(--glass);
+  border: 2px solid;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  position: relative;
+  z-index: 2;
+  animation: orb-spin 6s linear infinite;
+}
+@keyframes orb-spin {
+  0% { box-shadow: 0 0 0 0 rgba(0,229,176,0.4); }
+  50% { box-shadow: 0 0 30px 8px rgba(0,229,176,0.15); }
+  100% { box-shadow: 0 0 0 0 rgba(0,229,176,0.4); }
+}
+.step-orb-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed rgba(0,229,176,0.35);
+  animation: ring-rotate 8s linear infinite;
+}
+@keyframes ring-rotate { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+.step-num {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--cyan));
+  color: var(--navy);
+  font-family: 'Prompt', sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 3;
+}
+.process-step h4 {
+  font-family: 'Prompt', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.process-step p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+/* ── WHY US ── */
+#why {
+  padding: 100px 80px;
+  background: rgba(0,0,0,0.2);
+}
+.why-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  margin-top: 64px;
+}
+.why-3d-wrap {
+  position: relative;
+  height: 500px;
+}
+#why-canvas { width: 100%; height: 100%; }
+
+.why-items { display: flex; flex-direction: column; gap: 24px; }
+.why-item-3d {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 24px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.why-item-3d:hover {
+  border-color: rgba(0,229,176,0.35);
+  transform: translateX(6px);
+}
+.why-icon-3d {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+.why-item-3d h4 {
+  font-family: 'Prompt', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.why-item-3d p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+/* ── FREE PROMO ── */
+#promo {
+  padding: 80px;
+}
+.promo-card {
+  border-radius: 32px;
+  padding: 64px 80px;
+  background: linear-gradient(135deg, #062454 0%, #0a3d8f 50%, #062454 100%);
+  border: 1px solid rgba(0,229,176,0.2);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.promo-card::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,229,176,0.08) 0%, transparent 70%);
+  top: -200px; left: 50%;
+  transform: translateX(-50%);
+}
+.promo-tag {
+  display: inline-block;
+  background: #e63946;
+  color: white;
+  padding: 6px 20px;
+  border-radius: 50px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 24px;
+  animation: promo-pulse 2s ease-in-out infinite;
+}
+@keyframes promo-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(230,57,70,0.5); }
+  50% { box-shadow: 0 0 0 12px rgba(230,57,70,0); }
+}
+.promo-card h2 {
+  font-family: 'Prompt', sans-serif;
+  font-size: 56px;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.promo-card h2 em {
+  background: linear-gradient(90deg, var(--teal), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-style: normal;
+}
+.promo-card p {
+  font-size: 18px;
+  color: rgba(255,255,255,0.7);
+  max-width: 500px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+.promo-services {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.promo-svc {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── CONTACT / FOOTER ── */
+#contact {
+  padding: 100px 80px 60px;
+  background: rgba(0,0,0,0.4);
+}
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 80px;
+  align-items: start;
+  margin-top: 64px;
+}
+.contact-info {}
+.contact-brand {
+  font-family: 'Prompt', sans-serif;
+  font-size: 36px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+.contact-brand span { color: var(--teal); }
+.contact-tagline {
+  color: rgba(255,255,255,0.5);
+  font-size: 15px;
+  margin-bottom: 40px;
+}
+.contact-items { display: flex; flex-direction: column; gap: 16px; }
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  transition: border-color 0.3s;
+}
+.contact-item:hover { border-color: rgba(0,229,176,0.35); }
+.c-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(0,229,176,0.12);
+  border: 1px solid rgba(0,229,176,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.c-label { font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 2px; }
+.c-val { font-family: 'Prompt', sans-serif; font-size: 15px; font-weight: 700; }
+
+.map-box {
+  border-radius: 20px;
+  overflow: hidden;
+  height: 300px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.3);
+  font-size: 14px;
+  position: relative;
+}
+.map-placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px;
+}
+.map-pin { font-size: 48px; }
+
+footer {
+  background: rgba(0,0,0,0.5);
+  padding: 24px 80px;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+footer p { font-size: 13px; color: rgba(255,255,255,0.35); }
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.hidden-init {
+  opacity: 0;
+  transform: translateY(40px);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  #hero { padding: 100px 30px 60px; flex-direction: column; }
+  .hero h1 { font-size: 48px; }
+  .hero h1 .line3 { font-size: 36px; }
+  .hero-3d { height: 350px; }
+  .services-grid { grid-template-columns: 1fr; }
+  #services, #video-section, #process, #why, #promo, #contact { padding: 60px 30px; }
+  .video-grid { grid-template-columns: 1fr; }
+  .process-timeline { grid-template-columns: 1fr 1fr; }
+  .why-layout { grid-template-columns: 1fr; gap: 40px; }
+  .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+  .promo-card { padding: 40px 30px; }
+  .promo-card h2 { font-size: 38px; }
+  footer { padding: 24px 30px; }
+  nav { padding: 14px 20px; }
+  .nav-links { gap: 16px; }
+}
+
+/* ════════════════════════════════════════
+   LIGHT THEME OVERRIDES
+   ════════════════════════════════════════ */
+
+/* BG canvas — lighter grid */
+#bg-canvas { opacity: 0.35; }
+
+/* Hero */
+#hero { background: linear-gradient(160deg, #dbeeff 0%, #eef6ff 50%, #d6f0ff 100%); }
+.hero-badge { background: rgba(0,137,123,0.10); border-color: rgba(0,137,123,0.3); color: var(--teal); }
+.hero-badge .dot { background: var(--teal); }
+.hero h1 .line1 { color: var(--navy); }
+.hero h1 .line3 { color: var(--navy); }
+.hero-sub { color: var(--text-body); }
+.hero-sub strong { color: var(--blue); }
+.btn-outline {
+  border-color: rgba(21,101,192,0.3);
+  color: var(--blue);
+  backdrop-filter: none;
+}
+.btn-outline:hover { border-color: var(--teal); background: rgba(0,137,123,0.07); color: var(--teal); }
+
+/* Floating labels */
+.floating-label {
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(0,137,123,0.35);
+  color: var(--teal);
+  box-shadow: 0 4px 16px rgba(21,101,192,0.12);
+}
+
+/* Section backgrounds */
+#services      { background: var(--bg); }
+#video-section { background: #dbeeff; }
+#process       { background: var(--bg2); }
+#why           { background: #dbeeff; }
+#contact       { background: var(--bg2); }
+
+/* Section headers */
+.section-tag { color: var(--teal); }
+.section-header h2 { color: var(--navy); }
+.section-header p  { color: var(--text-muted); }
+
+/* Service cards */
+.service-card-3d {
+  background: #ffffff;
+  border-color: rgba(21,101,192,0.12);
+  box-shadow: var(--shadow);
+}
+.service-card-3d:hover {
+  border-color: rgba(0,137,123,0.4);
+  box-shadow: 0 20px 60px rgba(21,101,192,0.14), 0 0 30px rgba(0,137,123,0.08);
+}
+.service-card-3d h3       { color: var(--navy); }
+.service-card-3d .en-name { color: var(--text-muted); }
+.service-card-3d p        { color: var(--text-body); }
+.service-number           { color: rgba(21,101,192,0.05); }
+.price-label { color: var(--text-muted); }
+.price-unit  { color: var(--text-muted); }
+
+/* Card scene bg */
+.card-3d-scene { background: #eef6ff; }
+
+/* Video section */
+.video-info h4 { color: #fff; }
+.video-info p  { color: rgba(255,255,255,0.7); }
+
+/* Process */
+.process-timeline::before { background: linear-gradient(90deg, var(--teal), var(--cyan), var(--teal)); }
+.step-orb-inner { background: #fff; border-color: var(--teal) !important; }
+.step-orb-ring  { border-color: rgba(0,137,123,0.3) !important; }
+.process-step h4 { color: var(--navy); }
+.process-step p  { color: var(--text-muted); }
+
+/* Why */
+.why-item-3d {
+  background: #fff;
+  border-color: rgba(21,101,192,0.12);
+  box-shadow: var(--shadow);
+}
+.why-item-3d:hover { border-color: rgba(0,137,123,0.35); }
+.why-item-3d h4 { color: var(--navy); }
+.why-item-3d p  { color: var(--text-muted); }
+
+/* Promo */
+.promo-card {
+  background: linear-gradient(135deg, #0a3d8f 0%, #1565c0 50%, #0a3d8f 100%);
+}
+.promo-card h2 { color: #fff; }
+.promo-card h2 em { color: #4dd9c0; }
+.promo-card p  { color: rgba(255,255,255,0.8); }
+.promo-svc     { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); color: #fff; }
+
+/* Contact */
+.contact-brand      { color: var(--navy); }
+.contact-tagline    { color: var(--text-muted); }
+.contact-item       { background: #fff; border-color: rgba(21,101,192,0.12); box-shadow: var(--shadow); }
+.contact-item:hover { border-color: rgba(0,137,123,0.35); }
+.c-label { color: var(--text-muted); }
+.c-val   { color: var(--navy); }
+
+/* Footer */
+footer {
+  background: var(--navy);
+  border-top: none;
+}
+footer p { color: rgba(255,255,255,0.45); }
+
+/* Floating booking button — keep bright */
+#floatBookBtn {
+  box-shadow: 0 6px 28px rgba(0,137,123,0.4) !important;
+}
+
+/* Photo Gallery section */
+#gallery { background: var(--bg2); padding: 100px 80px; }
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 48px;
+}
+.gallery-col { display: flex; flex-direction: column; gap: 20px; }
+.before-after-wrap {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #dbe8f4;
+  box-shadow: var(--shadow);
+  cursor: zoom-in;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.before-after-wrap:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.before-after-wrap img {
+  width: 100%; display: block;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+.before-after-wrap:hover img { transform: scale(1.04); }
+.ba-label {
+  position: absolute;
+  top: 14px; left: 14px;
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.ba-label.before {
+  background: rgba(230,57,70,0.85);
+  color: #fff;
+}
+.ba-label.after {
+  background: rgba(0,137,123,0.85);
+  color: #fff;
+}
+.ba-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 28px 16px 14px;
+  background: linear-gradient(to top, rgba(10,45,110,0.75), transparent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Prompt', sans-serif;
+}
+
+/* Lightbox */
+#lightbox {
+  display: none;
+  position: fixed; inset: 0;
+  z-index: 3000;
+  background: rgba(5,14,45,0.92);
+  backdrop-filter: blur(12px);
+  align-items: center; justify-content: center;
+}
+#lightbox.open { display: flex; }
+#lightbox img {
+  max-width: 88vw; max-height: 88vh;
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+}
+#lightbox-close {
+  position: absolute;
+  top: 24px; right: 28px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; width: 44px; height: 44px;
+  border-radius: 50%; font-size: 22px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+#lightbox-close:hover { background: rgba(255,80,80,0.35); }
+
+/* ── Gallery zones ── */
+.gallery-zone { margin-bottom: 52px; }
+
+.gz-label {
+  font-family: 'Prompt', sans-serif;
+  font-size: 15px; font-weight: 700; color: var(--navy);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  background: white; border-radius: 12px;
+  border-left: 4px solid var(--gz-color, var(--teal));
+  box-shadow: var(--shadow);
+}
+.gz-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gz-color, var(--teal)); flex-shrink: 0;
+  box-shadow: 0 0 8px var(--gz-color, var(--teal));
+}
+.gz-count {
+  margin-left: auto; font-size: 11px; font-weight: 600;
+  color: var(--text-muted); background: var(--bg3);
+  padding: 2px 10px; border-radius: 20px;
+}
+
+/* Before/After split */
+.ba-split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.ba-col { display: flex; flex-direction: column; gap: 14px; }
+.ba-col-header {
+  text-align: center; padding: 8px 16px; border-radius: 10px;
+  font-family: 'Prompt', sans-serif; font-size: 13px; font-weight: 800; letter-spacing: 1px;
+}
+
+/* X-ray grid */
+.xray-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+
+/* Gallery section label (legacy) */
+.gallery-section-label {
+  font-family: 'Prompt', sans-serif; font-size: 15px; font-weight: 700;
+  color: var(--navy); margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+  padding-left: 14px; border-left: 4px solid var(--teal);
+}
+
+/* Happy patients carousel */
+.happy-track-wrap {
+  overflow: hidden;
+  border-radius: 18px;
+  position: relative;
+}
+.happy-track-wrap::before,
+.happy-track-wrap::after {
+  content: '';
+  position: absolute; top: 0; bottom: 0;
+  width: 80px; z-index: 2; pointer-events: none;
+}
+.happy-track-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg2), transparent);
+}
+.happy-track-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg2), transparent);
+}
+
+.happy-track {
+  display: flex;
+  gap: 16px;
+  animation: carouselScroll 40s linear infinite;
+  width: max-content;
+}
+.happy-track:hover { animation-play-state: paused; }
+
+@keyframes carouselScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.happy-card {
+  flex-shrink: 0;
+  width: 220px; height: 240px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.happy-card:hover {
+  transform: scale(1.04);
+  box-shadow: var(--shadow-lg);
+}
+.happy-card img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top;
+  transition: transform 0.4s;
+}
+.happy-card:hover img { transform: scale(1.08); }
+.happy-card .ba-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 20px 12px 10px;
+  background: linear-gradient(to top, rgba(10,45,110,0.7), transparent);
+  color: #fff; font-size: 12px; font-weight: 600;
+  font-family: 'Prompt', sans-serif;
+}
+
+/* Gallery CTA card */
+.gallery-cta-card {
+  background: linear-gradient(135deg, var(--blue), var(--navy));
+  border-radius: 18px; padding: 24px 20px;
+  text-align: center; color: #fff; cursor: pointer;
+  display: flex; flex-direction: column; gap: 10px;
+  align-items: center; justify-content: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  min-height: 185px;
+}
+.gallery-cta-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(10,45,110,0.3);
+}
+.gallery-cta-btn {
+  background: linear-gradient(135deg, #4db6ac, #0288d1);
+  border-radius: 50px; padding: 10px 24px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 13px; font-weight: 800;
+}
+
+/* Placeholder for missing photos */
+.ba-ph {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #dbeeff, #e8f4ff);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--text-muted);
+  font-family: 'Prompt', sans-serif; font-weight: 600;
+}
+
+@media(max-width:900px){
+  #gallery { padding: 60px 24px; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .happy-card { width: 180px; height: 200px; }
+  .ba-split-grid { grid-template-columns: 1fr; }
+  .xray-grid { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width:560px){
+  .gallery-grid { grid-template-columns: 1fr; }
+  .happy-card { width: 150px; height: 170px; }
+  .ba-split-grid { grid-template-columns: 1fr; }
+  .xray-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- BG PARTICLE CANVAS -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">BANGPAIN<span>DENTAL</span></div>
+  <div class="nav-links">
+    <a href="#services">บริการ</a>
+    <a href="#gallery">ผลงาน</a>
+    <a href="#process">ขั้นตอน</a>
+    <a href="#why">ทำไมเลือกเรา</a>
+    <a href="#" class="nav-cta" onclick="openBooking();return false;">📅 นัดหมาย</a>
+  </div>
+</nav>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section id="hero">
+  <div class="hero-content reveal">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      BANGPAIN DENTAL CLINIC
+    </div>
+    <h1>
+      <span class="line1">รักษาฟัน</span><br>
+      <span class="line2">ครบวงจร</span><br>
+      <span class="line3">ด้วยเทคโนโลยี 3D</span>
+    </h1>
+    <p class="hero-sub">
+      ทีมทันตแพทย์ผู้เชี่ยวชาญกว่า <strong>25 ปี</strong><br>
+      รากเทียม · ขูดหินปูน · รักษาราก · อุดฟัน<br>
+      มาตรฐานสากล ราคาคุ้มค่า
+    </p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary" onclick="openBooking();return false;">📅 นัดหมายวันนี้</a>
+      <a href="#services" class="btn-outline">ดูบริการทั้งหมด →</a>
+    </div>
+  </div>
+
+  <div class="hero-3d">
+    <canvas id="tooth-canvas"></canvas>
+    <div class="hero-3d-labels">
+      <div class="floating-label fl-1">🦷 รากเทียม Implant</div>
+      <div class="floating-label fl-2">✨ ขูดหินปูน</div>
+      <div class="floating-label fl-3">🔬 รักษาราก</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ SERVICES ══════════════════ -->
+<section id="services">
+  <div class="section-header reveal">
+    <div class="section-tag">⬡ บริการหลัก</div>
+    <h2>เชี่ยวชาญ<span>ทันตกรรม</span><br>4 บริการหลัก</h2>
+    <p>เทคโนโลยีทันสมัย ทีมแพทย์เชี่ยวชาญ ราคาคุ้มค่า</p>
+  </div>
+
+  <div class="services-grid">
+
+    <!-- IMPLANT -->
+    <div class="service-card-3d s1 reveal">
+      <div class="card-glow"></div>
+      <div class="service-number">01</div>
+      <div class="card-3d-scene" id="scene-implant">
+        <canvas id="canvas-implant"></canvas>
+      </div>
+      <div class="service-icon-wrap">🦷</div>
+      <h3>รากเทียม</h3>
+      <div class="en-name">DENTAL IMPLANT</div>
+      <p>ฝังรากเทียมไทเทเนียมเกรดการแพทย์ แข็งแรงทนทานเหมือนฟันธรรมชาติ รับแรงกัดได้เต็มที่ ไม่กระทบฟันข้างเคียง</p>
+      <div class="service-price-row">
+        <div class="service-price">
+          <div class="price-label">เริ่มต้น</div>
+          <span class="price-val">30,000</span>
+          <span class="price-unit"> บาท/ซี่</span>
+        </div>
+        <span class="service-badge badge-teal">✦ รับประกัน 10 ปี</span>
+      </div>
+    </div>
+
+    <!-- SCALING -->
+    <div class="service-card-3d s2 reveal" style="transition-delay:0.1s">
+      <div class="card-glow"></div>
+      <div class="service-number">02</div>
+      <div class="card-3d-scene" id="scene-scaling">
+        <canvas id="canvas-scaling"></canvas>
+      </div>
+      <div class="service-icon-wrap">💎</div>
+      <h3>ขูดหินปูน</h3>
+      <div class="en-name">TEETH SCALING & POLISHING</div>
+      <p>ขูดหินปูนอัลตราซาวด์ ขจัดคราบแบคทีเรีย ป้องกันเหงือกอักเสบ พร้อมขัดฟันให้ขาวสะอาดเป็นประกาย</p>
+      <div class="service-price-row">
+        <div class="service-price">
+          <div class="price-label">เริ่มต้น</div>
+          <span class="price-val">900</span>
+          <span class="price-unit"> บาทขึ้นไป</span>
+        </div>
+        <span class="service-badge badge-cyan">🏥 ใช้สิทธิประกันสังคมได้</span>
+      </div>
+    </div>
+
+    <!-- ROOT CANAL -->
+    <div class="service-card-3d s3 reveal" style="transition-delay:0.2s">
+      <div class="card-glow"></div>
+      <div class="service-number">03</div>
+      <div class="card-3d-scene" id="scene-root">
+        <canvas id="canvas-root"></canvas>
+      </div>
+      <div class="service-icon-wrap">🔬</div>
+      <h3>รักษาราก</h3>
+      <div class="en-name">ROOT CANAL TREATMENT</div>
+      <p>รักษาคลองรากฟันด้วยเครื่อง Rotary กรอโพรงรากอัตโนมัติ แม่นยำ เจ็บน้อย ช่วยรักษาฟันแท้ไว้ได้นานที่สุด</p>
+      <div class="service-price-row">
+        <div class="service-price">
+          <div class="price-label">สอบถามราคา</div>
+          <span class="price-val" style="font-size:20px">092-359-5963</span>
+        </div>
+        <span class="service-badge badge-red">⚡ Rotary Tech</span>
+      </div>
+    </div>
+
+    <!-- FILLING -->
+    <div class="service-card-3d s4 reveal" style="transition-delay:0.3s">
+      <div class="card-glow"></div>
+      <div class="service-number">04</div>
+      <div class="card-3d-scene" id="scene-fill">
+        <canvas id="canvas-fill"></canvas>
+      </div>
+      <div class="service-icon-wrap">🌟</div>
+      <h3>อุดฟัน</h3>
+      <div class="en-name">TOOTH FILLING</div>
+      <p>อุดฟันด้วยวัสดุคอมโพสิตเรซินสีเหมือนฟัน เนียนแนบสนิท ทนทาน ไม่มีสารปรอท เหมาะสำหรับฟันผุทุกระดับ</p>
+      <div class="service-price-row">
+        <div class="service-price">
+          <div class="price-label">เริ่มต้น</div>
+          <span class="price-val">900</span>
+          <span class="price-unit"> บาทขึ้นไป</span>
+        </div>
+        <span class="service-badge badge-gold">🏥 ใช้สิทธิประกันสังคมได้</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════ 3D VIDEO SECTION ══════════════════ -->
+<section id="video-section">
+  <div class="section-header reveal">
+    <div class="section-tag">▶ วิดีโอ 3D</div>
+    <h2>ดูขั้นตอน<span>การรักษา</span><br>แบบ 3D Animation</h2>
+    <p>เข้าใจการรักษาผ่านภาพเคลื่อนไหว 3 มิติ ก่อนตัดสินใจ</p>
+  </div>
+
+  <div class="video-grid reveal">
+    <div class="video-main">
+      <div class="video-canvas-wrap" style="height:420px">
+        <canvas id="vid-main"></canvas>
+        <div class="video-tag">3D ANIMATION</div>
+        <div class="play-btn" onclick="this.style.display='none'">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+        </div>
+        <div class="video-info">
+          <h4>การฝังรากเทียม Step-by-Step 3D</h4>
+          <p>ดูขั้นตอนการฝังรากเทียม Implant แบบ 3 มิติครบทุกขั้นตอน • 4:32 นาที</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-side">
+      <div class="video-thumb" style="flex:1; position:relative;">
+        <canvas id="vid-2" style="width:100%; height:180px; display:block;"></canvas>
+        <div class="video-tag cyan">SCALING 3D</div>
+        <div class="play-btn" style="width:48px;height:48px" onclick="this.style.display='none'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+        </div>
+        <div class="video-info">
+          <h4>ขูดหินปูน 3D</h4>
+          <p>กำจัดหินปูนอัลตราซาวด์ • 2:15 นาที</p>
+        </div>
+      </div>
+      <div class="video-thumb" style="flex:1; position:relative;">
+        <canvas id="vid-3" style="width:100%; height:180px; display:block;"></canvas>
+        <div class="video-tag purple">ROOT CANAL 3D</div>
+        <div class="play-btn" style="width:48px;height:48px" onclick="this.style.display='none'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+        </div>
+        <div class="video-info">
+          <h4>รักษารากคลองฟัน 3D</h4>
+          <p>Rotary Root Canal • 3:08 นาที</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ PROCESS ══════════════════ -->
+<section id="process">
+  <div class="section-header reveal">
+    <div class="section-tag">◈ ขั้นตอนการรักษา</div>
+    <h2>4 ขั้นตอน<span>ง่ายๆ</span></h2>
+    <p>ตรวจฟรี ไม่มีค่าใช้จ่ายแอบแฝง โปร่งใสทุกขั้นตอน</p>
+  </div>
+
+  <div class="process-timeline reveal">
+    <div class="process-step">
+      <div class="step-orb">
+        <div class="step-orb-ring"></div>
+        <div class="step-orb-inner" style="border-color: var(--teal);">🩺</div>
+        <div class="step-num">1</div>
+      </div>
+      <h4>ตรวจฟัน X-ray</h4>
+      <p>วินิจฉัยด้วยภาพ X-ray 3D ความละเอียดสูง วางแผนการรักษาเฉพาะบุคคล</p>
+    </div>
+    <div class="process-step">
+      <div class="step-orb">
+        <div class="step-orb-ring" style="animation-delay:2s"></div>
+        <div class="step-orb-inner" style="border-color: var(--cyan);">💬</div>
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0080ff)">2</div>
+      </div>
+      <h4>ปรึกษาแพทย์</h4>
+      <p>ทันตแพทย์อธิบายแผนรักษา ราคา และทางเลือกครบถ้วนก่อนเริ่ม</p>
+    </div>
+    <div class="process-step">
+      <div class="step-orb">
+        <div class="step-orb-ring" style="animation-delay:4s"></div>
+        <div class="step-orb-inner" style="border-color: #b06aff;">⚙️</div>
+        <div class="step-num" style="background:linear-gradient(135deg,#b06aff,#6040ff)">3</div>
+      </div>
+      <h4>รักษาด้วยเทคโนโลยี</h4>
+      <p>ทำการรักษาด้วยอุปกรณ์ทันสมัย เจ็บน้อย รวดเร็ว ปลอดภัย</p>
+    </div>
+    <div class="process-step">
+      <div class="step-orb">
+        <div class="step-orb-ring" style="animation-delay:6s"></div>
+        <div class="step-orb-inner" style="border-color: var(--gold);">🌟</div>
+        <div class="step-num" style="background:linear-gradient(135deg,var(--gold),#ff9800)">4</div>
+      </div>
+      <h4>ติดตามผล</h4>
+      <p>นัดติดตามผล รับประกันงาน แจ้งเตือนตรวจฟันประจำปี</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ PHOTO GALLERY (ALL PHOTOS) ══════════════════ -->
+<section id="gallery">
+  <div class="section-header reveal">
+    <div class="section-tag">📸 ผลงานจริง</div>
+    <h2>รอยยิ้ม<span>ของผู้ป่วย</span><br>คือรางวัลของเรา</h2>
+    <p>ภาพถ่ายจริง ทุกรูป — ผู้ป่วยจริง ผลลัพธ์จริง ไม่มีการแต่งภาพ</p>
+  </div>
+
+  <!-- ════ ZONE 1: ผู้ป่วยที่ไว้วางใจเรา (12 selfies) ════ -->
+  <div class="gallery-zone reveal">
+    <div class="gz-label" style="--gz-color:#00897b">
+      <span class="gz-dot"></span>😊 ผู้ป่วยที่ไว้วางใจเรา — จากทุกมุมโลก
+      <span class="gz-count">12 ภาพ</span>
+    </div>
+    <div class="happy-track-wrap">
+      <div class="happy-track">
+        <div class="happy-card" onclick="openLightbox('photos/476459567_1901161537326604_5782047335765215602_n.jpg')">
+          <img src="photos/476459567_1901161537326604_5782047335765215602_n.jpg" alt="ผู้ป่วยพึงพอใจ — หน้าคลินิก">
+          <div class="ba-caption">ผู้ป่วยพึงพอใจ — หน้าคลินิก</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/476463145_1901609050615186_7440291989033222407_n.jpg')">
+          <img src="photos/476463145_1901609050615186_7440291989033222407_n.jpg" alt="รากเทียมสำเร็จ 👍">
+          <div class="ba-caption">รากเทียมสำเร็จ 👍</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/480287953_1050731787070130_7335955959814004359_n.jpg')">
+          <img src="photos/480287953_1050731787070130_7335955959814004359_n.jpg" alt="ยิ้มมั่นใจหลังรักษา">
+          <div class="ba-caption">ยิ้มมั่นใจหลังรักษา</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/480410546_1050731920403450_6722516403775793064_n.jpg')">
+          <img src="photos/480410546_1050731920403450_6722516403775793064_n.jpg" alt="ผู้ป่วยพึงพอใจ ❤️">
+          <div class="ba-caption">ผู้ป่วยพึงพอใจ ❤️</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/480566920_1050731803736795_3521550423838389420_n.jpg')">
+          <img src="photos/480566920_1050731803736795_3521550423838389420_n.jpg" alt="ยิ้มสวยมั่นใจ 🌸">
+          <div class="ba-caption">ยิ้มสวยมั่นใจ 🌸</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/51975475_390139471762159_6051387673413681152_n.jpg')">
+          <img src="photos/51975475_390139471762159_6051387673413681152_n.jpg" alt="ความสวยงามคือผลลัพธ์">
+          <div class="ba-caption">ความสวยงามคือผลลัพธ์</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/51982166_390139365095503_8084173339305705472_n.jpg')">
+          <img src="photos/51982166_390139365095503_8084173339305705472_n.jpg" alt="ฟันสวย ยิ้มมั่นใจ">
+          <div class="ba-caption">ฟันสวย ยิ้มมั่นใจ</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/52020886_390139425095497_543016997315674112_n.jpg')">
+          <img src="photos/52020886_390139425095497_543016997315674112_n.jpg" alt="พึงพอใจในผลลัพธ์">
+          <div class="ba-caption">พึงพอใจในผลลัพธ์</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/47580711_351911642251609_6478484027396325376_n.jpg')">
+          <img src="photos/47580711_351911642251609_6478484027396325376_n.jpg" alt="ผู้ป่วยต่างชาติไว้วางใจ 👍">
+          <div class="ba-caption">ผู้ป่วยต่างชาติไว้วางใจ 👍</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/34962979_229242467851861_6311859207779909632_n.jpg')">
+          <img src="photos/34962979_229242467851861_6311859207779909632_n.jpg" alt="ยิ้มสวยทุกวัย 👍">
+          <div class="ba-caption">ยิ้มสวยทุกวัย 👍</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/306877369_465571075586207_4372613088459434494_n.jpg')">
+          <img src="photos/306877369_465571075586207_4372613088459434494_n.jpg" alt="ผู้ป่วยต่างชาติ 👍">
+          <div class="ba-caption">ผู้ป่วยต่างชาติ 👍</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/48254020_353789405397166_1434594513669586944_n.jpg')">
+          <img src="photos/48254020_353789405397166_1434594513669586944_n.jpg" alt="จัดฟันสำเร็จ ยิ้มได้ 👍">
+          <div class="ba-caption">จัดฟันสำเร็จ ยิ้มได้ 👍</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/476459567_1901161537326604_5782047335765215602_n.jpg')">
+          <img src="photos/476459567_1901161537326604_5782047335765215602_n.jpg" alt="ผู้ป่วยพึงพอใจ — หน้าคลินิก">
+          <div class="ba-caption">ผู้ป่วยพึงพอใจ — หน้าคลินิก</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/476463145_1901609050615186_7440291989033222407_n.jpg')">
+          <img src="photos/476463145_1901609050615186_7440291989033222407_n.jpg" alt="รากเทียมสำเร็จ 👍">
+          <div class="ba-caption">รากเทียมสำเร็จ 👍</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/480287953_1050731787070130_7335955959814004359_n.jpg')">
+          <img src="photos/480287953_1050731787070130_7335955959814004359_n.jpg" alt="ยิ้มมั่นใจหลังรักษา">
+          <div class="ba-caption">ยิ้มมั่นใจหลังรักษา</div>
+        </div>
+        <div class="happy-card" onclick="openLightbox('photos/480410546_1050731920403450_6722516403775793064_n.jpg')">
+          <img src="photos/480410546_1050731920403450_6722516403775793064_n.jpg" alt="ผู้ป่วยพึงพอใจ ❤️">
+          <div class="ba-caption">ผู้ป่วยพึงพอใจ ❤️</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ ZONE 2: ก่อน & หลัง Clinical (3 before + 5 after) ════ -->
+  <div class="gallery-zone reveal">
+    <div class="gz-label" style="--gz-color:#e63946">
+      <span class="gz-dot"></span>🔁 ก่อน &amp; หลัง — ขูดหินปูน / ครอบฟัน
+      <span class="gz-count">8 ภาพ</span>
+    </div>
+
+    <div class="ba-split-grid">
+      <!-- BEFORE column -->
+      <div class="ba-col">
+        <div class="ba-col-header" style="background:#fdecea;color:#e63946">❌ BEFORE — ก่อนรักษา</div>
+        <div class="before-after-wrap" style="height:260px" onclick="openLightbox('photos/before-1.jpg')">
+          <img src="photos/before-1.jpg" alt="หินปูนสะสมหนา เหงือกอักเสบ" style="height:260px">
+          <div class="ba-label" style="background:rgba(230,57,70,0.85)">BEFORE</div>
+          <div class="ba-caption">หินปูนสะสมหนา เหงือกอักเสบ</div>
+        </div>
+        <div class="before-after-wrap" style="height:260px" onclick="openLightbox('photos/before-2.jpg')">
+          <img src="photos/before-2.jpg" alt="คราบหินปูน + ฟันซ้อน close-up" style="height:260px">
+          <div class="ba-label" style="background:rgba(230,57,70,0.85)">BEFORE</div>
+          <div class="ba-caption">คราบหินปูน + ฟันซ้อน close-up</div>
+        </div>
+        <div class="before-after-wrap" style="height:200px" onclick="openLightbox('photos/before-3.jpg')">
+          <img src="photos/before-3.jpg" alt="ฟันผุสึก เหลือง รุนแรง" style="height:200px">
+          <div class="ba-label" style="background:rgba(230,57,70,0.85)">BEFORE</div>
+          <div class="ba-caption">ฟันผุสึก เหลือง รุนแรง</div>
+        </div>
+      </div>
+      <!-- AFTER column -->
+      <div class="ba-col">
+        <div class="ba-col-header" style="background:#e0f2f1;color:#00897b">✅ AFTER — หลังรักษาแล้ว</div>
+        <div class="before-after-wrap" style="height:230px" onclick="openLightbox('photos/after-1.jpg')">
+          <img src="photos/after-1.jpg" alt="ขูดหินปูน + ขัดฟัน — ขาวสะอาดใน 1 ครั้ง" style="height:230px">
+          <div class="ba-label" style="background:rgba(0,137,123,0.85)">AFTER</div>
+          <div class="ba-caption">ขูดหินปูน + ขัดฟัน — ขาวสะอาดใน 1 ครั้ง</div>
+        </div>
+        <div class="before-after-wrap" style="height:230px" onclick="openLightbox('photos/after-2.jpg')">
+          <img src="photos/after-2.jpg" alt="ครอบฟัน Ceramic ขาวสวย มุม 1" style="height:230px">
+          <div class="ba-label" style="background:rgba(0,137,123,0.85)">AFTER</div>
+          <div class="ba-caption">ครอบฟัน Ceramic ขาวสวย มุม 1</div>
+        </div>
+        <div class="before-after-wrap" style="height:230px" onclick="openLightbox('photos/after-3.jpg')">
+          <img src="photos/after-3.jpg" alt="ครอบฟัน Ceramic มุม 2" style="height:230px">
+          <div class="ba-label" style="background:rgba(0,137,123,0.85)">AFTER</div>
+          <div class="ba-caption">ครอบฟัน Ceramic มุม 2</div>
+        </div>
+        <div class="before-after-wrap" style="height:180px" onclick="openLightbox('photos/after-4.jpg')">
+          <img src="photos/after-4.jpg" alt="ยิ้มมั่นใจ ครอบฟันขาว" style="height:180px">
+          <div class="ba-label" style="background:rgba(0,137,123,0.85)">AFTER</div>
+          <div class="ba-caption">ยิ้มมั่นใจ ครอบฟันขาว</div>
+        </div>
+        <div class="before-after-wrap" style="height:180px" onclick="openLightbox('photos/after-5.jpg')">
+          <img src="photos/after-5.jpg" alt="ฟันขาวเรียงสวย wide view" style="height:180px">
+          <div class="ba-label" style="background:rgba(0,137,123,0.85)">AFTER</div>
+          <div class="ba-caption">ฟันขาวเรียงสวย wide view</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div onclick="openBooking()" class="gallery-cta-card" style="margin-top:16px;flex-direction:row;gap:20px;padding:18px 28px;text-align:left;min-height:auto;">
+      <div style="font-size:38px;flex-shrink:0">🦷</div>
+      <div style="flex:1">
+        <div style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800">อยากได้ผลลัพธ์แบบนี้บ้าง?</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:3px">นัดปรึกษาฟรี ไม่มีค่าใช้จ่าย</div>
+      </div>
+      <div class="gallery-cta-btn" style="flex-shrink:0;align-self:center">📅 นัดหมายทันที</div>
+    </div>
+  </div>
+
+  <!-- ════ ZONE 3: จัดฟัน Orthodontics (1 photo) ════ -->
+  <div class="gallery-zone reveal">
+    <div class="gz-label" style="--gz-color:#b06aff">
+      <span class="gz-dot"></span>🔩 จัดฟัน Orthodontics — ก่อน &amp; หลัง
+      <span class="gz-count">1 ภาพ</span>
+    </div>
+    <div class="before-after-wrap" onclick="openLightbox('photos/50626171_373269733449133_2416392834597781504_n.jpg')">
+      <img src="photos/50626171_373269733449133_2416392834597781504_n.jpg"
+           alt="จัดฟัน" style="width:100%;height:auto;max-height:380px;object-fit:cover;display:block">
+      <div class="ba-label" style="background:rgba(176,106,255,0.85)">ORTHO</div>
+      <div class="ba-caption">จัดฟัน before &amp; after — เห็นพัฒนาการทุกขั้นตอน</div>
+    </div>
+  </div>
+
+  <!-- ════ ZONE 4: X-ray รากเทียม (6 photos) ════ -->
+  <div class="gallery-zone reveal">
+    <div class="gz-label" style="--gz-color:#0288d1">
+      <span class="gz-dot"></span>🩻 X-ray รากเทียม — ยืนยันผลลัพธ์ด้วยภาพ
+      <span class="gz-count">6 ภาพ</span>
+    </div>
+    <div class="xray-grid">
+      <div class="before-after-wrap" onclick="openLightbox('photos/480298825_1051214147021894_4073599548645589575_n.jpg')">
+        <img src="photos/480298825_1051214147021894_4073599548645589575_n.jpg" alt="รากเทียม 2 ซี่ — close-up" style="width:100%;height:200px;object-fit:cover;display:block">
+        <div class="ba-label" style="background:rgba(2,136,209,0.85)">X-RAY</div>
+        <div class="ba-caption">รากเทียม 2 ซี่ — close-up</div>
+      </div>
+      <div class="before-after-wrap" onclick="openLightbox('photos/480690918_1051214207021888_5595521395180670819_n.jpg')">
+        <img src="photos/480690918_1051214207021888_5595521395180670819_n.jpg" alt="รากเทียมเดี่ยว — ฝังตรงตำแหน่ง" style="width:100%;height:200px;object-fit:cover;display:block">
+        <div class="ba-label" style="background:rgba(2,136,209,0.85)">X-RAY</div>
+        <div class="ba-caption">รากเทียมเดี่ยว — ฝังตรงตำแหน่ง</div>
+      </div>
+      <div class="before-after-wrap" onclick="openLightbox('photos/480326178_1051414547001854_2437124143880392010_n.jpg')">
+        <img src="photos/480326178_1051414547001854_2437124143880392010_n.jpg" alt="Panoramic + implant" style="width:100%;height:200px;object-fit:cover;display:block">
+        <div class="ba-label" style="background:rgba(2,136,209,0.85)">PANORAMIC</div>
+        <div class="ba-caption">Panoramic + implant</div>
+      </div>
+      <div class="before-after-wrap" onclick="openLightbox('photos/480579301_1051429470333695_5391425816144232400_n.jpg')">
+        <img src="photos/480579301_1051429470333695_5391425816144232400_n.jpg" alt="Panoramic หลายซี่ — full view" style="width:100%;height:200px;object-fit:cover;display:block">
+        <div class="ba-label" style="background:rgba(2,136,209,0.85)">PANORAMIC</div>
+        <div class="ba-caption">Panoramic หลายซี่ — full view</div>
+      </div>
+      <div class="before-after-wrap" onclick="openLightbox('photos/480762404_1051419637001345_8656219167852956817_n.jpg')">
+        <img src="photos/480762404_1051419637001345_8656219167852956817_n.jpg" alt="Panoramic — full jaw view" style="width:100%;height:200px;object-fit:cover;display:block">
+        <div class="ba-label" style="background:rgba(2,136,209,0.85)">PANORAMIC</div>
+        <div class="ba-caption">Panoramic — full jaw view</div>
+      </div>
+      <div class="before-after-wrap" onclick="openLightbox('photos/52123814_389521375157302_5033230534474465280_n.jpg')">
+        <img src="photos/52123814_389521375157302_5033230534474465280_n.jpg" alt="Panoramic รากเทียมหลายตำแหน่ง" style="width:100%;height:200px;object-fit:cover;display:block">
+        <div class="ba-label" style="background:rgba(2,136,209,0.85)">PANORAMIC</div>
+        <div class="ba-caption">Panoramic รากเทียมหลายตำแหน่ง</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- ══════════════════ WHY ══════════════════ -->
+<section id="why">
+  <div class="section-header reveal">
+    <div class="section-tag">✦ ทำไมต้องเลือกเรา</div>
+    <h2>มาตรฐาน<span>สากล</span><br>ใกล้บ้านคุณ</h2>
+  </div>
+
+  <div class="why-layout">
+    <div class="why-3d-wrap reveal">
+      <canvas id="why-canvas"></canvas>
+    </div>
+    <div class="why-items reveal" style="transition-delay:0.2s">
+      <div class="why-item-3d">
+        <div class="why-icon-3d" style="background:rgba(0,229,176,0.12);border:1px solid rgba(0,229,176,0.2)">🏆</div>
+        <div>
+          <h4>ประสบการณ์ 25+ ปี</h4>
+          <p>ทีมทันตแพทย์ผู้เชี่ยวชาญ ผ่านการอบรมเฉพาะทางจากสถาบันชั้นนำ</p>
+        </div>
+      </div>
+      <div class="why-item-3d">
+        <div class="why-icon-3d" style="background:rgba(0,200,255,0.12);border:1px solid rgba(0,200,255,0.2)">🔬</div>
+        <div>
+          <h4>เครื่องมือ 3D ทันสมัย</h4>
+          <p>X-ray CBCT 3D, Digital Scanner, Rotary System ระดับโรงพยาบาลเอกชน</p>
+        </div>
+      </div>
+      <div class="why-item-3d">
+        <div class="why-icon-3d" style="background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.2)">💰</div>
+        <div>
+          <h4>ราคาโปร่งใส ไม่มีซ่อนเร้น</h4>
+          <p>แจ้งราคาชัดเจนก่อนรักษา ผ่อนได้ 0% รับทุกสิทธิ์บัตรทอง-ประกัน</p>
+        </div>
+      </div>
+      <div class="why-item-3d">
+        <div class="why-icon-3d" style="background:rgba(176,106,255,0.12);border:1px solid rgba(176,106,255,0.2)">🛡️</div>
+        <div>
+          <h4>มาตรฐานการฆ่าเชื้อสูงสุด</h4>
+          <p>Autoclave Class B สเตอร์ไลเซชั่นทุกชิ้นงาน ปลอดภัยไร้กังวล</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FREE PROMO ══════════════════ -->
+<section id="promo">
+  <div class="promo-card reveal">
+    <div class="promo-tag">🎉 โปรโมชันพิเศษ</div>
+    <h2>ตรวจฟัน + <em>ขูดหินปูน</em><br>ฟรี! ไม่มีเงื่อนไข</h2>
+    <p>สำหรับผู้ป่วยใหม่ทุกท่าน พร้อมรับคำปรึกษาจากทันตแพทย์ฟรี ไม่จำกัดจำนวน</p>
+    <div class="promo-services">
+      <div class="promo-svc">🦷 ตรวจฟัน X-ray</div>
+      <div class="promo-svc">💎 ขูดหินปูน</div>
+      <div class="promo-svc">💬 ปรึกษาแพทย์</div>
+      <div class="promo-svc">📋 วางแผนรักษา</div>
+    </div>
+    <a href="#" onclick="openBooking();return false;" class="btn-primary" style="font-size:17px; padding:16px 44px; display:inline-flex; gap:10px; align-items:center;">
+      📞 จองสิทธิ์ฟรีทันที
+    </a>
+  </div>
+</section>
+
+<!-- ══════════════════ CONTACT ══════════════════ -->
+<section id="contact">
+  <div class="section-header reveal">
+    <div class="section-tag">📍 ติดต่อเรา</div>
+    <h2>มาพบเรา<span>ได้เลย</span></h2>
+  </div>
+
+  <div class="contact-layout">
+    <div class="contact-info reveal">
+      <div class="contact-brand">BANGPAIN<span>DENTAL</span></div>
+      <div class="contact-tagline">คลินิกทันตกรรมบางปะอิน</div>
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="c-icon">📍</div>
+          <div>
+            <div class="c-label">ที่อยู่</div>
+            <div class="c-val">บางปะอิน อยุธยา</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="c-icon">📞</div>
+          <div>
+            <div class="c-label">โทรศัพท์</div>
+            <div class="c-val">035-XXX-XXX</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="c-icon">⏰</div>
+          <div>
+            <div class="c-label">เวลาทำการ</div>
+            <div class="c-val">จ–ศ 09:00–20:00 · ส–อา 09:00–17:00</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="c-icon">💬</div>
+          <div>
+            <div class="c-label">LINE Official</div>
+            <div class="c-val">@BangpainDental</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay:0.2s">
+      <div class="map-box">
+        <div class="map-placeholder">
+          <span class="map-pin">📍</span>
+          <span>คลินิกทันตกรรมบางปะอิน</span>
+          <a href="https://maps.google.com" target="_blank" style="color:var(--teal);font-size:13px;text-decoration:none;">เปิดใน Google Maps →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Bangpain Dental Clinic · คลินิกทันตกรรมบางปะอิน · All Rights Reserved</p>
+  <p style="color:rgba(0,229,176,0.6)">Made with ❤️ &amp; WebGL 3D</p>
+</footer>
+
+<!-- ══════════════════ FLOATING BOOKING BUTTON ══════════════════ -->
+<button id="floatBookBtn" onclick="openBooking()" style="
+  position: fixed;
+  bottom: 32px; right: 32px;
+  z-index: 200;
+  background: linear-gradient(135deg, #00e5b0, #00c8ff);
+  color: #050e2d;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 28px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 32px rgba(0,229,176,0.45);
+  display: flex; align-items: center; gap: 10px;
+  animation: float-btn 3s ease-in-out infinite;
+  transition: transform 0.2s, box-shadow 0.2s;
+" onmouseover="this.style.transform='translateY(-4px) scale(1.04)';this.style.boxShadow='0 12px 40px rgba(0,229,176,0.65)'"
+   onmouseout="this.style.transform='';this.style.boxShadow='0 6px 32px rgba(0,229,176,0.45)'">
+  <span style="font-size:20px">📅</span> นัดปรึกษาทันตแพทย์
+</button>
+<style>
+@keyframes float-btn {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+</style>
+
+<!-- ══════════════════ BOOKING MODAL ══════════════════ -->
+<div id="bookingModal" style="
+  display: none;
+  position: fixed; inset: 0;
+  z-index: 1000;
+  background: rgba(5,14,45,0.85);
+  backdrop-filter: blur(12px);
+  overflow-y: auto;
+  padding: 24px 16px 40px;
+">
+  <div style="max-width: 660px; margin: 0 auto; position: relative;">
+    <!-- Close button -->
+    <button onclick="closeBooking()" style="
+      position: sticky; top: 0; float: right;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white; border-radius: 50%;
+      width: 40px; height: 40px;
+      font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+      backdrop-filter: blur(10px);
+      z-index: 10;
+      transition: background 0.2s;
+    " onmouseover="this.style.background='rgba(255,80,80,0.3)'"
+       onmouseout="this.style.background='rgba(255,255,255,0.1)'">✕</button>
+    <div style="clear:both;"></div>
+
+    <!-- Booking App Container -->
+    <div id="bookingAppRoot" style="
+      background: #f4f8fc;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+      min-height: 400px;
+    "></div>
+  </div>
+</div>
+
+<!-- ══════════════════ SCRIPTS ══════════════════ -->
+<script>
+// ═══════════════════════════════════════════════
+// 1. BG PARTICLE SYSTEM
+// ═══════════════════════════════════════════════
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (let i = 0; i < 120; i++) {
+    particles.push({
+      x: Math.random() * 9999,
+      y: Math.random() * 9999,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.8 + 0.4,
+      a: Math.random() * 0.3 + 0.08,
+      color: Math.random() > 0.5 ? '#0288d1' : '#00897b'
+    });
+  }
+
+  function drawBg() {
+    ctx.clearRect(0, 0, W, H);
+    // light blue grid
+    ctx.strokeStyle = 'rgba(21,101,192,0.06)';
+    ctx.lineWidth = 1;
+    const gs = 80;
+    for (let x = 0; x < W; x += gs) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y = 0; y < H; y += gs) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.a;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+
+    // lines between close particles
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i+1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(21,101,192,${0.07*(1-d/120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(drawBg);
+  }
+  drawBg();
+})();
+
+// ═══════════════════════════════════════════════
+// 2. HERO 3D TOOTH (Three.js)
+// ═══════════════════════════════════════════════
+(function() {
+  const canvas = document.getElementById('tooth-canvas');
+  const scene = new THREE.Scene();
+  const W = canvas.parentElement.offsetWidth;
+  const H = canvas.parentElement.offsetHeight || 600;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+
+  const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 100);
+  camera.position.set(0, 1, 8);
+
+  // Lights
+  const ambient = new THREE.AmbientLight(0xffffff, 0.3);
+  scene.add(ambient);
+  const dirLight = new THREE.DirectionalLight(0x00e5b0, 2);
+  dirLight.position.set(3, 5, 5);
+  dirLight.castShadow = true;
+  scene.add(dirLight);
+  const pointLight1 = new THREE.PointLight(0x00c8ff, 3, 20);
+  pointLight1.position.set(-4, 2, 3);
+  scene.add(pointLight1);
+  const pointLight2 = new THREE.PointLight(0xffffff, 1.5, 15);
+  pointLight2.position.set(4, -2, 4);
+  scene.add(pointLight2);
+
+  // Materials
+  const toothMat = new THREE.MeshStandardMaterial({
+    color: 0xf0f0f0,
+    metalness: 0.05,
+    roughness: 0.2,
+    envMapIntensity: 1
+  });
+  const implantMat = new THREE.MeshStandardMaterial({
+    color: 0x8ab4d4,
+    metalness: 0.9,
+    roughness: 0.1,
+  });
+  const gumMat = new THREE.MeshStandardMaterial({
+    color: 0xff8fa3,
+    metalness: 0,
+    roughness: 0.7,
+    transparent: true, opacity: 0.85
+  });
+
+  // === TOOTH GROUP ===
+  const toothGroup = new THREE.Group();
+  scene.add(toothGroup);
+
+  // Crown (tooth body)
+  const crownGeo = new THREE.SphereGeometry(0.85, 32, 24, 0, Math.PI*2, 0, Math.PI*0.65);
+  const crown = new THREE.Mesh(crownGeo, toothMat);
+  crown.position.y = 0.5;
+  crown.castShadow = true;
+  toothGroup.add(crown);
+
+  // Crown top flat
+  const topGeo = new THREE.CylinderGeometry(0.75, 0.85, 0.15, 32);
+  const top = new THREE.Mesh(topGeo, toothMat);
+  top.position.y = 1.2;
+  toothGroup.add(top);
+
+  // Cusps (bumps on top)
+  const cuspPositions = [
+    [0.3, 1.35, 0.3], [-0.3, 1.35, 0.3], [0.3, 1.35, -0.3], [-0.3, 1.35, -0.3], [0, 1.38, 0]
+  ];
+  cuspPositions.forEach(([x,y,z]) => {
+    const cg = new THREE.SphereGeometry(0.2, 16, 12);
+    const c = new THREE.Mesh(cg, toothMat);
+    c.position.set(x, y, z);
+    toothGroup.add(c);
+  });
+
+  // Root 1
+  const r1 = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.06, 1.4, 16), toothMat);
+  r1.position.set(0.25, -0.7, 0);
+  r1.rotation.z = 0.15;
+  toothGroup.add(r1);
+
+  // Root 2
+  const r2 = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.06, 1.4, 16), toothMat);
+  r2.position.set(-0.25, -0.7, 0);
+  r2.rotation.z = -0.15;
+  toothGroup.add(r2);
+
+  // Root 3 (back)
+  const r3 = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.05, 1.2, 16), toothMat);
+  r3.position.set(0, -0.65, -0.3);
+  toothGroup.add(r3);
+
+  // Implant screw (titanium)
+  const screwGeo = new THREE.CylinderGeometry(0.14, 0.1, 1.8, 8);
+  const screw = new THREE.Mesh(screwGeo, implantMat);
+  screw.position.set(2.2, -0.3, 0);
+  scene.add(screw);
+
+  // Screw threads
+  for (let i = 0; i < 14; i++) {
+    const tg = new THREE.TorusGeometry(0.17, 0.028, 8, 20);
+    const t = new THREE.Mesh(tg, implantMat);
+    t.position.set(2.2, -1.0 + i * 0.14, 0);
+    t.rotation.x = Math.PI / 2;
+    scene.add(t);
+  }
+
+  // Crown on implant
+  const iCrown = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.32, 0.28, 0.55, 32),
+    new THREE.MeshStandardMaterial({ color: 0xe8e0f0, metalness: 0.1, roughness: 0.15 })
+  );
+  iCrown.position.set(2.2, 0.72, 0);
+  scene.add(iCrown);
+
+  // Gum plane (translucent pink)
+  const gumGeo = new THREE.BoxGeometry(6, 0.4, 3);
+  const gum = new THREE.Mesh(gumGeo, gumMat);
+  gum.position.set(0, -0.2, 0);
+  scene.add(gum);
+
+  // Bone lines
+  const boneMat = new THREE.LineBasicMaterial({ color: 0x4080a0, transparent: true, opacity: 0.3 });
+  for (let i = 0; i < 12; i++) {
+    const pts = [];
+    const x = -3 + i * 0.5;
+    pts.push(new THREE.Vector3(x, -0.4, -1));
+    pts.push(new THREE.Vector3(x + 0.1, -2.0, -1 + Math.random() * 0.3));
+    const geo = new THREE.BufferGeometry().setFromPoints(pts);
+    scene.add(new THREE.Line(geo, boneMat));
+  }
+
+  // Floating particles around tooth
+  const sparkGeo = new THREE.BufferGeometry();
+  const sparkPos = [];
+  for (let i = 0; i < 60; i++) {
+    sparkPos.push((Math.random()-0.5)*6, (Math.random()-0.5)*5, (Math.random()-0.5)*3);
+  }
+  sparkGeo.setAttribute('position', new THREE.Float32BufferAttribute(sparkPos, 3));
+  const sparkMat = new THREE.PointsMaterial({ color: 0x00e5b0, size: 0.06, transparent: true, opacity: 0.7 });
+  const sparks = new THREE.Points(sparkGeo, sparkMat);
+  scene.add(sparks);
+
+  // Orbit ring
+  const ringGeo = new THREE.TorusGeometry(2.8, 0.01, 8, 120);
+  const ringMat = new THREE.MeshBasicMaterial({ color: 0x00e5b0, transparent: true, opacity: 0.2 });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.rotation.x = Math.PI / 2.5;
+  scene.add(ring);
+
+  // Orbit dot
+  const orbitDot = new THREE.Mesh(
+    new THREE.SphereGeometry(0.08, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0x00e5b0 })
+  );
+  scene.add(orbitDot);
+
+  let time = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    time += 0.01;
+    toothGroup.rotation.y = Math.sin(time * 0.5) * 0.3;
+    toothGroup.position.y = Math.sin(time * 0.7) * 0.1;
+    screw.rotation.y = time * 0.5;
+    sparks.rotation.y = time * 0.08;
+    sparks.rotation.x = time * 0.04;
+    ring.rotation.z = time * 0.2;
+    orbitDot.position.set(
+      Math.cos(time * 0.4) * 2.8 * Math.cos(ring.rotation.x),
+      Math.sin(time * 0.4) * 2.8 * Math.sin(ring.rotation.x) * 1.2,
+      Math.sin(time * 0.4) * 2.8 * Math.cos(ring.rotation.x) * 0.4
+    );
+    pointLight1.intensity = 2.5 + Math.sin(time * 1.2) * 0.5;
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+
+// ═══════════════════════════════════════════════
+// 3. SERVICE CARD CANVASES (mini 3D scenes)
+// ═══════════════════════════════════════════════
+function createMiniScene(canvasId, buildFn) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const parent = canvas.parentElement;
+  const W = parent.offsetWidth || 400;
+  const H = 220;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, W/H, 0.1, 100);
+  camera.position.set(0, 0, 5);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  const dl = new THREE.DirectionalLight(0xffffff, 1.5);
+  dl.position.set(3,3,3);
+  scene.add(dl);
+
+  const { group, animate: anim } = buildFn(scene);
+  let t = 0;
+  function loop() {
+    requestAnimationFrame(loop);
+    t += 0.015;
+    if (anim) anim(t, group);
+    renderer.render(scene, camera);
+  }
+  loop();
+}
+
+// Implant card scene
+createMiniScene('canvas-implant', (scene) => {
+  const group = new THREE.Group();
+  scene.add(group);
+
+  const pl = new THREE.PointLight(0x00e5b0, 4, 15);
+  pl.position.set(2, 2, 3);
+  scene.add(pl);
+
+  // screw body
+  const mat = new THREE.MeshStandardMaterial({ color: 0x88aacc, metalness: 0.95, roughness: 0.05 });
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.22, 3.2, 12), mat);
+  group.add(body);
+  for (let i = 0; i < 20; i++) {
+    const tr = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.05, 6, 20), mat);
+    tr.rotation.x = Math.PI/2;
+    tr.position.y = -1.4 + i * 0.16;
+    group.add(tr);
+  }
+  // crown
+  const crown = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.55, 0.5, 0.9, 32),
+    new THREE.MeshStandardMaterial({ color: 0xf0ece8, metalness: 0.08, roughness: 0.2 })
+  );
+  crown.position.y = 2.0;
+  group.add(crown);
+  // abutment
+  const ab = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.35, 0.7, 16),
+    new THREE.MeshStandardMaterial({ color: 0xaaaaaa, metalness: 0.8, roughness: 0.1 }));
+  ab.position.y = 1.55;
+  group.add(ab);
+  // glow
+  const glow = new THREE.PointLight(0x00c8ff, 3, 8);
+  glow.position.set(0, 0, 2);
+  scene.add(glow);
+
+  return { group, animate: (t, g) => {
+    g.rotation.y = t * 0.6;
+    g.position.y = Math.sin(t * 0.8) * 0.15;
+    glow.intensity = 2.5 + Math.sin(t * 1.5) * 0.8;
+  }};
+});
+
+// Scaling card scene
+createMiniScene('canvas-scaling', (scene) => {
+  const group = new THREE.Group();
+  scene.add(group);
+
+  scene.add(new THREE.PointLight(0x00c8ff, 4, 12));
+
+  // tooth shape
+  const toothMat = new THREE.MeshStandardMaterial({ color: 0xfffde7, metalness: 0.0, roughness: 0.25 });
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.7, 0.5, 32), toothMat);
+  base.position.y = 0.3;
+  group.add(base);
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(0.9, 32, 16, 0, Math.PI*2, 0, Math.PI*0.6), toothMat);
+  dome.position.y = 0.5;
+  group.add(dome);
+  // root
+  const root = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.08, 1.5, 16), toothMat);
+  root.position.y = -0.95;
+  group.add(root);
+
+  // tartar (brownish patches)
+  const tartarMat = new THREE.MeshStandardMaterial({ color: 0x8b7355, metalness: 0, roughness: 0.9 });
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    const t2 = new THREE.Mesh(new THREE.SphereGeometry(0.14, 8, 6), tartarMat);
+    t2.position.set(Math.cos(a)*0.75, 0.1 + Math.random()*0.3, Math.sin(a)*0.75);
+    group.add(t2);
+  }
+
+  // sparkle particles (cleaning)
+  const sparkGeo = new THREE.BufferGeometry();
+  const pos = [];
+  for (let i = 0; i < 40; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const r = 0.7 + Math.random() * 0.6;
+    pos.push(Math.cos(a)*r, Math.random()*1.5 - 0.5, Math.sin(a)*r);
+  }
+  sparkGeo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  const sparkPts = new THREE.Points(sparkGeo, new THREE.PointsMaterial({ color: 0x00c8ff, size: 0.1, transparent: true, opacity: 0.8 }));
+  group.add(sparkPts);
+
+  return { group, animate: (t, g) => {
+    g.rotation.y = t * 0.5;
+    g.position.y = Math.sin(t) * 0.1;
+    sparkPts.material.opacity = 0.5 + Math.sin(t*2)*0.4;
+    sparkPts.rotation.y = -t * 0.8;
+  }};
+});
+
+// Root canal scene
+createMiniScene('canvas-root', (scene) => {
+  const group = new THREE.Group();
+  scene.add(group);
+
+  const pl = new THREE.PointLight(0xb06aff, 5, 12);
+  pl.position.set(1, 2, 3);
+  scene.add(pl);
+
+  const toothMat = new THREE.MeshStandardMaterial({ color: 0xf5f0ea, metalness: 0.0, roughness: 0.3 });
+  // cut-open tooth cross section look
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.65, 1.2, 32), toothMat);
+  body.position.y = 0.6;
+  group.add(body);
+
+  // canal visualization
+  const canalMat = new THREE.MeshStandardMaterial({ color: 0xff6b9d, metalness: 0, roughness: 0.5, transparent: true, opacity: 0.85 });
+  const canal = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.04, 2.0, 12), canalMat);
+  canal.position.y = -0.4;
+  group.add(canal);
+
+  // file (rotary instrument)
+  const fileMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, metalness: 0.9, roughness: 0.1 });
+  const file = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.02, 2.5, 8), fileMat);
+  file.position.set(0.8, 0, 0);
+  group.add(file);
+  for (let i = 0; i < 16; i++) {
+    const t2 = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.018, 4, 8), fileMat);
+    t2.position.set(0.8, -0.9 + i * 0.12, 0);
+    t2.rotation.x = Math.PI/2;
+    group.add(t2);
+  }
+
+  // glow tube
+  const glowTube = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.12, 0.06, 1.8, 12),
+    new THREE.MeshStandardMaterial({ color: 0xb06aff, transparent: true, opacity: 0.3, emissive: 0xb06aff, emissiveIntensity: 0.5 })
+  );
+  glowTube.position.y = -0.3;
+  group.add(glowTube);
+
+  return { group, animate: (t, g) => {
+    g.rotation.y = t * 0.4;
+    file.rotation.y = t * 3;
+    g.position.y = Math.sin(t * 0.9) * 0.1;
+    pl.intensity = 4 + Math.sin(t * 2) * 1;
+  }};
+});
+
+// Filling card scene
+createMiniScene('canvas-fill', (scene) => {
+  const group = new THREE.Group();
+  scene.add(group);
+
+  scene.add(new THREE.PointLight(0xffb347, 5, 12));
+
+  const toothMat = new THREE.MeshStandardMaterial({ color: 0xfff9f0, metalness: 0.0, roughness: 0.2 });
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.7, 0.5, 32), toothMat);
+  base.position.y = 0.25;
+  group.add(base);
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(0.85, 32, 16, 0, Math.PI*2, 0, Math.PI*0.6), toothMat);
+  dome.position.y = 0.5;
+  group.add(dome);
+
+  // cavity (dark pit)
+  const cavMat = new THREE.MeshStandardMaterial({ color: 0x3a2a1a, metalness: 0, roughness: 1 });
+  const cav = new THREE.Mesh(new THREE.SphereGeometry(0.28, 16, 12), cavMat);
+  cav.position.set(0.2, 1.15, 0.15);
+  group.add(cav);
+
+  // filling material (composite resin)
+  const fillMat = new THREE.MeshStandardMaterial({
+    color: 0xffe0b0,
+    metalness: 0.02,
+    roughness: 0.15,
+    emissive: 0xffb347,
+    emissiveIntensity: 0.1
+  });
+  const fill = new THREE.Mesh(new THREE.SphereGeometry(0.27, 16, 12), fillMat);
+  fill.position.set(0.2, 1.15, 0.15);
+  fill.scale.set(0, 0, 0);
+  group.add(fill);
+
+  // UV light
+  const uvLight = new THREE.PointLight(0x6040ff, 8, 6);
+  uvLight.position.set(1.5, 1.5, 1);
+  scene.add(uvLight);
+
+  // light wand
+  const wand = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.08, 1.5, 12), new THREE.MeshStandardMaterial({ color: 0x4060aa, metalness: 0.5, roughness: 0.3 }));
+  wand.position.set(1.2, 0.8, 0.5);
+  wand.rotation.z = -0.8;
+  group.add(wand);
+
+  let filled = false;
+  return { group, animate: (t, g) => {
+    g.rotation.y = t * 0.4;
+    // filling animation
+    const phase = (t % 6) / 6;
+    if (phase < 0.5) {
+      cav.visible = true;
+      fill.scale.setScalar(0);
+      uvLight.intensity = 0;
+    } else {
+      cav.visible = false;
+      const s = Math.min(1, (phase - 0.5) * 4);
+      fill.scale.setScalar(s);
+      uvLight.intensity = s * 8;
+    }
+    g.position.y = Math.sin(t * 0.8) * 0.12;
+  }};
+});
+
+// ═══════════════════════════════════════════════
+// 4. VIDEO SECTION CANVASES (3D animated previews)
+// ═══════════════════════════════════════════════
+function createVideoScene(canvasId, colorHex, buildFunc) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const parent = canvas.parentElement;
+  const W = parent.offsetWidth || 600;
+  const H = parseInt(canvas.style.height) || parent.offsetHeight || 420;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0xd6eeff, 1);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, W/H, 0.1, 200);
+  camera.position.set(0, 1, 7);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+  const dl = new THREE.DirectionalLight(colorHex, 3);
+  dl.position.set(4, 5, 6);
+  scene.add(dl);
+  const pl = new THREE.PointLight(colorHex, 5, 20);
+  pl.position.set(-3, 2, 3);
+  scene.add(pl);
+
+  const { animate: anim } = buildFunc(scene, camera, pl);
+  let t = 0;
+  function loop() {
+    requestAnimationFrame(loop);
+    t += 0.012;
+    if (anim) anim(t, pl);
+    renderer.render(scene, camera);
+  }
+  loop();
+}
+
+// Main video: implant procedure
+createVideoScene('vid-main', 0x00e5b0, (scene, camera, pl) => {
+  const group = new THREE.Group();
+  scene.add(group);
+
+  // Background jaw bone
+  const boneMat = new THREE.MeshStandardMaterial({ color: 0xd4b896, metalness: 0, roughness: 0.8 });
+  const jaw = new THREE.Mesh(new THREE.BoxGeometry(8, 1.5, 3), boneMat);
+  jaw.position.y = -2;
+  group.add(jaw);
+
+  // Multiple teeth row
+  const toothMat = new THREE.MeshStandardMaterial({ color: 0xf8f4ee, metalness: 0.02, roughness: 0.2 });
+  for (let i = -3; i <= 3; i++) {
+    if (i === 0) continue; // gap for implant
+    const t = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.25, 0.9, 16), toothMat);
+    t.position.set(i * 0.85, -1.0, 0);
+    group.add(t);
+    const cap = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 10, 0, Math.PI*2, 0, Math.PI*0.6), toothMat);
+    cap.position.set(i * 0.85, -0.55, 0);
+    group.add(cap);
+  }
+
+  // Implant (animated drilling)
+  const iMat = new THREE.MeshStandardMaterial({ color: 0x9ab8d4, metalness: 0.95, roughness: 0.05 });
+  const screw = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.14, 2.2, 12), iMat);
+  scene.add(screw);
+  screw.position.set(0, 3, 0);
+
+  for (let i = 0; i < 18; i++) {
+    const tr = new THREE.Mesh(new THREE.TorusGeometry(0.25, 0.04, 6, 20), iMat);
+    tr.rotation.x = Math.PI / 2;
+    tr.position.set(0, 3 - 0.12 * i, 0);
+    scene.add(tr);
+  }
+
+  // crown
+  const crownMesh = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.42, 0.38, 0.75, 32),
+    new THREE.MeshStandardMaterial({ color: 0xf0ece8, metalness: 0.1, roughness: 0.15 })
+  );
+  scene.add(crownMesh);
+  crownMesh.position.set(0, 5, 0);
+
+  // Drill animation
+  let screwY = 3;
+  const targetY = -0.8;
+
+  // Bone particles
+  const boneParticles = new THREE.Group();
+  scene.add(boneParticles);
+  for (let i = 0; i < 20; i++) {
+    const bp = new THREE.Mesh(new THREE.SphereGeometry(0.04, 6, 6),
+      new THREE.MeshBasicMaterial({ color: 0xd4b896 }));
+    bp.position.set(Math.random()*0.4-0.2, -1.5 + Math.random()*0.6, Math.random()*0.4-0.2);
+    boneParticles.add(bp);
+  }
+
+  camera.position.set(4, 2, 9);
+  camera.lookAt(0, 0, 0);
+
+  return { animate: (t, lightRef) => {
+    group.rotation.y = t * 0.15;
+    // screw drilling down
+    const phase = t % 10;
+    if (phase < 5) {
+      screwY = 3 - (phase / 5) * (3 - targetY);
+    } else if (phase < 7) {
+      screwY = targetY;
+    } else {
+      screwY = targetY;
+    }
+    screw.position.y = screwY;
+    screw.rotation.y = t * 4;
+
+    // update thread positions
+    // crown follows
+    crownMesh.position.y = screwY + 1.5 + (phase > 7 ? 0 : 2);
+
+    boneParticles.visible = phase < 5.5;
+    boneParticles.rotation.y = t * 0.3;
+    lightRef.intensity = 4 + Math.sin(t * 1.5) * 1;
+  }};
+});
+
+// Vid 2: scaling
+createVideoScene('vid-2', 0x00c8ff, (scene, camera, pl) => {
+  const group = new THREE.Group();
+  scene.add(group);
+  camera.position.set(0, 0.5, 5);
+  camera.lookAt(0, 0, 0);
+
+  const toothMat = new THREE.MeshStandardMaterial({ color: 0xfffde7, metalness: 0.0, roughness: 0.2 });
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(1.0, 0.8, 0.6, 32), toothMat);
+  body.position.y = 0.3;
+  group.add(body);
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(1.0, 32, 16, 0, Math.PI*2, 0, Math.PI*0.6), toothMat);
+  dome.position.y = 0.6;
+  group.add(dome);
+  const root = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.1, 2, 16), toothMat);
+  root.position.y = -1.3;
+  group.add(root);
+
+  // tartar
+  const tartarMat = new THREE.MeshStandardMaterial({ color: 0x7a6040, metalness: 0, roughness: 0.9, transparent: true, opacity: 1.0 });
+  const tartars = [];
+  for (let i = 0; i < 10; i++) {
+    const a = (i / 10) * Math.PI * 2;
+    const tm = new THREE.Mesh(new THREE.SphereGeometry(0.18, 8, 6), tartarMat.clone());
+    tm.position.set(Math.cos(a)*0.88, 0.1 + Math.random()*0.4, Math.sin(a)*0.88);
+    group.add(tm);
+    tartars.push(tm);
+  }
+
+  // Ultrasonic scaler tip
+  const scalerMat = new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.9, roughness: 0.1 });
+  const scalerTip = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.02, 1.5, 8), scalerMat);
+  scene.add(scalerTip);
+  scalerTip.position.set(1.5, 0.3, 0.8);
+  scalerTip.rotation.z = 0.6;
+
+  // spray particles
+  const sprayGeo = new THREE.BufferGeometry();
+  const sprayPos = [];
+  for (let i = 0; i < 50; i++) sprayPos.push((Math.random()-0.5)*2, Math.random()*1.5, (Math.random()-0.5)*2);
+  sprayGeo.setAttribute('position', new THREE.Float32BufferAttribute(sprayPos, 3));
+  const spray = new THREE.Points(sprayGeo, new THREE.PointsMaterial({ color: 0x88ddff, size: 0.07, transparent: true, opacity: 0.6 }));
+  scene.add(spray);
+
+  return { animate: (t) => {
+    group.rotation.y = t * 0.3;
+    const phase = t % 8;
+    tartars.forEach((tm, i) => {
+      const f = Math.max(0, Math.min(1, (phase - i*0.3) / 2.5));
+      tm.material.opacity = 1 - f;
+      tm.scale.setScalar(1 - f * 0.8);
+    });
+    scalerTip.rotation.z = 0.6 + Math.sin(t * 8) * 0.05;
+    scalerTip.position.x = 1.5 + Math.sin(t*3)*0.15;
+    spray.rotation.y = t * 0.5;
+    spray.material.opacity = 0.4 + Math.sin(t*3)*0.3;
+    pl.intensity = 4 + Math.sin(t*2)*1.5;
+  }};
+});
+
+// Vid 3: root canal
+createVideoScene('vid-3', 0xb06aff, (scene, camera, pl) => {
+  const group = new THREE.Group();
+  scene.add(group);
+  camera.position.set(2, 1.5, 6);
+  camera.lookAt(0, 0, 0);
+
+  const toothMat = new THREE.MeshStandardMaterial({ color: 0xf4f0e8, metalness: 0, roughness: 0.25 });
+
+  // tooth with visible cross section
+  const outerGeo = new THREE.CylinderGeometry(0.9, 0.7, 0.6, 32);
+  group.add(new THREE.Mesh(outerGeo, toothMat));
+  const domeGeo = new THREE.SphereGeometry(0.9, 32, 16, 0, Math.PI*2, 0, Math.PI*0.6);
+  const domeMesh = new THREE.Mesh(domeGeo, toothMat);
+  domeMesh.position.y = 0.3;
+  group.add(domeMesh);
+
+  // roots (2)
+  const rootMat = toothMat.clone();
+  for (let side of [-0.35, 0.35]) {
+    const r = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.06, 2.2, 12), rootMat);
+    r.position.set(side, -1.4, 0);
+    r.rotation.z = side > 0 ? 0.2 : -0.2;
+    group.add(r);
+  }
+
+  // pulp chamber
+  const pulpMat = new THREE.MeshStandardMaterial({ color: 0xff4466, emissive: 0xff2244, emissiveIntensity: 0.4, transparent: true, opacity: 0.8 });
+  const pulp = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.08, 1.8, 12), pulpMat);
+  pulp.position.set(-0.35, -0.9, 0);
+  pulp.rotation.z = 0.2;
+  scene.add(pulp);
+
+  // canal files
+  const fileMat = new THREE.MeshStandardMaterial({ color: 0xddddaa, metalness: 0.85, roughness: 0.15 });
+  const file1 = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.018, 2.0, 8), fileMat);
+  file1.position.set(-0.35, -0.9, 0);
+  file1.rotation.z = 0.2;
+  scene.add(file1);
+  for (let i = 0; i < 14; i++) {
+    const tr = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.015, 4, 10), fileMat);
+    tr.rotation.x = Math.PI/2;
+    const y = -0.1 - i * 0.12;
+    tr.position.set(-0.35 + Math.sin(0.2)*y, -0.9 + y, 0);
+    scene.add(tr);
+  }
+
+  // gutta-percha fill (pink)
+  const gpMat = new THREE.MeshStandardMaterial({ color: 0xff9999, metalness: 0, roughness: 0.7, transparent: true, opacity: 0 });
+  const gp = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.07, 1.8, 12), gpMat);
+  gp.position.set(-0.35, -0.9, 0);
+  gp.rotation.z = 0.2;
+  scene.add(gp);
+
+  return { animate: (t) => {
+    group.rotation.y = t * 0.35;
+    file1.rotation.y = t * 5;
+    const phase = t % 10;
+    pulp.material.opacity = phase < 4 ? 0.8 : Math.max(0, 0.8 - (phase-4)*0.4);
+    gp.material.opacity = phase > 6 ? Math.min(0.9, (phase-6)*0.45) : 0;
+    pl.intensity = 4 + Math.sin(t*1.8)*1.2;
+  }};
+});
+
+// ═══════════════════════════════════════════════
+// 5. WHY CANVAS (rotating tooth molecule)
+// ═══════════════════════════════════════════════
+(function() {
+  const canvas = document.getElementById('why-canvas');
+  if (!canvas) return;
+  const parent = canvas.parentElement;
+  const W = parent.offsetWidth || 500;
+  const H = 500;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, W/H, 0.1, 100);
+  camera.position.set(0, 0, 9);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+  const dl = new THREE.DirectionalLight(0x00e5b0, 3);
+  dl.position.set(3, 4, 5);
+  scene.add(dl);
+  const pl = new THREE.PointLight(0x00c8ff, 4, 20);
+  pl.position.set(-3, 2, 3);
+  scene.add(pl);
+
+  const toothMat = new THREE.MeshStandardMaterial({ color: 0xf0f0f0, metalness: 0.05, roughness: 0.2 });
+
+  // Central big tooth
+  const center = new THREE.Group();
+  scene.add(center);
+
+  const cBody = new THREE.Mesh(new THREE.SphereGeometry(1.2, 32, 24, 0, Math.PI*2, 0, Math.PI*0.65), toothMat);
+  cBody.position.y = 0.4;
+  center.add(cBody);
+  const cTop = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.2, 0.25, 32), toothMat);
+  cTop.position.y = 1.1;
+  center.add(cTop);
+
+  // Cusps
+  [[0.45, 1.5, 0.45], [-0.45, 1.5, 0.45], [0.45, 1.5, -0.45], [-0.45, 1.5, -0.45], [0, 1.55, 0]].forEach(([x,y,z]) => {
+    center.add(Object.assign(new THREE.Mesh(new THREE.SphereGeometry(0.28, 16, 12), toothMat), { position: new THREE.Vector3(x, y, z) }));
+  });
+
+  // Roots
+  [-0.35, 0.35].forEach(side => {
+    const r = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.07, 1.8, 16), toothMat);
+    r.position.set(side, -1.0, 0);
+    r.rotation.z = side > 0 ? 0.2 : -0.2;
+    center.add(r);
+  });
+  const r3 = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.06, 1.6, 16), toothMat);
+  r3.position.set(0, -0.95, -0.35);
+  center.add(r3);
+
+  // Orbiting small elements
+  const orbitGroup = new THREE.Group();
+  scene.add(orbitGroup);
+  const orbitItems = [
+    { emoji: '🦷', color: 0x00e5b0, r: 3.5, speed: 0.4, y: 0 },
+    { emoji: '⭐', color: 0x00c8ff, r: 4.0, speed: -0.3, y: 0.5 },
+    { emoji: '🔬', color: 0xb06aff, r: 3.2, speed: 0.5, y: -0.5 },
+    { emoji: '💎', color: 0xffd700, r: 3.8, speed: -0.45, y: 0.3 },
+  ];
+  const orbitMeshes = orbitItems.map(item => {
+    const m = new THREE.Mesh(
+      new THREE.SphereGeometry(0.3, 16, 12),
+      new THREE.MeshStandardMaterial({ color: item.color, emissive: item.color, emissiveIntensity: 0.4, metalness: 0.3, roughness: 0.4 })
+    );
+    orbitGroup.add(m);
+    return { mesh: m, ...item };
+  });
+
+  // orbit rings
+  [3.5, 4.0, 3.2, 3.8].forEach(r => {
+    const rg = new THREE.TorusGeometry(r, 0.01, 8, 100);
+    const rm = new THREE.Mesh(rg, new THREE.MeshBasicMaterial({ color: 0x00e5b0, transparent: true, opacity: 0.1 }));
+    rm.rotation.x = Math.PI / 2;
+    scene.add(rm);
+  });
+
+  // Glowing center sphere
+  const glowSphere = new THREE.Mesh(
+    new THREE.SphereGeometry(0.4, 32, 32),
+    new THREE.MeshBasicMaterial({ color: 0x00e5b0, transparent: true, opacity: 0.15 })
+  );
+  scene.add(glowSphere);
+
+  let t = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    t += 0.01;
+    center.rotation.y = t * 0.3;
+    center.position.y = Math.sin(t * 0.5) * 0.1;
+
+    orbitMeshes.forEach((item, i) => {
+      const angle = t * item.speed + i * Math.PI / 2;
+      item.mesh.position.set(
+        Math.cos(angle) * item.r,
+        item.y + Math.sin(t * 0.3 + i) * 0.3,
+        Math.sin(angle) * item.r
+      );
+      item.mesh.scale.setScalar(0.9 + Math.sin(t * 2 + i) * 0.1);
+    });
+
+    pl.position.set(Math.cos(t * 0.5) * 5, 2, Math.sin(t * 0.5) * 5);
+    pl.intensity = 3.5 + Math.sin(t * 1.2) * 0.8;
+    glowSphere.material.opacity = 0.1 + Math.sin(t * 2) * 0.05;
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+
+// ═══════════════════════════════════════════════
+// 6. SCROLL REVEAL
+// ═══════════════════════════════════════════════
+const revealEls = document.querySelectorAll('.reveal');
+// Add hidden-init only after page load so content is visible without JS
+revealEls.forEach(el => el.classList.add('hidden-init'));
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      e.target.classList.remove('hidden-init');
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+revealEls.forEach(el => revealObs.observe(el));
+// Fallback: show all after 1.5s in case IntersectionObserver fails
+setTimeout(() => {
+  revealEls.forEach(el => { el.classList.remove('hidden-init'); el.classList.add('visible'); });
+}, 1500);
+
+
+// ═══════════════════════════════════════════════
+// 8. CARD 3D TILT
+// ═══════════════════════════════════════════════
+document.querySelectorAll('.service-card-3d').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${x * 10}deg) rotateX(${-y * 8}deg) translateY(-8px)`;
+    const glow = card.querySelector('.card-glow');
+    if (glow) {
+      glow.style.left = (x * 100 + 50) + '%';
+      glow.style.top = (y * 100 + 50) + '%';
+      glow.style.transform = 'translate(-50%,-50%)';
+      glow.style.opacity = '1';
+    }
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    const glow = card.querySelector('.card-glow');
+    if (glow) glow.style.opacity = '0';
+  });
+});
+</script>
+<!-- ══════════════════ BOOKING SYSTEM (embedded) ══════════════════ -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── Booking scoped inside #bookingAppRoot ── */
+#bookingAppRoot {
+  font-family: 'Noto Sans Thai', sans-serif;
+  color: #263238;
+  -webkit-font-smoothing: antialiased;
+}
+#bookingAppRoot * { box-sizing: border-box; }
+
+/* Header */
+#bookingAppRoot .bk-header {
+  background: linear-gradient(135deg, #1565c0 0%, #1976d2 50%, #42a5f5 100%);
+  color: white;
+  padding: 20px 24px;
+  display: flex; align-items: center; gap: 14px;
+}
+#bookingAppRoot .bk-logo {
+  width: 52px; height: 52px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+#bookingAppRoot .bk-header h1 { font-size: 17px; font-weight: 700; }
+#bookingAppRoot .bk-header p  { font-size: 12px; opacity: .85; margin-top: 2px; font-weight: 300; }
+
+/* Step bar */
+#bookingAppRoot .bk-stepbar {
+  background: white;
+  border-bottom: 1px solid #e3eaf5;
+  padding: 14px 16px;
+}
+#bookingAppRoot .bk-stepbar-inner {
+  display: flex; align-items: center; justify-content: center; gap: 0;
+}
+#bookingAppRoot .bk-step-item { display: flex; align-items: center; gap: 6px; }
+#bookingAppRoot .bk-step-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #e3eaf5; color: #90a4ae;
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .2s;
+}
+#bookingAppRoot .bk-step-dot.active { background: #1565c0; color: white; box-shadow: 0 2px 8px rgba(25,118,210,.4); }
+#bookingAppRoot .bk-step-dot.done   { background: #2e7d32; color: white; }
+#bookingAppRoot .bk-step-name { font-size: 11px; color: #90a4ae; white-space: nowrap; font-weight: 500; }
+#bookingAppRoot .bk-step-name.active { color: #1565c0; font-weight: 700; }
+#bookingAppRoot .bk-step-arrow { color: #cfd8dc; font-size: 11px; margin: 0 6px; }
+@media(max-width:480px){ #bookingAppRoot .bk-step-name { display:none; } }
+
+/* Content */
+#bookingAppRoot .bk-content { padding: 20px 16px 32px; background: #f4f8fc; }
+
+/* Card */
+#bookingAppRoot .bk-card {
+  background: white; border-radius: 14px;
+  padding: 24px; margin-bottom: 16px;
+  border: 1px solid #e3eaf5;
+  box-shadow: 0 1px 3px rgba(21,101,192,.06);
+  animation: bkFadeUp .35s ease-out;
+}
+@keyframes bkFadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+#bookingAppRoot .bk-card-title {
+  font-size: 15px; font-weight: 700; color: #1565c0;
+  margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+}
+
+/* Form */
+#bookingAppRoot .bk-form-group { margin-bottom: 16px; }
+#bookingAppRoot .bk-label { display:block; font-size:13px; font-weight:600; color:#546e7a; margin-bottom:6px; }
+#bookingAppRoot .bk-input {
+  width: 100%; padding: 12px 16px;
+  border: 1.5px solid #e3eaf5; border-radius: 8px;
+  font-size: 15px; font-family: 'Noto Sans Thai', sans-serif;
+  color: #263238; background: #f0f7ff; outline: none;
+  transition: all .2s;
+}
+#bookingAppRoot .bk-input:focus { border-color: #1976d2; background: white; box-shadow: 0 0 0 3px rgba(25,118,210,.1); }
+#bookingAppRoot .bk-input::placeholder { color: #b0bec5; }
+#bookingAppRoot .bk-error { color: #d32f2f; font-size: 12px; margin-top: 5px; display: none; font-weight: 500; }
+#bookingAppRoot .bk-error.show { display: block; }
+
+/* Service grid */
+#bookingAppRoot .bk-svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media(max-width:400px){ #bookingAppRoot .bk-svc-grid { grid-template-columns: 1fr; } }
+#bookingAppRoot .bk-svc-btn {
+  padding: 14px 12px; border: 1.5px solid #e3eaf5; border-radius: 10px;
+  background: #f0f7ff; cursor: pointer; font-size: 13px; font-weight: 500;
+  color: #546e7a; font-family: 'Noto Sans Thai', sans-serif;
+  display: flex; align-items: center; gap: 10px;
+  transition: all .2s; text-align: left; line-height: 1.4;
+}
+#bookingAppRoot .bk-svc-btn:hover { border-color: #1976d2; background: #e3f2fd; color: #1565c0; }
+#bookingAppRoot .bk-svc-btn.selected { border-color: #1565c0; background: #e3f2fd; color: #1565c0; font-weight: 700; box-shadow: 0 0 0 2px rgba(25,118,210,.15); }
+#bookingAppRoot .bk-svc-btn .svc-icon { font-size: 18px; flex-shrink: 0; }
+#bookingAppRoot .bk-svc-btn.full-width { grid-column: 1 / -1; }
+
+/* Buttons */
+#bookingAppRoot .bk-btn-primary {
+  width: 100%; padding: 15px; background: #1565c0; color: white;
+  border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+  font-family: 'Noto Sans Thai', sans-serif; cursor: pointer; margin-top: 8px;
+  transition: all .2s;
+}
+#bookingAppRoot .bk-btn-primary:hover { background: #1976d2; box-shadow: 0 4px 12px rgba(21,101,192,.25); transform: translateY(-1px); }
+#bookingAppRoot .bk-btn-primary:active { transform: scale(.98); }
+#bookingAppRoot .bk-btn-primary:disabled { background: #b0bec5; cursor: not-allowed; transform: none; }
+#bookingAppRoot .bk-btn-primary.success { background: #2e7d32; }
+#bookingAppRoot .bk-btn-primary.success:hover { background: #43a047; }
+#bookingAppRoot .bk-btn-back {
+  width: 100%; padding: 12px; background: white; color: #546e7a;
+  border: 1.5px solid #cfd8dc; border-radius: 10px; font-size: 14px;
+  font-family: 'Noto Sans Thai', sans-serif; cursor: pointer; margin-top: 8px;
+  transition: all .2s; font-weight: 500;
+}
+#bookingAppRoot .bk-btn-back:hover { background: #f0f7ff; border-color: #1976d2; color: #1565c0; }
+
+/* Calendar */
+#bookingAppRoot .bk-month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+#bookingAppRoot .bk-month-title { font-size: 16px; font-weight: 700; color: #1565c0; }
+#bookingAppRoot .bk-nav-btn {
+  background: #e3f2fd; border: none; color: #1565c0;
+  width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+  font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all .2s;
+}
+#bookingAppRoot .bk-nav-btn:hover { background: #bbdefb; }
+#bookingAppRoot .bk-nav-btn:disabled { opacity: .3; cursor: not-allowed; }
+#bookingAppRoot .bk-cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+#bookingAppRoot .bk-day-hdr { text-align: center; font-size: 11px; font-weight: 700; color: #90a4ae; padding: 8px 0; }
+#bookingAppRoot .bk-day-hdr.sat { color: #42a5f5; }
+#bookingAppRoot .bk-day-hdr.sun { color: #ef5350; }
+#bookingAppRoot .bk-day-cell {
+  aspect-ratio: 1; border-radius: 8px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  transition: all .2s; border: 1.5px solid transparent; position: relative;
+}
+#bookingAppRoot .bk-day-cell.empty    { cursor: default; }
+#bookingAppRoot .bk-day-cell.past     { background: #f5f5f5; color: #cfd8dc; cursor: not-allowed; }
+#bookingAppRoot .bk-day-cell.closed   { background: #fce4ec; color: #ef9a9a; cursor: not-allowed; }
+#bookingAppRoot .bk-day-cell.available{ background: #e8f5e9; color: #2e7d32; border-color: #a5d6a7; }
+#bookingAppRoot .bk-day-cell.available:hover { background: #c8e6c9; border-color: #66bb6a; transform: scale(1.05); }
+#bookingAppRoot .bk-day-cell.selected { background: #1565c0; color: white; border-color: #1565c0; transform: scale(1.08); box-shadow: 0 3px 12px rgba(25,118,210,.3); }
+#bookingAppRoot .bk-day-cell.today::after {
+  content: ''; position: absolute; bottom: 3px;
+  width: 5px; height: 5px; border-radius: 50%; background: #ff9800;
+}
+#bookingAppRoot .bk-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+#bookingAppRoot .bk-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #90a4ae; }
+#bookingAppRoot .bk-legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+#bookingAppRoot .bk-clinic-note {
+  background: #fff8e1; border-radius: 8px; padding: 12px 14px;
+  font-size: 12px; color: #f57f17; border-left: 3px solid #ffca28;
+  margin-top: 14px; line-height: 1.8;
+}
+#bookingAppRoot .bk-info-badge {
+  display: inline-block; background: #e3f2fd; color: #1565c0;
+  font-size: 11px; font-weight: 600; padding: 3px 10px;
+  border-radius: 20px; margin-bottom: 10px;
+}
+
+/* Time grid */
+#bookingAppRoot .bk-time-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 6px; }
+@media(max-width:400px){ #bookingAppRoot .bk-time-grid { grid-template-columns: repeat(2,1fr); } }
+#bookingAppRoot .bk-time-btn {
+  padding: 14px 8px; border: 1.5px solid #e3eaf5; border-radius: 10px;
+  background: #f0f7ff; cursor: pointer; text-align: center;
+  font-family: 'Noto Sans Thai', sans-serif; transition: all .2s;
+}
+#bookingAppRoot .bk-time-btn .t-time  { font-size: 16px; font-weight: 700; color: #2e7d32; }
+#bookingAppRoot .bk-time-btn .t-status{ font-size: 10px; color: #66bb6a; margin-top: 2px; font-weight: 600; }
+#bookingAppRoot .bk-time-btn.free  { border-color: #a5d6a7; background: #e8f5e9; }
+#bookingAppRoot .bk-time-btn.free:hover { background: #c8e6c9; border-color: #66bb6a; transform: translateY(-2px); }
+#bookingAppRoot .bk-time-btn.full  { background: #fafafa; border-color: #eee; cursor: not-allowed; }
+#bookingAppRoot .bk-time-btn.full .t-time   { color: #bdbdbd; }
+#bookingAppRoot .bk-time-btn.full .t-status { color: #e0e0e0; }
+#bookingAppRoot .bk-time-btn.selected { background: #1565c0; border-color: #1565c0; box-shadow: 0 3px 12px rgba(25,118,210,.3); }
+#bookingAppRoot .bk-time-btn.selected .t-time   { color: white; }
+#bookingAppRoot .bk-time-btn.selected .t-status { color: rgba(255,255,255,.8); }
+
+/* Summary */
+#bookingAppRoot .bk-sum-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid #f0f4f8; font-size: 13px;
+}
+#bookingAppRoot .bk-sum-row:last-child { border-bottom: none; }
+#bookingAppRoot .bk-sum-label { color: #90a4ae; font-weight: 500; }
+#bookingAppRoot .bk-sum-value { color: #263238; font-weight: 600; text-align: right; }
+
+/* Success */
+#bookingAppRoot .bk-success-box { text-align: center; padding: 24px 16px; }
+#bookingAppRoot .bk-success-icon { font-size: 60px; margin-bottom: 12px; animation: bkPopIn .5s cubic-bezier(.175,.885,.32,1.275); }
+@keyframes bkPopIn { from{transform:scale(.3);opacity:0} to{transform:scale(1);opacity:1} }
+#bookingAppRoot .bk-success-title { font-size: 22px; font-weight: 800; color: #2e7d32; margin-bottom: 6px; }
+#bookingAppRoot .bk-success-sub   { font-size: 13px; color: #90a4ae; line-height: 1.8; }
+#bookingAppRoot .bk-appt-card {
+  background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 10px;
+  padding: 16px; margin: 18px 0; text-align: left;
+}
+#bookingAppRoot .bk-appt-line { font-size: 13px; color: #2e7d32; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+
+/* Loading */
+#bkLoadingOverlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(255,255,255,.85); backdrop-filter: blur(4px);
+  z-index: 2000; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+}
+#bkLoadingOverlay.show { display: flex; }
+#bkLoadingOverlay .bk-spinner {
+  width: 44px; height: 44px; border: 4px solid #e3eaf5;
+  border-top-color: #1565c0; border-radius: 50%;
+  animation: bkSpin .8s linear infinite;
+}
+@keyframes bkSpin { to { transform: rotate(360deg); } }
+#bkLoadingOverlay .bk-loading-text { font-size: 15px; color: #1565c0; font-weight: 600; font-family: 'Noto Sans Thai', sans-serif; }
+</style>
+
+<!-- Loading overlay for booking -->
+<div id="bkLoadingOverlay">
+  <div class="bk-spinner"></div>
+  <div class="bk-loading-text" id="bkLoadingText">กำลังตรวจสอบเวลาว่าง...</div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  LIGHTBOX
+// ══════════════════════════════════════════════
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ══════════════════════════════════════════════
+//  BOOKING MODAL OPEN / CLOSE
+// ══════════════════════════════════════════════
+function openBooking() {
+  document.getElementById('bookingModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  bkInit();
+}
+function closeBooking() {
+  document.getElementById('bookingModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+// Close on backdrop click
+document.getElementById('bookingModal').addEventListener('click', function(e) {
+  if (e.target === this) closeBooking();
+});
+
+// ══════════════════════════════════════════════
+//  BOOKING APP CONFIG
+// ══════════════════════════════════════════════
+const BK_SCHEDULE_URL = 'https://docs.google.com/spreadsheets/d/1FkEZ5OgkfCiJyyCkpiiGI2IWz6-5cOKVX47H1g0IJRk/export?format=csv';
+const BK_WEB_APP_URL  = 'https://script.google.com/macros/s/AKfycbzL-RVZTlkOXVbeWitfd_ek7O0-lgQeMy7ZTQbKpm4G9MNwVMroOGBiQSII7SP48w/exec';
+
+const BK_ALL_SLOTS = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00'];
+const BK_THAI_MONTHS       = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+const BK_THAI_MONTHS_SHORT = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const BK_THAI_DAYS_SHORT   = ['จ.','อ.','พ.','พฤ.','ศ.','ส.','อา.'];
+const BK_THAI_DAYS_SUN     = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+
+const BK_SERVICES = [
+  { label: 'ถอนฟัน',      icon: '🔧' },
+  { label: 'อุดฟัน',      icon: '🪥' },
+  { label: 'ขูดหินปูน',   icon: '✨' },
+  { label: 'รักษารากฟัน', icon: '🔬' },
+  { label: 'ทำฟันปลอม',   icon: '😁' },
+  { label: 'ทำรากฟันเทียม', icon: '🦷' },
+  { label: 'ปวดฟัน / ต้องการปรึกษาทันตแพทย์', icon: '💬', fullWidth: true },
+];
+const BK_STEPS = ['ข้อมูลผู้ป่วย','เลือกบริการ','เลือกวัน','เลือกเวลา','ยืนยัน'];
+
+let bkState = {};
+
+function bkInit() {
+  bkState = { step:1, name:'', phone:'', service:'', selectedDate:null, selectedTime:'', viewYear:0, viewMonth:0, calStart:null, calEnd:null, fetchedSlots:null };
+  const root = document.getElementById('bookingAppRoot');
+  root.innerHTML = `
+    <div class="bk-header">
+      <div class="bk-logo">🦷</div>
+      <div>
+        <h1>คลินิกทันตกรรมบางปะอิน</h1>
+        <p>Bangpa-in Dental Clinic — ระบบนัดหมายออนไลน์</p>
+      </div>
+    </div>
+    <div class="bk-stepbar"><div class="bk-stepbar-inner" id="bkStepBar"></div></div>
+    <div class="bk-content" id="bkContent"></div>
+  `;
+  bkRenderStep();
+}
+
+function bkRenderStep() {
+  bkRenderStepBar();
+  const c = document.getElementById('bkContent');
+  if (!c) return;
+  switch(bkState.step) {
+    case 1: bkStep1(c); break;
+    case 2: bkStep2(c); break;
+    case 3: bkStep3(c); break;
+    case 4: bkStep4(c); break;
+    case 5: bkStep5(c); break;
+    case 6: bkStep6(c); break;
+  }
+  document.getElementById('bookingModal').scrollTop = 0;
+}
+
+function bkRenderStepBar() {
+  const bar = document.getElementById('bkStepBar');
+  if (!bar) return;
+  bar.innerHTML = BK_STEPS.map((s,i) => {
+    const n = i+1;
+    let cls = n < bkState.step ? 'done' : n === bkState.step ? 'active' : '';
+    const lbl = n < bkState.step ? '✓' : n;
+    return `<div class="bk-step-item">
+      <div class="bk-step-dot ${cls}">${lbl}</div>
+      <span class="bk-step-name ${cls==='active'?'active':''}">${s}</span>
+    </div>${n<BK_STEPS.length?'<span class="bk-step-arrow">›</span>':''}`;
+  }).join('');
+}
+
+function bkGo(n) { bkState.step = n; bkRenderStep(); }
+
+// STEP 1
+function bkStep1(c) {
+  c.innerHTML = `
+    <div class="bk-card">
+      <div class="bk-card-title">👤 ข้อมูลผู้รับบริการ</div>
+      <div class="bk-form-group">
+        <label class="bk-label">ชื่อ - นามสกุล <span style="color:#d32f2f">*</span></label>
+        <input class="bk-input" id="bkName" type="text" placeholder="กรอกชื่อ-นามสกุลของท่าน" value="${bkEsc(bkState.name)}" autocomplete="name">
+        <div class="bk-error" id="bkErrName">กรุณากรอกชื่อ-นามสกุลให้ครบถ้วน</div>
+      </div>
+      <div class="bk-form-group">
+        <label class="bk-label">เบอร์โทรศัพท์ <span style="color:#d32f2f">*</span></label>
+        <input class="bk-input" id="bkPhone" type="tel" placeholder="0XX-XXX-XXXX" maxlength="10" value="${bkEsc(bkState.phone)}" autocomplete="tel" inputmode="numeric">
+        <div class="bk-error" id="bkErrPhone">กรุณากรอกเบอร์โทรให้ถูกต้อง (9-10 หลัก)</div>
+      </div>
+    </div>
+    <button class="bk-btn-primary" onclick="bkVal1()">ถัดไป →</button>`;
+  document.getElementById('bkPhone').addEventListener('input', function(){ this.value = this.value.replace(/\D/g,''); });
+}
+function bkVal1() {
+  const name = document.getElementById('bkName').value.trim();
+  const phone = document.getElementById('bkPhone').value.trim();
+  let ok = true;
+  bkErr('bkErrName', name.length<3); if(name.length<3) ok=false;
+  bkErr('bkErrPhone', !/^[0-9]{9,10}$/.test(phone)); if(!/^[0-9]{9,10}$/.test(phone)) ok=false;
+  if(!ok) return;
+  bkState.name = name; bkState.phone = phone; bkGo(2);
+}
+
+// STEP 2
+function bkStep2(c) {
+  c.innerHTML = `
+    <div class="bk-card">
+      <div class="bk-card-title">🦷 กรุณาเลือกบริการที่ต้องการ</div>
+      <div class="bk-svc-grid">
+        ${BK_SERVICES.map(s=>`
+          <button class="bk-svc-btn ${s.fullWidth?'full-width':''} ${bkState.service===s.label?'selected':''}"
+                  onclick="bkPickSvc(this,'${bkEsc(s.label)}')">
+            <span class="svc-icon">${s.icon}</span>${s.label}
+          </button>`).join('')}
+      </div>
+      <div class="bk-error" id="bkErrSvc">กรุณาเลือกบริการที่ต้องการ</div>
+    </div>
+    <button class="bk-btn-primary" onclick="bkVal2()">ถัดไป →</button>
+    <button class="bk-btn-back" onclick="bkGo(1)">← ย้อนกลับ</button>`;
+}
+function bkPickSvc(btn, label) {
+  document.querySelectorAll('#bookingAppRoot .bk-svc-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected'); bkState.service = label; bkErr('bkErrSvc',false);
+}
+function bkVal2() {
+  if(!bkState.service){ bkErr('bkErrSvc',true); return; }
+  const today = new Date(); today.setHours(0,0,0,0);
+  const end = new Date(today); end.setDate(end.getDate()+30);
+  bkState.calStart=today; bkState.calEnd=end;
+  bkState.viewYear=today.getFullYear(); bkState.viewMonth=today.getMonth();
+  bkState.selectedDate=null;
+  bkGo(3);
+}
+
+// STEP 3 — Calendar
+function bkStep3(c) {
+  c.innerHTML = `
+    <div class="bk-card">
+      <div class="bk-card-title">📅 เลือกวันที่ต้องการนัดหมาย</div>
+      <div class="bk-info-badge">แสดงวันว่าง 1 เดือนข้างหน้า นับจากวันนี้</div>
+      <div class="bk-month-nav">
+        <button class="bk-nav-btn" id="bkBtnPrev" onclick="bkCalPrev()">◀</button>
+        <div class="bk-month-title" id="bkMonthTitle"></div>
+        <button class="bk-nav-btn" id="bkBtnNext" onclick="bkCalNext()">▶</button>
+      </div>
+      <div class="bk-cal-grid" id="bkCalGrid"></div>
+      <div class="bk-legend">
+        <div class="bk-legend-item"><div class="bk-legend-dot" style="background:#e8f5e9;border:1px solid #a5d6a7"></div>ว่าง</div>
+        <div class="bk-legend-item"><div class="bk-legend-dot" style="background:#fce4ec;border:1px solid #ef9a9a"></div>คลินิกปิด</div>
+        <div class="bk-legend-item"><div class="bk-legend-dot" style="background:#f5f5f5"></div>ผ่านแล้ว</div>
+        <div class="bk-legend-item"><div class="bk-legend-dot" style="background:#1565c0"></div>เลือกอยู่</div>
+      </div>
+      <div class="bk-clinic-note"><strong>หมายเหตุ:</strong> คลินิกหยุดทุกวันพฤหัสบดีและศุกร์<br>เปิดบริการ: จันทร์, อังคาร, พุธ, เสาร์, อาทิตย์</div>
+      <div class="bk-error" id="bkErrDate">กรุณาเลือกวันที่ต้องการนัด</div>
+    </div>
+    <button class="bk-btn-primary" onclick="bkVal3()">ถัดไป →</button>
+    <button class="bk-btn-back" onclick="bkGo(2)">← ย้อนกลับ</button>`;
+  bkBuildCal();
+}
+function bkBuildCal() {
+  const today=new Date(); today.setHours(0,0,0,0);
+  const yr=bkState.viewYear, mo=bkState.viewMonth;
+  document.getElementById('bkMonthTitle').textContent=`${BK_THAI_MONTHS[mo]}  ${yr+543}`;
+  const grid=document.getElementById('bkCalGrid'); grid.innerHTML='';
+  BK_THAI_DAYS_SHORT.forEach((d,i)=>{
+    const h=document.createElement('div');
+    h.className='bk-day-hdr'+(i===5?' sat':i===6?' sun':'');
+    h.textContent=d; grid.appendChild(h);
+  });
+  const firstDay=new Date(yr,mo,1).getDay();
+  const offset=firstDay===0?6:firstDay-1;
+  const dim=new Date(yr,mo+1,0).getDate();
+  for(let i=0;i<offset;i++){ const e=document.createElement('div'); e.className='bk-day-cell empty'; grid.appendChild(e); }
+  for(let day=1;day<=dim;day++){
+    const d=new Date(yr,mo,day); const dow=d.getDay();
+    const closed=dow===4||dow===5;
+    const past=d<today; const afterEnd=d>bkState.calEnd;
+    const isToday=d.getTime()===today.getTime();
+    const sel=bkState.selectedDate&&d.getTime()===bkState.selectedDate.getTime();
+    const cell=document.createElement('div');
+    cell.textContent=day;
+    if(sel){ cell.className='bk-day-cell selected'; cell.onclick=()=>bkSelDay(d); }
+    else if(past||afterEnd||closed){ cell.className='bk-day-cell '+(closed?'closed':'past'); }
+    else { cell.className='bk-day-cell available'+(isToday?' today':''); cell.onclick=()=>bkSelDay(d); }
+    grid.appendChild(cell);
+  }
+  const vs=new Date(yr,mo,1);
+  const pe=new Date(bkState.calStart.getFullYear(),bkState.calStart.getMonth(),1);
+  const ns=new Date(bkState.calEnd.getFullYear(),bkState.calEnd.getMonth(),1);
+  document.getElementById('bkBtnPrev').disabled=vs<=pe;
+  document.getElementById('bkBtnNext').disabled=vs>=ns;
+}
+function bkSelDay(d){ bkState.selectedDate=d; bkState.fetchedSlots=null; bkErr('bkErrDate',false); bkBuildCal(); }
+function bkCalPrev(){ if(bkState.viewMonth===0){bkState.viewMonth=11;bkState.viewYear--;}else bkState.viewMonth--; bkBuildCal(); }
+function bkCalNext(){ if(bkState.viewMonth===11){bkState.viewMonth=0;bkState.viewYear++;}else bkState.viewMonth++; bkBuildCal(); }
+function bkVal3(){
+  if(!bkState.selectedDate){ bkErr('bkErrDate',true); return; }
+  bkShowLoad('กำลังตรวจสอบเวลาว่าง...');
+  bkFetchSlots(bkState.selectedDate).then(slots=>{ bkState.fetchedSlots=slots; bkHideLoad(); bkGo(4); });
+}
+
+function bkFetchSlots(dateObj) {
+  const dd=String(dateObj.getDate()).padStart(2,'0');
+  const mm=String(dateObj.getMonth()+1).padStart(2,'0');
+  const targetStr=`${dd}/${mm}/${dateObj.getFullYear()}`;
+  return new Promise(resolve=>{
+    const cbName='_bkSlotCB_'+Date.now();
+    const timeout=setTimeout(()=>{ cleanup(); resolve({free:[...BK_ALL_SLOTS],full:[],fallback:true}); },8000);
+    function cleanup(){ clearTimeout(timeout); delete window[cbName]; const el=document.getElementById('_bkScript'); if(el)el.remove(); }
+    window[cbName]=function(data){ cleanup(); resolve(data&&Array.isArray(data.free)?{free:data.free,full:data.full||[]}:{free:[...BK_ALL_SLOTS],full:[],fallback:true}); };
+    const url=`${BK_WEB_APP_URL}?action=checkSlots&date=${encodeURIComponent(targetStr)}&callback=${cbName}`;
+    const s=document.createElement('script'); s.id='_bkScript'; s.src=url;
+    s.onerror=()=>{ cleanup(); resolve({free:[...BK_ALL_SLOTS],full:[],fallback:true}); };
+    document.head.appendChild(s);
+  });
+}
+
+// STEP 4 — Time
+function bkStep4(c) {
+  const d=bkState.selectedDate, dow=d.getDay(), beY=d.getFullYear()+543;
+  const dateLabel=`วัน${BK_THAI_DAYS_SUN[dow]}ที่ ${d.getDate()} ${BK_THAI_MONTHS_SHORT[d.getMonth()]} ${beY}`;
+  const slots=bkState.fetchedSlots||{free:BK_ALL_SLOTS,full:[]};
+  const fb=slots.fallback===true;
+  c.innerHTML=`
+    <div class="bk-card">
+      <div class="bk-card-title">⏰ เลือกเวลาที่สะดวก</div>
+      <div style="font-size:13px;color:#546e7a;margin-bottom:14px;font-weight:500;">${dateLabel}</div>
+      ${fb?`<div style="background:#fff3e0;border:1px solid #ffcc80;border-radius:8px;padding:10px 14px;font-size:12px;color:#e65100;margin-bottom:12px;">⚠️ ไม่สามารถโหลดข้อมูลเวลาได้ กรุณาโทร <strong>092-359-5963</strong> เพื่อยืนยัน</div>`:''}
+      <div class="bk-time-grid">
+        ${BK_ALL_SLOTS.map(slot=>{
+          const free=slots.free.includes(slot);
+          return `<div class="bk-time-btn ${free?'free':'full'} ${bkState.selectedTime===slot?'selected':''}"
+            ${free?`onclick="bkPickTime('${slot}',this)"`:''}><div class="t-time">${slot}</div><div class="t-status">${free?'ว่าง':'เต็ม'}</div></div>`;
+        }).join('')}
+      </div>
+      <div class="bk-error" id="bkErrTime">กรุณาเลือกเวลาที่สะดวก</div>
+    </div>
+    <button class="bk-btn-primary" onclick="bkVal4()">ถัดไป →</button>
+    <button class="bk-btn-back" onclick="bkGo(3)">← ย้อนกลับ</button>`;
+}
+function bkPickTime(slot,el){
+  document.querySelectorAll('#bookingAppRoot .bk-time-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected'); bkState.selectedTime=slot; bkErr('bkErrTime',false);
+}
+function bkVal4(){ if(!bkState.selectedTime){ bkErr('bkErrTime',true); return; } bkGo(5); }
+
+// STEP 5 — Confirm
+function bkStep5(c) {
+  const d=bkState.selectedDate, dow=d.getDay(), beY=d.getFullYear()+543;
+  const dateStr=`วัน${BK_THAI_DAYS_SUN[dow]}ที่ ${d.getDate()} ${BK_THAI_MONTHS_SHORT[d.getMonth()]} พ.ศ. ${beY}`;
+  c.innerHTML=`
+    <div class="bk-card">
+      <div class="bk-card-title">✅ ยืนยันการนัดหมาย</div>
+      <div class="bk-sum-row"><span class="bk-sum-label">ชื่อ-นามสกุล</span><span class="bk-sum-value">${bkEsc(bkState.name)}</span></div>
+      <div class="bk-sum-row"><span class="bk-sum-label">เบอร์โทรศัพท์</span><span class="bk-sum-value">${bkEsc(bkState.phone)}</span></div>
+      <div class="bk-sum-row"><span class="bk-sum-label">บริการที่ต้องการ</span><span class="bk-sum-value">${bkEsc(bkState.service)}</span></div>
+      <div class="bk-sum-row"><span class="bk-sum-label">วันนัดหมาย</span><span class="bk-sum-value">${dateStr}</span></div>
+      <div class="bk-sum-row"><span class="bk-sum-label">เวลานัดหมาย</span><span class="bk-sum-value">${bkState.selectedTime} น.</span></div>
+      <div class="bk-clinic-note" style="margin-top:16px;">📞 ทีมงานจะโทรยืนยันนัดหมายภายใน 24 ชั่วโมง<br>หากต้องการยกเลิกหรือเปลี่ยนนัด กรุณาโทร <strong>092-359-5963</strong></div>
+    </div>
+    <button class="bk-btn-primary" onclick="bkSubmit()">✓ ยืนยันนัดหมาย</button>
+    <button class="bk-btn-back" onclick="bkGo(4)">← ย้อนกลับ</button>`;
+}
+
+// SUBMIT
+async function bkSubmit() {
+  const d=bkState.selectedDate;
+  const dd=String(d.getDate()).padStart(2,'0'), mm=String(d.getMonth()+1).padStart(2,'0');
+  const bookDate=`${dd}/${mm}/${d.getFullYear()}`;
+  const nameForSheet=`(ลงนัดผ่านลิ้งค์) ${bkState.name} เบอร์${bkState.phone} ต้องการนัด${bkState.service}`;
+  const payload={ date:bookDate, time:bkState.selectedTime, name:nameForSheet, phone:bkState.phone, treatment:bkState.service };
+  bkShowLoad('กำลังบันทึกนัดหมาย...');
+  try {
+    await fetch(BK_WEB_APP_URL,{ method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload) });
+  } catch(e){ console.error(e); }
+  bkHideLoad(); bkGo(6);
+}
+
+// STEP 6 — Success
+function bkStep6(c) {
+  const d=bkState.selectedDate, dow=d.getDay(), beY=d.getFullYear()+543;
+  const dateStr=`วัน${BK_THAI_DAYS_SUN[dow]}ที่ ${d.getDate()} ${BK_THAI_MONTHS_SHORT[d.getMonth()]} พ.ศ. ${beY}`;
+  c.innerHTML=`
+    <div class="bk-card">
+      <div class="bk-success-box">
+        <div class="bk-success-icon">🎉</div>
+        <div class="bk-success-title">นัดหมายสำเร็จ!</div>
+        <div class="bk-success-sub">ระบบได้บันทึกการนัดหมายของท่านเรียบร้อยแล้ว</div>
+        <div class="bk-appt-card">
+          <div class="bk-appt-line">👤 <strong>${bkEsc(bkState.name)}</strong></div>
+          <div class="bk-appt-line">📞 ${bkEsc(bkState.phone)}</div>
+          <div class="bk-appt-line">🦷 ${bkEsc(bkState.service)}</div>
+          <div class="bk-appt-line">📅 ${dateStr}</div>
+          <div class="bk-appt-line">⏰ ${bkState.selectedTime} น.</div>
+        </div>
+        <div class="bk-success-sub">ทีมงานจะโทรยืนยันนัดหมายภายใน 24 ชั่วโมง<br>หากมีข้อสงสัย กรุณาโทร <strong style="color:#1565c0">092-359-5963</strong></div>
+      </div>
+    </div>
+    <button class="bk-btn-primary success" onclick="bkInit()">🏠 กลับหน้าหลัก — นัดหมายใหม่</button>
+    <button class="bk-btn-back" onclick="closeBooking()">✕ ปิดหน้าต่าง</button>`;
+}
+
+// UTILITIES
+function bkEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function bkErr(id,show){ const el=document.getElementById(id); if(el) el.classList.toggle('show',show); }
+function bkShowLoad(t){ document.getElementById('bkLoadingText').textContent=t||'กรุณารอสักครู่...'; document.getElementById('bkLoadingOverlay').classList.add('show'); }
+function bkHideLoad(){ document.getElementById('bkLoadingOverlay').classList.remove('show'); }
+</script>
+
+</body>
+</html>
