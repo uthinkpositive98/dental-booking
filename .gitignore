@@ -1,0 +1,26 @@
+# macOS resource forks
+._*
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Archives
+*.zip
+bangpain_extracted/
+__MACOSX/
+
+# Claude settings
+.claude/
+
+# Duplicate files (renamed versions already exist as before/after)
+photos/15420.jpg
+photos/15424_0.jpg
+photos/15425_0.jpg
+photos/15426_0.jpg
+photos/15427_0.jpg
+photos/15428_0.jpg
+photos/15429_0.jpg
+photos/15431.jpg
+
+# Old poster file
+bangpain_dental_poster.html
