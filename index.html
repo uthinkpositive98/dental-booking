@@ -4,28 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>คลินิกทันตกรรมบางปะอิน | Bangpain Dental Clinic</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Prompt:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="three.min.js"></script>
 <style>
 :root {
-  --navy:        #0a2d6e;
-  --blue:        #1565c0;
-  --cyan:        #0288d1;
-  --teal:        #00897b;
-  --teal-light:  #4db6ac;
-  --gold:        #f59e0b;
+  --navy:        #0b1b2e;
+  --blue:        #1a3a5c;
+  --cyan:        #2d6fa4;
+  --teal:        #2d6fa4;
+  --teal-light:  #4a90c4;
+  --gold:        #c9a96e;
+  --gold-light:  #e8d5a3;
   --white:       #ffffff;
-  --bg:          #eef6ff;
-  --bg2:         #f0f9ff;
-  --bg3:         #e3f2fd;
+  --cream:       #faf9f7;
+  --bg:          #f7f6f3;
+  --bg2:         #f2f1ee;
+  --bg3:         #e8e6e1;
   --card-bg:     #ffffff;
-  --glass:       rgba(255,255,255,0.72);
-  --glass-border:rgba(25,118,210,0.15);
-  --text-h:      #0a2d6e;
-  --text-body:   #263c5a;
-  --text-muted:  #5e7a96;
-  --shadow:      0 4px 24px rgba(21,101,192,0.10);
-  --shadow-lg:   0 12px 48px rgba(21,101,192,0.16);
+  --glass:       rgba(255,255,255,0.85);
+  --glass-border:rgba(11,27,46,0.08);
+  --text-h:      #0b1b2e;
+  --text-body:   #2c3e50;
+  --text-muted:  #7a8794;
+  --shadow:      0 2px 20px rgba(0,0,0,0.06);
+  --shadow-lg:   0 8px 48px rgba(0,0,0,0.12);
+  --radius-card: 4px;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -1187,6 +1190,330 @@ footer p { color: rgba(255,255,255,0.45); }
   .ba-split-grid { grid-template-columns: 1fr; }
   .xray-grid { grid-template-columns: 1fr; }
 }
+
+/* ══════════════════════════════════════════
+   PREMIUM REDESIGN — Luxury Dental Clinic
+   ══════════════════════════════════════════ */
+
+/* ── Global reset ── */
+body {
+  background: var(--cream) !important;
+  color: var(--text-body) !important;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+}
+
+/* ── Premium typography ── */
+h1, h2, h3 { letter-spacing: -0.02em !important; }
+.section-header h2,
+.hero h1 .line1,
+.hero h1 .line3 {
+  font-family: 'Playfair Display', 'Prompt', serif !important;
+}
+
+/* ── NAV — refined minimal ── */
+nav {
+  background: rgba(250,249,247,0.96) !important;
+  backdrop-filter: blur(24px) !important;
+  border-bottom: 1px solid rgba(11,27,46,0.07) !important;
+  box-shadow: 0 1px 0 rgba(11,27,46,0.04) !important;
+  padding: 0 60px !important;
+  height: 72px !important;
+}
+.nav-logo-main {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, var(--navy) 0%, #2d6fa4 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  letter-spacing: 0.05em !important;
+}
+.nav-logo-main span {
+  background: linear-gradient(135deg, var(--gold), #a07840) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+.nav-logo-sub { color: var(--text-muted) !important; letter-spacing: 3px !important; }
+.nav-links a {
+  font-size: 13px !important;
+  letter-spacing: 0.08em !important;
+  font-weight: 500 !important;
+  color: var(--text-body) !important;
+  text-transform: uppercase !important;
+}
+.nav-links a:hover { color: var(--navy) !important; }
+.nav-links a::after { background: var(--gold) !important; height: 1px !important; }
+.nav-cta {
+  background: var(--navy) !important;
+  color: white !important;
+  border-radius: 2px !important;
+  padding: 10px 24px !important;
+  font-size: 12px !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
+  transition: background 0.3s, transform 0.2s !important;
+}
+.nav-cta:hover { background: var(--gold) !important; color: var(--navy) !important; }
+
+/* ── HERO ── */
+#hero {
+  background: linear-gradient(165deg, #0b1b2e 0%, #1a3a5c 60%, #0d2540 100%) !important;
+  padding: 120px 80px 80px !important;
+}
+.hero h1 { line-height: 1.0 !important; }
+.hero h1 .line1, .hero h1 .line3 { color: white !important; font-weight: 700 !important; }
+.hero h1 .line2 {
+  background: linear-gradient(90deg, var(--gold-light), var(--gold)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-style: italic !important;
+}
+.hero-badge {
+  background: rgba(201,169,110,0.12) !important;
+  border-color: rgba(201,169,110,0.3) !important;
+  color: var(--gold-light) !important;
+  border-radius: 2px !important;
+  letter-spacing: 3px !important;
+}
+.hero-badge .dot { background: var(--gold) !important; }
+.hero-sub { color: rgba(255,255,255,0.6) !important; font-size: 16px !important; line-height: 1.9 !important; }
+.hero-sub strong { color: var(--gold-light) !important; }
+.btn-primary {
+  background: var(--gold) !important;
+  color: var(--navy) !important;
+  border-radius: 2px !important;
+  font-size: 13px !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 24px rgba(201,169,110,0.3) !important;
+}
+.btn-primary:hover {
+  background: var(--gold-light) !important;
+  box-shadow: 0 8px 32px rgba(201,169,110,0.45) !important;
+}
+.btn-outline {
+  border-color: rgba(255,255,255,0.2) !important;
+  color: rgba(255,255,255,0.8) !important;
+  border-radius: 2px !important;
+  font-size: 13px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+.btn-outline:hover { border-color: var(--gold) !important; color: var(--gold) !important; background: transparent !important; }
+.floating-label {
+  background: rgba(11,27,46,0.85) !important;
+  border-color: rgba(201,169,110,0.35) !important;
+  color: var(--gold-light) !important;
+  border-radius: 2px !important;
+  font-size: 12px !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* ── SECTIONS general ── */
+section { position: relative; z-index: 1; }
+#services      { background: var(--cream) !important; padding: 120px 80px !important; }
+#video-section { background: var(--navy) !important; }
+#process       { background: var(--bg) !important; padding: 120px 80px !important; }
+#why           { background: var(--cream) !important; padding: 120px 80px !important; }
+#gallery       { background: var(--bg) !important; padding: 120px 80px !important; }
+#contact       { background: var(--navy) !important; padding: 120px 80px !important; }
+
+/* ── Section header ── */
+.section-tag {
+  font-size: 11px !important;
+  letter-spacing: 4px !important;
+  text-transform: uppercase !important;
+  color: var(--gold) !important;
+  font-family: 'Prompt', sans-serif !important;
+  font-weight: 500 !important;
+}
+.section-header h2 {
+  font-size: 52px !important;
+  font-weight: 700 !important;
+  color: var(--navy) !important;
+  line-height: 1.05 !important;
+}
+.section-header h2 span {
+  background: linear-gradient(135deg, #2d6fa4, #1a3a5c) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-style: italic !important;
+}
+.section-header p { color: var(--text-muted) !important; font-size: 15px !important; }
+
+/* ── SERVICE CARDS ── */
+.service-card-3d {
+  background: white !important;
+  border: 1px solid rgba(11,27,46,0.06) !important;
+  border-radius: var(--radius-card) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.05) !important;
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s !important;
+}
+.service-card-3d:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.1) !important;
+  border-color: rgba(201,169,110,0.25) !important;
+}
+.service-card-3d h3 { color: var(--navy) !important; font-weight: 700 !important; font-size: 22px !important; }
+.service-card-3d .en-name { color: var(--text-muted) !important; letter-spacing: 2px !important; font-size: 10px !important; text-transform: uppercase !important; }
+.service-card-3d p { color: var(--text-body) !important; line-height: 1.8 !important; }
+.service-number { color: rgba(11,27,46,0.03) !important; }
+.price-label { color: var(--text-muted) !important; letter-spacing: 1px !important; font-size: 11px !important; text-transform: uppercase !important; }
+.price-val {
+  background: linear-gradient(135deg, var(--navy), #2d6fa4) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+}
+.price-unit { color: var(--text-muted) !important; }
+.card-3d-scene { background: #f0f4f8 !important; border-radius: 2px !important; }
+.service-badge { border-radius: 2px !important; font-size: 11px !important; letter-spacing: 1px !important; }
+.badge-teal   { background: rgba(45,111,164,0.08) !important; color: #1a3a5c !important; border-color: rgba(45,111,164,0.2) !important; }
+.badge-cyan   { background: rgba(45,111,164,0.08) !important; color: #1a3a5c !important; border-color: rgba(45,111,164,0.2) !important; }
+.badge-gold   { background: rgba(201,169,110,0.1) !important; color: #7a5c20 !important; border-color: rgba(201,169,110,0.3) !important; }
+.badge-red    { background: rgba(180,60,60,0.08) !important; color: #8b3030 !important; border-color: rgba(180,60,60,0.2) !important; }
+
+/* ── PROCESS ── */
+.process-timeline::before { background: linear-gradient(90deg, var(--gold), #2d6fa4) !important; height: 1px !important; }
+.step-orb-inner {
+  background: white !important;
+  border-color: var(--gold) !important;
+  box-shadow: 0 4px 20px rgba(201,169,110,0.2) !important;
+}
+.step-num { background: linear-gradient(135deg, var(--navy), #2d6fa4) !important; border-radius: 50% !important; }
+.process-step h4 { color: var(--navy) !important; font-weight: 700 !important; letter-spacing: -0.01em !important; }
+.process-step p { color: var(--text-muted) !important; }
+
+/* ── WHY US ── */
+.why-item-3d {
+  background: white !important;
+  border: 1px solid rgba(11,27,46,0.05) !important;
+  border-radius: var(--radius-card) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s !important;
+}
+.why-item-3d:hover {
+  transform: translateX(8px) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08) !important;
+  border-color: rgba(201,169,110,0.3) !important;
+}
+.why-item-3d h4 { color: var(--navy) !important; font-weight: 700 !important; }
+.why-item-3d p { color: var(--text-muted) !important; }
+.why-icon-3d { border-radius: 4px !important; }
+
+/* ── GALLERY ── */
+.gz-label {
+  background: white !important;
+  border-left-width: 2px !important;
+  border-radius: 2px !important;
+  font-size: 13px !important;
+  letter-spacing: 0.05em !important;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.04) !important;
+}
+.gz-count { background: var(--bg) !important; }
+.before-after-wrap {
+  border-radius: 2px !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
+}
+.before-after-wrap:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.14) !important; }
+.ba-label { border-radius: 0 0 2px 0 !important; font-size: 10px !important; letter-spacing: 2px !important; }
+.ba-caption {
+  font-size: 12px !important;
+  letter-spacing: 0.05em !important;
+  padding: 32px 14px 12px !important;
+}
+.happy-card { border-radius: 2px !important; box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important; }
+.happy-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.14) !important; }
+.gallery-cta-card {
+  background: linear-gradient(135deg, var(--navy) 0%, #1a3a5c 100%) !important;
+  border-radius: 2px !important;
+}
+.gallery-cta-btn { border-radius: 2px !important; background: var(--gold) !important; color: var(--navy) !important; font-size: 12px !important; letter-spacing: 0.1em !important; text-transform: uppercase !important; }
+
+/* ── CONTACT (dark bg) ── */
+#contact .section-header h2 { color: white !important; }
+#contact .section-header h2 span { font-style: italic !important; color: var(--gold-light) !important; -webkit-text-fill-color: var(--gold-light) !important; background: none !important; }
+#contact .section-tag { color: var(--gold) !important; }
+#contact .section-header p { color: rgba(255,255,255,0.5) !important; }
+.contact-brand { color: white !important; }
+.contact-brand span { color: var(--gold) !important; }
+.contact-tagline { color: rgba(255,255,255,0.45) !important; }
+.contact-item {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.07) !important;
+  border-radius: 2px !important;
+  backdrop-filter: blur(10px) !important;
+  transition: background 0.3s, border-color 0.3s !important;
+}
+.contact-item:hover { background: rgba(201,169,110,0.08) !important; border-color: rgba(201,169,110,0.2) !important; }
+.c-label { color: rgba(255,255,255,0.4) !important; letter-spacing: 1.5px !important; font-size: 11px !important; text-transform: uppercase !important; }
+.c-val   { color: white !important; font-weight: 300 !important; }
+.c-icon  { background: rgba(201,169,110,0.1) !important; border: 1px solid rgba(201,169,110,0.15) !important; }
+.map-box { border-radius: 2px !important; border-color: rgba(255,255,255,0.1) !important; }
+
+/* ── FOOTER ── */
+footer {
+  background: #070f1a !important;
+  border-top: 1px solid rgba(201,169,110,0.15) !important;
+  padding: 28px 80px !important;
+}
+footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; letter-spacing: 0.08em !important; }
+
+/* ── FLOATING BUTTON ── */
+#floatBookBtn {
+  background: linear-gradient(135deg, var(--navy), #1a3a5c) !important;
+  color: white !important;
+  border-radius: 2px !important;
+  font-size: 13px !important;
+  letter-spacing: 0.06em !important;
+  box-shadow: 0 4px 24px rgba(11,27,46,0.35) !important;
+  border: 1px solid rgba(201,169,110,0.2) !important;
+}
+#floatBookBtn:hover {
+  background: var(--gold) !important;
+  color: var(--navy) !important;
+  box-shadow: 0 8px 32px rgba(201,169,110,0.4) !important;
+}
+
+/* ── BOOKING MODAL CTA ── */
+.promo-tag { border-radius: 2px !important; }
+
+/* ── Doctor section tweaks ── */
+#doctor { background: white !important; }
+
+/* ── Video section ── */
+#video-section .section-header h2 { color: white !important; }
+#video-section .section-header h2 span { -webkit-text-fill-color: var(--gold-light) !important; color: var(--gold-light) !important; background: none !important; font-style: italic !important; }
+#video-section .section-tag { color: var(--gold) !important; }
+#video-section .section-header p { color: rgba(255,255,255,0.5) !important; }
+.video-tag { border-radius: 0 !important; font-size: 10px !important; letter-spacing: 2px !important; }
+
+/* ── Subtle dividers between sections ── */
+#doctor::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,169,110,0.3), transparent);
+  margin-bottom: 0;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: rgba(11,27,46,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* ── Selection ── */
+::selection { background: rgba(201,169,110,0.2); color: var(--navy); }
+
 </style>
 </head>
 <body>
