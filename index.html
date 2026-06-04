@@ -1699,25 +1699,25 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
           background:#f0f9ff; border:1px solid rgba(2,136,209,0.2);
           padding:12px 20px; border-radius:10px;
           font-family:'Prompt',sans-serif; font-size:16px; font-weight:600; color:#0a2d6e;
-        ">🎓 ทพ.บ. มหาวิทยาลัยเชียงใหม่</div>
+        " data-i18n="badge1">🎓 ทพ.บ. มหาวิทยาลัยเชียงใหม่</div>
         <div style="
           display:flex; align-items:center; gap:8px;
           background:#f0fdf4; border:1px solid rgba(0,137,123,0.2);
           padding:12px 20px; border-radius:10px;
           font-family:'Prompt',sans-serif; font-size:16px; font-weight:600; color:#00695c;
-        ">🦷 ชำนาญรากฟันเทียม</div>
+        " data-i18n="badge2">🦷 ชำนาญรากฟันเทียม</div>
         <div style="
           display:flex; align-items:center; gap:8px;
           background:#fff8f0; border:1px solid rgba(255,160,0,0.2);
           padding:12px 20px; border-radius:10px;
           font-family:'Prompt',sans-serif; font-size:16px; font-weight:600; color:#e65100;
-        ">⭐ 25+ ปีประสบการณ์</div>
+        " data-i18n="badge3">⭐ 25+ ปีประสบการณ์</div>
         <div style="
           display:flex; align-items:center; gap:8px;
           background:#f5f0ff; border:1px solid rgba(124,58,237,0.2);
           padding:12px 20px; border-radius:10px;
           font-family:'Prompt',sans-serif; font-size:16px; font-weight:600; color:#6d28d9;
-        ">🔩 ผ่านการอบรมทันตแพทย์ผู้เชี่ยวชาญด้านการจัดฟัน</div>
+        " data-i18n="badge4">🔩 ผ่านการอบรมทันตแพทย์ผู้เชี่ยวชาญด้านการจัดฟัน</div>
       </div>
 
       <a href="#" onclick="openBooking();return false;" style="
@@ -1755,7 +1755,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
 <section id="gallery">
   <div class="section-header reveal">
     <div class="section-tag">📸 ผลงานจริง</div>
-    <h2>รอยยิ้มของคนไข้<br><span>คือความสุขของเรา</span></h2>
+    <h2 data-i18n="contact_h2">รอยยิ้มของคนไข้<br><span>คือความสุขของเรา</span></h2>
     
   </div>
 
@@ -1867,7 +1867,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
 
     <!-- ❌ BEFORE row -->
     <div class="ba-col-header" style="background:#fdecea;color:#e63946;border-radius:8px;margin-bottom:14px;">
-      ❌ BEFORE — ก่อนรักษา
+      <span data-i18n="before_label">❌ BEFORE — ก่อนรักษา</span>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;">
       <div class="before-after-wrap" onclick="openLightbox('photos/before-2.jpg')">
@@ -1887,7 +1887,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
 
     <!-- ✅ AFTER row -->
     <div class="ba-col-header" style="background:#e0f2f1;color:#00897b;border-radius:8px;margin-bottom:14px;">
-      ✅ AFTER — หลังรักษาแล้ว
+      <span data-i18n="after_label">✅ AFTER — หลังรักษาแล้ว</span>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
       <div class="before-after-wrap" onclick="openLightbox('photos/crown_ba_1.webp')">
@@ -4368,6 +4368,7 @@ const TRANSLATIONS = {
     contact_hours_val:'เปิดให้บริการทุกวัน จันทร์ – อาทิตย์',
     contact_pedo_val:'เข้าวันจันทร์ และ วันพุธ',
     contact_tagline:'คลินิกทันตกรรมบางปะอิน',
+    before_label:'❌ BEFORE — ก่อนรักษา',after_label:'✅ AFTER — หลังรักษาแล้ว',badge1:'🎓 ทพ.บ. มหาวิทยาลัยเชียงใหม่',badge2:'🦷 ชำนาญรากฟันเทียม',badge3:'⭐ 25+ ปีประสบการณ์',badge4:'🔩 ผ่านการอบรมทันตแพทย์ผู้เชี่ยวชาญด้านการจัดฟัน',
     vid_tag:'▶ วิดีโอ 3D',vid_h2:'ดูขั้นตอน<span>การรักษา</span><br>แบบ 3D Animation',vid_sub:'เข้าใจการรักษาผ่านภาพเคลื่อนไหว 3 มิติ ก่อนตัดสินใจ',vid1_title:'การฝังรากเทียม Step-by-Step 3D',vid1_sub:'ดูขั้นตอนการฝังรากเทียม Implant แบบ 3 มิติครบทุกขั้นตอน • 4:32 นาที',vid2_title:'ขูดหินปูน 3D',vid2_sub:'กำจัดหินปูนอัลตราซาวด์ • 2:15 นาที',vid3_title:'รักษารากคลองฟัน 3D',vid3_sub:'Rotary Root Canal • 3:08 นาที',
     gallery_cta_h:'อยากได้ผลลัพธ์แบบนี้บ้าง?',
     gallery_cta_sub:'นัดปรึกษาฟรี ไม่มีค่าใช้จ่าย',
@@ -4424,6 +4425,7 @@ const TRANSLATIONS = {
     contact_hours_val:'Open Every Day: Mon – Sun',
     contact_pedo_val:'Mon &amp; Wed only',
     contact_tagline:'Bang Pa-in Dental Clinic',
+    before_label:'❌ BEFORE — Before Treatment',after_label:'✅ AFTER — After Treatment',badge1:'🎓 D.D.S. Chiangmai University',badge2:'🦷 Implant Specialist',badge3:'⭐ 25+ Years Experience',badge4:'🔩 Certified Orthodontic Specialist',
     vid_tag:'▶ 3D Videos',vid_h2:'See <span>Treatment</span><br>in 3D Animation',vid_sub:'Understand your treatment through 3D visuals before deciding',vid1_title:'Dental Implant Step-by-Step 3D',vid1_sub:'Watch the full implant procedure in 3D • 4:32 min',vid2_title:'Teeth Scaling 3D',vid2_sub:'Ultrasonic tartar removal • 2:15 min',vid3_title:'Root Canal 3D',vid3_sub:'Rotary Root Canal • 3:08 min',
     gallery_cta_h:'Want Results Like These?',
     gallery_cta_sub:'Free consultation, no charge',
@@ -4480,6 +4482,7 @@ const TRANSLATIONS = {
     contact_hours_val:'每天开放：周一 – 周日',
     contact_pedo_val:'仅周一和周三',
     contact_tagline:'班帕因牙科诊所',
+    before_label:'❌ 治疗前',after_label:'✅ 治疗后',badge1:'🎓 清迈大学牙科学士',badge2:'🦷 种植牙专家',badge3:'⭐ 25年以上经验',badge4:'🔩 认证正畸专科医师',
     vid_tag:'▶ 3D视频',vid_h2:'观看<span>治疗过程</span><br>3D动画',vid_sub:'通过3D动画了解治疗过程，再做决定',vid1_title:'种植牙手术 3D流程',vid1_sub:'完整3D种植牙手术流程 • 4:32分钟',vid2_title:'洗牙 3D',vid2_sub:'超声波洁牙 • 2:15分钟',vid3_title:'根管治疗 3D',vid3_sub:'旋转根管治疗 • 3:08分钟',
     gallery_cta_h:'想要这样的效果吗？',
     gallery_cta_sub:'免费咨询，无需费用',
@@ -4536,6 +4539,7 @@ const TRANSLATIONS = {
     contact_hours_val:'毎日営業：月〜日',
     contact_pedo_val:'月曜・水曜のみ',
     contact_tagline:'バンパイン歯科クリニック',
+    before_label:'❌ 治療前',after_label:'✅ 治療後',badge1:'🎓 チェンマイ大学歯科学士',badge2:'🦷 インプラント専門',badge3:'⭐ 25年以上の経験',badge4:'🔩 認定矯正専門医',
     vid_tag:'▶ 3D動画',vid_h2:'<span>治療の流れ</span>を<br>3Dアニメーションで見る',vid_sub:'3Dビジュアルで治療を理解してから決断',vid1_title:'インプラント Step-by-Step 3D',vid1_sub:'3Dインプラント手術の全工程 • 4:32分',vid2_title:'歯のクリーニング 3D',vid2_sub:'超音波スケーリング • 2:15分',vid3_title:'根管治療 3D',vid3_sub:'ロータリー根管治療 • 3:08分',
     gallery_cta_h:'こんな結果を望みますか？',
     gallery_cta_sub:'無料相談、費用なし',
