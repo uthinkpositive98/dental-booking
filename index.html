@@ -1686,7 +1686,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
         font-weight:600; letter-spacing:0.5px; margin-bottom:40px;
       ">Dr. Nawarat Phaewphisakul · D.D.S. Chiangmai University</div>
 
-      <p style="font-size:26px;color:#263c5a;line-height:2.0;margin-bottom:48px;">
+      <p data-i18n="doc_bio" style="font-size:26px;color:#263c5a;line-height:2.0;margin-bottom:48px;">
         ทันตแพทย์ผู้เชี่ยวชาญด้านทันตกรรมครบวงจร ประสบการณ์กว่า <strong style="color:#0288d1">25 ปี</strong>
         เชี่ยวชาญพิเศษด้านรากฟันเทียม การรักษารากฟัน และทันตกรรมเพื่อความสวยงาม
         ด้วยเทคโนโลยีทันสมัยและการดูแลที่ใส่ใจผู้ป่วยเป็นหลัก
@@ -4594,7 +4594,7 @@ function setLang(lang) {
   if (h2 && t.doc_name_html) h2.innerHTML = t.doc_name_html;
   const enDiv = document.querySelector('#doctor h2 + div');
   if (enDiv) enDiv.textContent = t.doc_en.replace(/<[^>]*>/g,'');
-  const bioP = document.querySelector('#doctor p');
+  const bioP = document.querySelector('#doctor [data-i18n="doc_bio"]');
   if (bioP) bioP.innerHTML = t.doc_bio;
   const docBtn = document.querySelector('#doctor a.btn-primary, #doctor a[onclick*="openBooking"]');
   if (docBtn) docBtn.textContent = t.doc_btn;
