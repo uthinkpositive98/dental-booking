@@ -3969,27 +3969,44 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 .lang-btn:hover { border-color: var(--blue); color: var(--blue); background: rgba(21,101,192,0.05); }
 .lang-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
 @media(max-width:900px){
-  #lang-switcher {
-    display: flex !important;
-    position: fixed;
-    bottom: 80px;
-    right: 12px;
-    flex-direction: column;
-    gap: 5px;
-    z-index: 300;
-  }
-  .lang-btn {
-    font-size: 11px !important;
-    padding: 6px 10px !important;
-    border-radius: 20px !important;
-    background: white !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15) !important;
-    border: 1px solid rgba(11,27,46,0.12) !important;
-  }
-  .lang-btn.active {
-    background: var(--navy) !important;
-    color: white !important;
-  }
+  #lang-switcher { display: none !important; }
+  #lang-switcher-mobile { display: flex !important; }
+}
+
+
+/* Mobile language bar */
+#lang-switcher-mobile {
+  display: none;
+  position: fixed;
+  bottom: 76px;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: row;
+  gap: 6px;
+  z-index: 500;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  padding: 6px 14px;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  border: 1px solid rgba(11,27,46,0.08);
+}
+#lang-switcher-mobile .lang-btn {
+  font-size: 12px;
+  padding: 5px 11px;
+  border-radius: 20px;
+  background: transparent;
+  border: 1px solid rgba(11,27,46,0.12);
+  color: var(--text-body);
+  cursor: pointer;
+  font-family: 'Prompt', sans-serif;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+#lang-switcher-mobile .lang-btn.active {
+  background: var(--navy);
+  color: white;
+  border-color: var(--navy);
 }
 
 </style>
@@ -4816,5 +4833,14 @@ function setSectionHeader(sectionId, tag, h2, sub) {
   if (pEl   && sub) pEl.innerHTML   = sub;
 }
 </script>
+
+<!-- Mobile language switcher (fixed bottom center) -->
+<div id="lang-switcher-mobile">
+  <button onclick="setLang('th')" class="lang-btn active" data-lang="th">ไทย</button>
+  <button onclick="setLang('en')" class="lang-btn" data-lang="en">EN</button>
+  <button onclick="setLang('zh')" class="lang-btn" data-lang="zh">中文</button>
+  <button onclick="setLang('ja')" class="lang-btn" data-lang="ja">日本語</button>
+  <button onclick="setLang('my')" class="lang-btn" data-lang="my">ဗမာ</button>
+</div>
 </body>
 </html>
