@@ -4064,6 +4064,114 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
   border-color: var(--navy);
 }
 
+
+/* ── Mobile Language Selection Modal ── */
+#lang-welcome-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(11,27,46,0.88);
+  backdrop-filter: blur(16px);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+#lang-welcome-modal.open { display: flex; }
+
+.lang-welcome-card {
+  background: white;
+  border-radius: 24px;
+  padding: 32px 24px 24px;
+  max-width: 340px;
+  width: 100%;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+  position: relative;
+  animation: slideUpModal 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes slideUpModal {
+  from { opacity:0; transform:translateY(40px) scale(0.96); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+
+.lang-welcome-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.lang-welcome-logo img {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.lang-welcome-title {
+  font-family: 'Prompt', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: #0b1b2e;
+  text-align: center;
+  margin-bottom: 6px;
+}
+.lang-welcome-sub {
+  font-size: 12px;
+  color: #7a8794;
+  text-align: center;
+  margin-bottom: 22px;
+  font-family: 'Prompt', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.lang-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.lang-choice-btn {
+  padding: 14px 12px;
+  border: 2px solid #e8eef5;
+  border-radius: 14px;
+  background: #f7faff;
+  cursor: pointer;
+  font-family: 'Prompt', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0b1b2e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+.lang-choice-btn:hover, .lang-choice-btn:active {
+  border-color: #0288d1;
+  background: #e3f4ff;
+  color: #0288d1;
+  transform: scale(1.03);
+}
+.lang-choice-btn .flag { font-size: 22px; }
+.lang-choice-btn .name { font-size: 13px; }
+.lang-choice-btn.full-width { grid-column: 1/-1; flex-direction: row; justify-content: center; gap: 10px; }
+
+.lang-skip-btn {
+  width: 100%;
+  padding: 11px;
+  background: transparent;
+  border: 1px solid #e0e8f0;
+  border-radius: 12px;
+  color: #7a8794;
+  font-family: 'Prompt', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.lang-skip-btn:hover { background: #f0f4f8; }
+
+/* Only show on mobile */
+@media(min-width:901px) { #lang-welcome-modal { display: none !important; } }
+
 </style>
 
 <!-- Loading overlay for booking -->
@@ -4897,5 +5005,62 @@ function setSectionHeader(sectionId, tag, h2, sub) {
   <button onclick="setLang('ja')" class="lang-btn" data-lang="ja">日本語</button>
   <button onclick="setLang('my')" class="lang-btn" data-lang="my">ဗမာ</button>
 </div>
+
+<!-- Mobile Language Welcome Modal -->
+<div id="lang-welcome-modal">
+  <div class="lang-welcome-card">
+    <div class="lang-welcome-logo">
+      <img src="photos/clinic-logo.jpg" alt="logo">
+    </div>
+    <div class="lang-welcome-title">BANGPAIN DENTAL CLINIC</div>
+    <div class="lang-welcome-sub">เลือกภาษา · Select Language</div>
+
+    <div class="lang-choice-grid">
+      <button class="lang-choice-btn" onclick="chooseLang('th')">
+        <span class="flag">🇹🇭</span>
+        <span class="name">ภาษาไทย</span>
+      </button>
+      <button class="lang-choice-btn" onclick="chooseLang('en')">
+        <span class="flag">🇬🇧</span>
+        <span class="name">English</span>
+      </button>
+      <button class="lang-choice-btn" onclick="chooseLang('zh')">
+        <span class="flag">🇨🇳</span>
+        <span class="name">中文</span>
+      </button>
+      <button class="lang-choice-btn" onclick="chooseLang('ja')">
+        <span class="flag">🇯🇵</span>
+        <span class="name">日本語</span>
+      </button>
+      <button class="lang-choice-btn full-width" onclick="chooseLang('my')">
+        <span class="flag">🇲🇲</span>
+        <span class="name">ဗမာဘာသာ</span>
+      </button>
+    </div>
+
+    <button class="lang-skip-btn" onclick="closeLangModal()">
+      ข้ามไปก่อน (ภาษาไทย) · Skip
+    </button>
+  </div>
+</div>
+
+<script>
+function chooseLang(lang) {
+  setLang(lang);
+  closeLangModal();
+}
+function closeLangModal() {
+  document.getElementById('lang-welcome-modal').classList.remove('open');
+}
+// Show on mobile only, every visit
+(function() {
+  const isMobile = window.innerWidth <= 900 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  if (isMobile) {
+    setTimeout(() => {
+      document.getElementById('lang-welcome-modal').classList.add('open');
+    }, 600);
+  }
+})();
+</script>
 </body>
 </html>
