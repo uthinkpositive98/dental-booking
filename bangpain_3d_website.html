@@ -1556,12 +1556,20 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
       <div class="nav-logo-sub">DENTAL CLINIC · บางปะอิน</div>
     </div>
   </div>
+  <!-- Language switcher -->
+  <div id="lang-switcher" style="display:flex;gap:6px;align-items:center;">
+    <button onclick="setLang('th')" class="lang-btn active" data-lang="th">ไทย</button>
+    <button onclick="setLang('en')" class="lang-btn" data-lang="en">English</button>
+    <button onclick="setLang('zh')" class="lang-btn" data-lang="zh">中文</button>
+    <button onclick="setLang('ja')" class="lang-btn" data-lang="ja">日本語</button>
+  </div>
+
   <div class="nav-links">
-    <a href="#services">บริการ</a>
-    <a href="#gallery">ผลงาน</a>
-    <a href="#process">ขั้นตอน</a>
-    <a href="#why">ทำไมเลือกเรา</a>
-    <a href="#" class="nav-cta" onclick="openBooking();return false;">📅 นัดหมาย</a>
+    <a href="#services" data-i18n="nav_services">บริการ</a>
+    <a href="#gallery" data-i18n="nav_gallery">ผลงาน</a>
+    <a href="#process" data-i18n="nav_process">ขั้นตอน</a>
+    <a href="#why" data-i18n="nav_why">ทำไมเลือกเรา</a>
+    <a href="#" class="nav-cta" onclick="openBooking();return false;" data-i18n="nav_book">📅 นัดหมาย</a>
   </div>
 </nav>
 
@@ -3942,6 +3950,25 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 .fl-1::before { display: none !important; }
 .fl-2, .fl-3 { display: none !important; }
 
+
+/* ── Language switcher ── */
+.lang-btn {
+  background: transparent;
+  border: 1px solid rgba(11,27,46,0.15);
+  color: var(--text-muted);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.lang-btn:hover { border-color: var(--blue); color: var(--blue); background: rgba(21,101,192,0.05); }
+.lang-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+@media(max-width:900px){ #lang-switcher { display: none !important; } }
+
 </style>
 
 <!-- Loading overlay for booking -->
@@ -4290,5 +4317,150 @@ function bkShowLoad(t){ document.getElementById('bkLoadingText').textContent=t||
 function bkHideLoad(){ document.getElementById('bkLoadingOverlay').classList.remove('show'); }
 </script>
 
+
+<script>
+// ══════════════════════════════════════════
+//  LANGUAGE SWITCHER
+// ══════════════════════════════════════════
+const TRANSLATIONS = {
+  th: {
+    nav_services: 'บริการ', nav_gallery: 'ผลงาน', nav_process: 'ขั้นตอน',
+    nav_why: 'ทำไมเลือกเรา', nav_book: '📅 นัดหมาย',
+    hero_badge: 'BANGPAIN DENTAL CLINIC',
+    hero_h1_1: 'รักษาฟัน', hero_h1_2: 'ครบวงจร', hero_h1_3: 'ด้วยเทคโนโลยี 3D',
+    hero_sub: 'ทีมทันตแพทย์ผู้เชี่ยวชาญกว่า <strong>25 ปี</strong><br>รากฟันเทียม · ขูดหินปูน · รักษารากฟัน · อุดฟัน<br>มาตรฐานสากล ราคาคุ้มค่า',
+    hero_btn1: '📅 นัดหมายวันนี้', hero_btn2: 'ดูบริการทั้งหมด →',
+    doc_tag: 'ทันตแพทย์ผู้เชี่ยวชาญ',
+    doc_name: 'ทพญ. นวรัตน์', doc_surname: 'แผ้วพิษากุล',
+    doc_en: 'Dr. Nawarat Phaewphisakul · D.D.S. Chiangmai University',
+    doc_bio: 'ทันตแพทย์ผู้เชี่ยวชาญด้านทันตกรรมครบวงจร ประสบการณ์กว่า <strong style="color:#0288d1">25 ปี</strong> เชี่ยวชาญพิเศษด้านรากฟันเทียม การรักษารากฟัน และทันตกรรมเพื่อความสวยงาม ด้วยเทคโนโลยีทันสมัยและการดูแลที่ใส่ใจผู้ป่วยเป็นหลัก',
+    doc_btn: '📅 นัดหมายกับทันตแพทย์',
+    svc_tag: '⬡ บริการหลัก', svc_h2: 'เชี่ยวชาญ<span>ทันตกรรม</span><br>4 บริการหลัก', svc_sub: 'เทคโนโลยีทันสมัย ทีมแพทย์เชี่ยวชาญ ราคาคุ้มค่า',
+    proc_tag: '◈ ขั้นตอนการรักษา', proc_h2: '4 ขั้นตอน<span>ง่ายๆ</span>', proc_sub: 'ตรวจฟรี ไม่มีค่าใช้จ่ายแอบแฝง โปร่งใสทุกขั้นตอน',
+    why_tag: '✦ ทำไมต้องเลือกเรา', why_h2: 'มาตรฐานสากล<br><span>ที่คุณสามารถวางใจ</span>',
+    contact_tag: '📍 ติดต่อเรา', contact_h2: 'รอยยิ้มที่มั่นใจของคนไข้<br><span>คือความสุขของเรา</span>',
+    book_label: 'นัดปรึกษาทันตแพทย์',
+  },
+  en: {
+    nav_services: 'Services', nav_gallery: 'Gallery', nav_process: 'Process',
+    nav_why: 'Why Us', nav_book: '📅 Book Now',
+    hero_badge: 'BANGPAIN DENTAL CLINIC',
+    hero_h1_1: 'Complete', hero_h1_2: 'Dental Care', hero_h1_3: 'with 3D Technology',
+    hero_sub: 'Expert dental team with over <strong>25 years</strong><br>Implants · Scaling · Root Canal · Filling<br>International Standards · Affordable Prices',
+    hero_btn1: '📅 Book Today', hero_btn2: 'View All Services →',
+    doc_tag: 'Dental Specialist',
+    doc_name: 'Dr. Nawarat', doc_surname: 'Phaewphisakul',
+    doc_en: 'Dr. Nawarat Phaewphisakul · D.D.S. Chiangmai University',
+    doc_bio: 'Comprehensive dental care specialist with over <strong style="color:#0288d1">25 years</strong> of experience. Expert in dental implants, root canal treatment, and cosmetic dentistry using modern technology.',
+    doc_btn: '📅 Book an Appointment',
+    svc_tag: '⬡ Our Services', svc_h2: 'Specialized<span> Dentistry</span><br>4 Core Services', svc_sub: 'Modern Technology · Expert Team · Affordable Prices',
+    proc_tag: '◈ Treatment Process', proc_h2: '4 <span>Simple</span> Steps', proc_sub: 'Free consultation · No hidden fees · Transparent process',
+    why_tag: '✦ Why Choose Us', why_h2: 'International Standards<br><span>You Can Trust</span>',
+    contact_tag: '📍 Contact Us', contact_h2: 'Your Confident Smile<br><span>is Our Happiness</span>',
+    book_label: 'Book a Consultation',
+  },
+  zh: {
+    nav_services: '服务', nav_gallery: '作品集', nav_process: '流程',
+    nav_why: '为什么选择我们', nav_book: '📅 立即预约',
+    hero_badge: 'BANGPAIN DENTAL CLINIC',
+    hero_h1_1: '全面', hero_h1_2: '牙科护理', hero_h1_3: '3D 技术',
+    hero_sub: '超过 <strong>25年</strong> 经验的牙科专家团队<br>种植牙 · 洗牙 · 根管治疗 · 补牙<br>国际标准 · 价格实惠',
+    hero_btn1: '📅 立即预约', hero_btn2: '查看所有服务 →',
+    doc_tag: '牙科专家',
+    doc_name: 'Dr. 那瓦拉', doc_surname: '帕维皮萨库尔',
+    doc_en: 'Dr. Nawarat Phaewphisakul · 清迈大学牙科外科博士',
+    doc_bio: '综合牙科专家，拥有超过 <strong style="color:#0288d1">25年</strong> 经验。专精种植牙、根管治疗及美容牙科，采用现代技术以患者为中心。',
+    doc_btn: '📅 预约医生',
+    svc_tag: '⬡ 我们的服务', svc_h2: '专业<span>牙科</span><br>4项核心服务', svc_sub: '现代技术 · 专业团队 · 价格实惠',
+    proc_tag: '◈ 治疗流程', proc_h2: '4个<span>简单</span>步骤', proc_sub: '免费咨询 · 无隐藏费用 · 透明流程',
+    why_tag: '✦ 为什么选择我们', why_h2: '国际标准<br><span>值得信赖</span>',
+    contact_tag: '📍 联系我们', contact_h2: '您自信的微笑<br><span>是我们的幸福</span>',
+    book_label: '预约咨询',
+  },
+  ja: {
+    nav_services: 'サービス', nav_gallery: 'ギャラリー', nav_process: '治療の流れ',
+    nav_why: '選ばれる理由', nav_book: '📅 予約する',
+    hero_badge: 'BANGPAIN DENTAL CLINIC',
+    hero_h1_1: '総合', hero_h1_2: '歯科診療', hero_h1_3: '3Dテクノロジー',
+    hero_sub: '<strong>25年以上</strong>の経験を持つ歯科専門チーム<br>インプラント · クリーニング · 根管治療 · 充填<br>国際基準 · リーズナブルな価格',
+    hero_btn1: '📅 今すぐ予約', hero_btn2: 'すべてのサービスを見る →',
+    doc_tag: '歯科専門医',
+    doc_name: 'Dr. ナワラット', doc_surname: 'パエウピサクル',
+    doc_en: 'Dr. Nawarat Phaewphisakul · チェンマイ大学歯科手術博士',
+    doc_bio: '総合歯科専門医として<strong style="color:#0288d1">25年以上</strong>の経験。インプラント、根管治療、審美歯科を専門とし、最新技術と患者中心のケアを提供。',
+    doc_btn: '📅 歯科医師に予約',
+    svc_tag: '⬡ 当院のサービス', svc_h2: '専門<span>歯科</span><br>4つのコアサービス', svc_sub: '最新技術 · 専門チーム · リーズナブルな価格',
+    proc_tag: '◈ 治療の流れ', proc_h2: '4つの<span>簡単な</span>ステップ', proc_sub: '無料相談 · 隠れた費用なし · 透明なプロセス',
+    why_tag: '✦ 選ばれる理由', why_h2: '国際基準<br><span>信頼できる</span>',
+    contact_tag: '📍 お問い合わせ', contact_h2: 'あなたの自信ある笑顔<br><span>が私たちの喜び</span>',
+    book_label: '相談を予約',
+  }
+};
+
+let currentLang = 'th';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = TRANSLATIONS[lang];
+
+  // Update nav buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+
+  // Update elements with data-i18n
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (t[key]) el.innerHTML = t[key];
+  });
+
+  // Hero
+  setHTML('.line1', t.hero_h1_1);
+  setHTML('.line2', t.hero_h1_2);
+  setHTML('.line3', t.hero_h1_3);
+  setHTML('.hero-sub', t.hero_sub);
+  setHTML('.hero-badge', '<span class="dot"></span>' + t.hero_badge);
+
+  // Section tags & headers
+  setSectionHeader('#services', t.svc_tag, t.svc_h2, t.svc_sub);
+  setSectionHeader('#process', t.proc_tag, t.proc_h2, t.proc_sub);
+  setSectionHeader('#why',     t.why_tag,  t.why_h2,  '');
+  setSectionHeader('#contact', t.contact_tag, t.contact_h2, '');
+
+  // Doctor
+  setHTML('#doctor .section-tag, #doctor .gz-label', t.doc_tag);
+  const docName = document.querySelector('#doctor .nav-logo-main, #doctor h2 .white-part');
+  const h2 = document.querySelector('#doctor h2');
+  if (h2) h2.innerHTML = '<span style="white-space:nowrap;">' + t.doc_name + '</span><br><span style="background:linear-gradient(135deg,#0288d1,#00897b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">' + t.doc_surname + '</span>';
+  const enDiv = document.querySelector('#doctor h2 + div');
+  if (enDiv) enDiv.textContent = t.doc_en.replace(/<[^>]*>/g,'');
+  const bioP = document.querySelector('#doctor p');
+  if (bioP) bioP.innerHTML = t.doc_bio;
+  const docBtn = document.querySelector('#doctor a.btn-primary, #doctor a[onclick*="openBooking"]');
+  if (docBtn) docBtn.textContent = t.doc_btn;
+
+  // Floating book button
+  const floatBtn = document.getElementById('floatBookBtn');
+  if (floatBtn) {
+    const span = floatBtn.querySelector('span:last-child') || floatBtn;
+    floatBtn.innerHTML = '<span style="font-size:20px">📅</span> ' + t.book_label;
+  }
+}
+
+function setHTML(selector, html) {
+  document.querySelectorAll(selector).forEach(el => { if(html) el.innerHTML = html; });
+}
+
+function setSectionHeader(sectionId, tag, h2, sub) {
+  const sec = document.querySelector(sectionId + ' .section-header');
+  if (!sec) return;
+  const tagEl = sec.querySelector('.section-tag');
+  const h2El  = sec.querySelector('h2');
+  const pEl   = sec.querySelector('p');
+  if (tagEl && tag) tagEl.innerHTML = tag;
+  if (h2El  && h2)  h2El.innerHTML  = h2;
+  if (pEl   && sub) pEl.innerHTML   = sub;
+}
+</script>
 </body>
 </html>
