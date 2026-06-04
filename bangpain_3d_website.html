@@ -4141,7 +4141,7 @@ const BK_TRANS = {
   },
 };
 
-function getBKT() { return BK_TRANS[currentLang] || BK_TRANS['th']; }
+function getBKT() { const r=BK_TRANS[currentLang]; return (r && r.steps) ? r : BK_TRANS['th']; }
 
 let bkState = {};
 
@@ -4180,7 +4180,9 @@ function bkRenderStep() {
 function bkRenderStepBar() {
   const bar = document.getElementById('bkStepBar');
   if (!bar) return;
-  const t=getBKT(); document.getElementById("bkTitle").textContent=t.title; document.getElementById("bkSubtitle").textContent=t.subtitle;
+  const t=getBKT();
+  const _bt=document.getElementById("bkTitle"); if(_bt) _bt.textContent=t.title;
+  const _bs=document.getElementById("bkSubtitle"); if(_bs) _bs.textContent=t.subtitle;
   bar.innerHTML = t.steps.map((s,i) => {
     const n = i+1;
     let cls = n < bkState.step ? 'done' : n === bkState.step ? 'active' : '';
@@ -4196,7 +4198,8 @@ function bkGo(n) { bkState.step = n; bkRenderStep(); }
 
 // STEP 1
 function bkStep1(c) {
-  c.innerHTML = `
+  if(!c) return;
+  try { c.innerHTML = `
     <div class="bk-card">
       <div class="bk-card-title">👤 ${getBKT().step1_title}</div>
       <div class="bk-form-group">
@@ -4211,7 +4214,8 @@ function bkStep1(c) {
       </div>
     </div>
     <button class="bk-btn-primary" onclick="bkVal1()">${getBKT().next}</button>`;
-  document.getElementById('bkPhone').addEventListener('input', function(){ this.value = this.value.replace(/\D/g,''); });
+  } catch(e){ console.error('bkStep1 error:',e); }
+  const p=document.getElementById('bkPhone'); if(p) p.addEventListener('input', function(){ this.value = this.value.replace(/\D/g,''); });
 }
 function bkVal1() {
   const name = document.getElementById('bkName').value.trim();
