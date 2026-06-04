@@ -3614,12 +3614,20 @@ function happyScroll(dir) {
   const track = document.getElementById('happyTrack');
   const wrap  = document.getElementById('happyWrap');
   if (!track || !wrap) return;
-  track.style.animationPlayState = 'paused';
+  // Stop CSS animation so JS transform takes effect
+  track.style.animation = 'none';
+  track.style.transition = 'none';
   _happyOff = Math.max(0, _happyOff + dir * 248);
-  const max = track.scrollWidth / 2 - wrap.offsetWidth;
-  if (_happyOff > max) _happyOff = 0;
-  track.style.transition = 'transform 0.45s cubic-bezier(0.16,1,0.3,1)';
-  track.style.transform  = `translateX(-${_happyOff}px)`;
+  const cardW = track.querySelector('.happy-card') ? track.querySelector('.happy-card').offsetWidth + 16 : 248;
+  // Count real (non-duplicate) cards = 12
+  const maxOff = cardW * 12 - wrap.offsetWidth;
+  if (_happyOff > maxOff) _happyOff = 0;
+  if (_happyOff < 0) _happyOff = maxOff;
+  // Apply with smooth transition
+  requestAnimationFrame(() => {
+    track.style.transition = 'transform 0.45s cubic-bezier(0.16,1,0.3,1)';
+    track.style.transform  = `translateX(-${_happyOff}px)`;
+  });
 }
 
 // ═══════════════════════════════════════════════
