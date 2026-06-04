@@ -4070,14 +4070,15 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
   display: none;
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 99999;
   background: rgba(11,27,46,0.88);
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   align-items: center;
   justify-content: center;
   padding: 24px;
 }
-#lang-welcome-modal.open { display: flex; }
+#lang-welcome-modal.open { display: flex !important; }
 
 .lang-welcome-card {
   background: white;
@@ -4169,8 +4170,7 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 }
 .lang-skip-btn:hover { background: #f0f4f8; }
 
-/* Desktop hides via JS (UA check), CSS keeps it hidden on large screens */
-@media(min-width:901px) { #lang-welcome-modal { display: none !important; } }
+/* JS controls visibility via UA detection */
 
 </style>
 
