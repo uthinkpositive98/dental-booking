@@ -4037,7 +4037,7 @@ const BK_TRANS = {
     next:'ถัดไป →', back:'← ย้อนกลับ',
     step2_title:'กรุณาเลือกบริการที่ต้องการ',
     step3_title:'เลือกวันที่ต้องการนัดหมาย', cal_badge:'แสดงวันว่าง 1 เดือนข้างหน้า',
-    closed_note:'หมายเหตุ: คลินิกหยุดทุกวันพฤหัสบดีและศุกร์<br>เปิดบริการ: จันทร์, อังคาร, พุธ, เสาร์, อาทิตย์',
+    closed_note:'เปิดให้บริการทุกวัน จันทร์ – อาทิตย์ 09:00–14:00 น.',
     step4_title:'เลือกเวลาที่สะดวก', slot_free:'ว่าง', slot_full:'เต็ม',
     step5_title:'ยืนยันการนัดหมาย',
     sum_name:'ชื่อ-นามสกุล', sum_phone:'เบอร์โทรศัพท์', sum_service:'บริการที่ต้องการ', sum_date:'วันนัดหมาย', sum_time:'เวลานัดหมาย',
@@ -4060,7 +4060,7 @@ const BK_TRANS = {
     next:'Next →', back:'← Back',
     step2_title:'Please Select a Service',
     step3_title:'Select Appointment Date', cal_badge:'Available dates for next 30 days',
-    closed_note:'Note: Closed on Thursday and Friday<br>Open: Monday, Tuesday, Wednesday, Saturday, Sunday',
+    closed_note:'Open every day: Monday – Sunday, 09:00–14:00',
     step4_title:'Select a Convenient Time', slot_free:'Available', slot_full:'Full',
     step5_title:'Confirm Appointment',
     sum_name:'Full Name', sum_phone:'Phone Number', sum_service:'Service', sum_date:'Appointment Date', sum_time:'Appointment Time',
@@ -4083,7 +4083,7 @@ const BK_TRANS = {
     next:'下一步 →', back:'← 返回',
     step2_title:'请选择服务',
     step3_title:'选择预约日期', cal_badge:'显示未来30天的可用日期',
-    closed_note:'注意：周四和周五休息<br>开放：周一、二、三、六、日',
+    closed_note:'每天开放：周一 – 周日 09:00–14:00',
     step4_title:'选择方便的时间', slot_free:'可预约', slot_full:'已满',
     step5_title:'确认预约',
     sum_name:'姓名', sum_phone:'电话号码', sum_service:'服务项目', sum_date:'预约日期', sum_time:'预约时间',
@@ -4106,7 +4106,7 @@ const BK_TRANS = {
     next:'次へ →', back:'← 戻る',
     step2_title:'サービスを選択してください',
     step3_title:'予約日を選択', cal_badge:'今後30日間の空き日程',
-    closed_note:'注意：木・金曜は休診<br>診療日：月・火・水・土・日',
+    closed_note:'毎日診療：月〜日 09:00–14:00',
     step4_title:'ご都合の良い時間を選択', slot_free:'空き', slot_full:'満',
     step5_title:'予約確認',
     sum_name:'お名前', sum_phone:'電話番号', sum_service:'サービス', sum_date:'予約日', sum_time:'予約時間',
@@ -4129,7 +4129,7 @@ const BK_TRANS = {
     next:'နောက်တစ်ဆင့် →', back:'← နောက်သို့ပြန်',
     step2_title:'ဝန်ဆောင်မှုတစ်ခုရွေးချယ်ပါ',
     step3_title:'ချိန်းဆိုမည့်ရက်ရွေးချယ်ပါ', cal_badge:'လာမည့် ၃၀ ရက်အတွင်း ရရှိနိုင်သောရက်များ',
-    closed_note:'မှတ်ချက်: ကြာသပတေးနှင့် သောကြာနေ့ ပိတ်သည်<br>ဖွင့်သောနေ့: တနင်္လာ၊ အင်္ဂါ၊ ဗုဒ္ဓဟူး၊ စနေ၊ တနင်္ဂနွေ',
+    closed_note:'နေ့တိုင်းဖွင့်သည်: တနင်္လာ – တနင်္ဂနွေ 09:00–14:00',
     step4_title:'သင့်တော်သောအချိန်ရွေးချယ်ပါ', slot_free:'ရရှိနိုင်', slot_full:'ပြည့်',
     step5_title:'ချိန်းဆိုမှုအတည်ပြုခြင်း',
     sum_name:'အမည်', sum_phone:'ဖုန်းနံပါတ်', sum_service:'ဝန်ဆောင်မှု', sum_date:'ချိန်းဆိုမည့်ရက်', sum_time:'ချိန်းဆိုမည့်အချိန်',
@@ -4299,7 +4299,7 @@ function bkBuildCal() {
   for(let i=0;i<offset;i++){ const e=document.createElement('div'); e.className='bk-day-cell empty'; grid.appendChild(e); }
   for(let day=1;day<=dim;day++){
     const d=new Date(yr,mo,day); const dow=d.getDay();
-    const closed=dow===4||dow===5;
+    const closed=false; // เปิดทุกวัน
     const past=d<today; const afterEnd=d>bkState.calEnd;
     const isToday=d.getTime()===today.getTime();
     const sel=bkState.selectedDate&&d.getTime()===bkState.selectedDate.getTime();
