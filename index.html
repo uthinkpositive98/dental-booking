@@ -5046,11 +5046,12 @@ function setSectionHeader(sectionId, tag, h2, sub) {
 
 <script>
 function chooseLang(lang) {
-  setLang(lang);
   closeLangModal();
+  try { setLang(lang); } catch(e) { console.error('setLang error:', e); }
 }
 function closeLangModal() {
-  document.getElementById('lang-welcome-modal').classList.remove('open');
+  const m = document.getElementById('lang-welcome-modal');
+  if (m) { m.classList.remove('open'); m.style.display = 'none'; }
 }
 // Show on mobile only, every visit
 (function() {
