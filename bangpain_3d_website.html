@@ -4169,7 +4169,7 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 }
 .lang-skip-btn:hover { background: #f0f4f8; }
 
-/* Only show on mobile */
+/* Desktop hides via JS (UA check), CSS keeps it hidden on large screens */
 @media(min-width:901px) { #lang-welcome-modal { display: none !important; } }
 
 </style>
@@ -5054,11 +5054,12 @@ function closeLangModal() {
 }
 // Show on mobile only, every visit
 (function() {
-  const isMobile = window.innerWidth <= 900 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  // Detect mobile via UA (works regardless of viewport width setting)
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent);
   if (isMobile) {
     setTimeout(() => {
       document.getElementById('lang-welcome-modal').classList.add('open');
-    }, 600);
+    }, 500);
   }
 })();
 </script>
