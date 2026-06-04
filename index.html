@@ -4021,16 +4021,103 @@ const BK_THAI_MONTHS_SHORT = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.',
 const BK_THAI_DAYS_SHORT   = ['จ.','อ.','พ.','พฤ.','ศ.','ส.','อา.'];
 const BK_THAI_DAYS_SUN     = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
 
-const BK_SERVICES = [
-  { label: 'ถอนฟัน',      icon: '🔧' },
-  { label: 'อุดฟัน',      icon: '🪥' },
-  { label: 'ขูดหินปูน',   icon: '✨' },
-  { label: 'รักษารากฟัน', icon: '🔬' },
-  { label: 'ทำฟันปลอม',   icon: '😁' },
-  { label: 'ทำรากฟันเทียม', icon: '🦷' },
-  { label: 'ปวดฟัน / ต้องการปรึกษาทันตแพทย์', icon: '💬', fullWidth: true },
-];
-const BK_STEPS = ['ข้อมูลผู้ป่วย','เลือกบริการ','เลือกวัน','เลือกเวลา','ยืนยัน'];
+// ── Booking translations ──
+const BK_TRANS = {
+  th: {
+    title:'คลินิกทันตกรรมบางปะอิน', subtitle:'Bangpa-in Dental Clinic — ระบบนัดหมายออนไลน์',
+    steps:['ข้อมูลผู้ป่วย','เลือกบริการ','เลือกวัน','เลือกเวลา','ยืนยัน'],
+    services:[
+      {label:'ถอนฟัน',icon:'🔧'},{label:'อุดฟัน',icon:'🪥'},{label:'ขูดหินปูน',icon:'✨'},
+      {label:'รักษารากฟัน',icon:'🔬'},{label:'ทำฟันปลอม',icon:'😁'},{label:'ทำรากฟันเทียม',icon:'🦷'},
+      {label:'ปวดฟัน / ต้องการปรึกษาทันตแพทย์',icon:'💬',fullWidth:true},
+    ],
+    step1_title:'ข้อมูลผู้รับบริการ', name_label:'ชื่อ - นามสกุล', name_ph:'กรอกชื่อ-นามสกุลของท่าน', name_err:'กรุณากรอกชื่อ-นามสกุลให้ครบถ้วน',
+    phone_label:'เบอร์โทรศัพท์', phone_ph:'0XX-XXX-XXXX', phone_err:'กรุณากรอกเบอร์โทรให้ถูกต้อง (9-10 หลัก)',
+    next:'ถัดไป →', back:'← ย้อนกลับ',
+    step2_title:'กรุณาเลือกบริการที่ต้องการ',
+    step3_title:'เลือกวันที่ต้องการนัดหมาย', cal_badge:'แสดงวันว่าง 1 เดือนข้างหน้า',
+    closed_note:'หมายเหตุ: คลินิกหยุดทุกวันพฤหัสบดีและศุกร์<br>เปิดบริการ: จันทร์, อังคาร, พุธ, เสาร์, อาทิตย์',
+    step4_title:'เลือกเวลาที่สะดวก', slot_free:'ว่าง', slot_full:'เต็ม',
+    step5_title:'ยืนยันการนัดหมาย',
+    sum_name:'ชื่อ-นามสกุล', sum_phone:'เบอร์โทรศัพท์', sum_service:'บริการที่ต้องการ', sum_date:'วันนัดหมาย', sum_time:'เวลานัดหมาย',
+    confirm_note:'📞 ทีมงานจะโทรยืนยันนัดหมายภายใน 24 ชั่วโมง<br>หากต้องการยกเลิก กรุณาโทร <strong>092-359-5963</strong>',
+    confirm_btn:'✓ ยืนยันนัดหมาย', saving:'กำลังบันทึกนัดหมาย...',
+    success_title:'นัดหมายสำเร็จ!', success_sub:'ระบบได้บันทึกการนัดหมายของท่านเรียบร้อยแล้ว',
+    success_note:'ทีมงานจะโทรยืนยันนัดหมายภายใน 24 ชั่วโมง',
+    reset_btn:'🏠 กลับหน้าหลัก — นัดหมายใหม่', close_btn:'✕ ปิดหน้าต่าง',
+  },
+  en: {
+    title:'Bang Pa-in Dental Clinic', subtitle:'Online Appointment Booking System',
+    steps:['Patient Info','Select Service','Select Date','Select Time','Confirm'],
+    services:[
+      {label:'Tooth Extraction',icon:'🔧'},{label:'Tooth Filling',icon:'🪥'},{label:'Teeth Scaling',icon:'✨'},
+      {label:'Root Canal',icon:'🔬'},{label:'Dentures',icon:'😁'},{label:'Dental Implant',icon:'🦷'},
+      {label:'Toothache / Dental Consultation',icon:'💬',fullWidth:true},
+    ],
+    step1_title:'Patient Information', name_label:'Full Name', name_ph:'Enter your full name', name_err:'Please enter your full name (3+ characters)',
+    phone_label:'Phone Number', phone_ph:'0XX-XXX-XXXX', phone_err:'Please enter a valid phone number (9-10 digits)',
+    next:'Next →', back:'← Back',
+    step2_title:'Please Select a Service',
+    step3_title:'Select Appointment Date', cal_badge:'Available dates for next 30 days',
+    closed_note:'Note: Closed on Thursday and Friday<br>Open: Monday, Tuesday, Wednesday, Saturday, Sunday',
+    step4_title:'Select a Convenient Time', slot_free:'Available', slot_full:'Full',
+    step5_title:'Confirm Appointment',
+    sum_name:'Full Name', sum_phone:'Phone Number', sum_service:'Service', sum_date:'Appointment Date', sum_time:'Appointment Time',
+    confirm_note:'📞 Our team will call to confirm within 24 hours<br>To cancel, please call <strong>092-359-5963</strong>',
+    confirm_btn:'✓ Confirm Appointment', saving:'Saving appointment...',
+    success_title:'Appointment Booked!', success_sub:'Your appointment has been recorded.',
+    success_note:'Our team will confirm your appointment within 24 hours.',
+    reset_btn:'🏠 Back to Home — Book Again', close_btn:'✕ Close',
+  },
+  zh: {
+    title:'班帕因牙科诊所', subtitle:'在线预约系统',
+    steps:['患者信息','选择服务','选择日期','选择时间','确认'],
+    services:[
+      {label:'拔牙',icon:'🔧'},{label:'补牙',icon:'🪥'},{label:'洗牙',icon:'✨'},
+      {label:'根管治疗',icon:'🔬'},{label:'假牙',icon:'😁'},{label:'种植牙',icon:'🦷'},
+      {label:'牙痛 / 牙科咨询',icon:'💬',fullWidth:true},
+    ],
+    step1_title:'患者信息', name_label:'姓名', name_ph:'请输入您的姓名', name_err:'请输入完整姓名（3个字符以上）',
+    phone_label:'电话号码', phone_ph:'0XX-XXX-XXXX', phone_err:'请输入有效电话号码（9-10位数字）',
+    next:'下一步 →', back:'← 返回',
+    step2_title:'请选择服务',
+    step3_title:'选择预约日期', cal_badge:'显示未来30天的可用日期',
+    closed_note:'注意：周四和周五休息<br>开放：周一、二、三、六、日',
+    step4_title:'选择方便的时间', slot_free:'可预约', slot_full:'已满',
+    step5_title:'确认预约',
+    sum_name:'姓名', sum_phone:'电话号码', sum_service:'服务项目', sum_date:'预约日期', sum_time:'预约时间',
+    confirm_note:'📞 我们的团队将在24小时内致电确认<br>如需取消，请致电 <strong>092-359-5963</strong>',
+    confirm_btn:'✓ 确认预约', saving:'正在保存预约...',
+    success_title:'预约成功！', success_sub:'您的预约已成功记录。',
+    success_note:'我们的团队将在24小时内确认您的预约。',
+    reset_btn:'🏠 返回主页 — 重新预约', close_btn:'✕ 关闭',
+  },
+  ja: {
+    title:'バンパイン歯科クリニック', subtitle:'オンライン予約システム',
+    steps:['患者情報','サービス選択','日付選択','時間選択','確認'],
+    services:[
+      {label:'抜歯',icon:'🔧'},{label:'充填',icon:'🪥'},{label:'クリーニング',icon:'✨'},
+      {label:'根管治療',icon:'🔬'},{label:'義歯',icon:'😁'},{label:'インプラント',icon:'🦷'},
+      {label:'歯の痛み / 相談',icon:'💬',fullWidth:true},
+    ],
+    step1_title:'患者情報', name_label:'お名前', name_ph:'お名前を入力してください', name_err:'お名前を正しく入力してください（3文字以上）',
+    phone_label:'電話番号', phone_ph:'0XX-XXX-XXXX', phone_err:'有効な電話番号を入力してください（9〜10桁）',
+    next:'次へ →', back:'← 戻る',
+    step2_title:'サービスを選択してください',
+    step3_title:'予約日を選択', cal_badge:'今後30日間の空き日程',
+    closed_note:'注意：木・金曜は休診<br>診療日：月・火・水・土・日',
+    step4_title:'ご都合の良い時間を選択', slot_free:'空き', slot_full:'満',
+    step5_title:'予約確認',
+    sum_name:'お名前', sum_phone:'電話番号', sum_service:'サービス', sum_date:'予約日', sum_time:'予約時間',
+    confirm_note:'📞 24時間以内にご確認のお電話をいたします<br>キャンセルは <strong>092-359-5963</strong> まで',
+    confirm_btn:'✓ 予約を確認', saving:'予約を保存中...',
+    success_title:'予約完了！', success_sub:'ご予約が正常に記録されました。',
+    success_note:'24時間以内に確認のご連絡をいたします。',
+    reset_btn:'🏠 トップへ戻る', close_btn:'✕ 閉じる',
+  },
+};
+
+function getBKT() { return BK_TRANS[currentLang] || BK_TRANS['th']; }
 
 let bkState = {};
 
@@ -4041,8 +4128,8 @@ function bkInit() {
     <div class="bk-header">
       <div class="bk-logo">🦷</div>
       <div>
-        <h1>คลินิกทันตกรรมบางปะอิน</h1>
-        <p>Bangpa-in Dental Clinic — ระบบนัดหมายออนไลน์</p>
+        <h1 id="bkTitle">คลินิกทันตกรรมบางปะอิน</h1>
+        <p id="bkSubtitle">Bangpa-in Dental Clinic — ระบบนัดหมายออนไลน์</p>
       </div>
     </div>
     <div class="bk-stepbar"><div class="bk-stepbar-inner" id="bkStepBar"></div></div>
@@ -4069,7 +4156,8 @@ function bkRenderStep() {
 function bkRenderStepBar() {
   const bar = document.getElementById('bkStepBar');
   if (!bar) return;
-  bar.innerHTML = BK_STEPS.map((s,i) => {
+  const t=getBKT(); document.getElementById("bkTitle").textContent=t.title; document.getElementById("bkSubtitle").textContent=t.subtitle;
+  bar.innerHTML = t.steps.map((s,i) => {
     const n = i+1;
     let cls = n < bkState.step ? 'done' : n === bkState.step ? 'active' : '';
     const lbl = n < bkState.step ? '✓' : n;
@@ -4086,19 +4174,19 @@ function bkGo(n) { bkState.step = n; bkRenderStep(); }
 function bkStep1(c) {
   c.innerHTML = `
     <div class="bk-card">
-      <div class="bk-card-title">👤 ข้อมูลผู้รับบริการ</div>
+      <div class="bk-card-title">👤 ${getBKT().step1_title}</div>
       <div class="bk-form-group">
-        <label class="bk-label">ชื่อ - นามสกุล <span style="color:#d32f2f">*</span></label>
-        <input class="bk-input" id="bkName" type="text" placeholder="กรอกชื่อ-นามสกุลของท่าน" value="${bkEsc(bkState.name)}" autocomplete="name">
-        <div class="bk-error" id="bkErrName">กรุณากรอกชื่อ-นามสกุลให้ครบถ้วน</div>
+        <label class="bk-label">${getBKT().name_label} <span style="color:#d32f2f">*</span></label>
+        <input class="bk-input" id="bkName" type="text" placeholder="${getBKT().name_ph}" value="${bkEsc(bkState.name)}" autocomplete="name">
+        <div class="bk-error" id="bkErrName">${getBKT().name_err}</div>
       </div>
       <div class="bk-form-group">
-        <label class="bk-label">เบอร์โทรศัพท์ <span style="color:#d32f2f">*</span></label>
-        <input class="bk-input" id="bkPhone" type="tel" placeholder="0XX-XXX-XXXX" maxlength="10" value="${bkEsc(bkState.phone)}" autocomplete="tel" inputmode="numeric">
-        <div class="bk-error" id="bkErrPhone">กรุณากรอกเบอร์โทรให้ถูกต้อง (9-10 หลัก)</div>
+        <label class="bk-label">${getBKT().phone_label} <span style="color:#d32f2f">*</span></label>
+        <input class="bk-input" id="bkPhone" type="tel" placeholder="${getBKT().phone_ph}" maxlength="10" value="${bkEsc(bkState.phone)}" autocomplete="tel" inputmode="numeric">
+        <div class="bk-error" id="bkErrPhone">${getBKT().phone_err}</div>
       </div>
     </div>
-    <button class="bk-btn-primary" onclick="bkVal1()">ถัดไป →</button>`;
+    <button class="bk-btn-primary" onclick="bkVal1()">${getBKT().next}</button>`;
   document.getElementById('bkPhone').addEventListener('input', function(){ this.value = this.value.replace(/\D/g,''); });
 }
 function bkVal1() {
@@ -4115,9 +4203,9 @@ function bkVal1() {
 function bkStep2(c) {
   c.innerHTML = `
     <div class="bk-card">
-      <div class="bk-card-title">🦷 กรุณาเลือกบริการที่ต้องการ</div>
+      <div class="bk-card-title">🦷 ${getBKT().step2_title}</div>
       <div class="bk-svc-grid">
-        ${BK_SERVICES.map(s=>`
+        ${getBKT().services.map(s=>`
           <button class="bk-svc-btn ${s.fullWidth?'full-width':''} ${bkState.service===s.label?'selected':''}"
                   onclick="bkPickSvc(this,'${bkEsc(s.label)}')">
             <span class="svc-icon">${s.icon}</span>${s.label}
@@ -4125,8 +4213,8 @@ function bkStep2(c) {
       </div>
       <div class="bk-error" id="bkErrSvc">กรุณาเลือกบริการที่ต้องการ</div>
     </div>
-    <button class="bk-btn-primary" onclick="bkVal2()">ถัดไป →</button>
-    <button class="bk-btn-back" onclick="bkGo(1)">← ย้อนกลับ</button>`;
+    <button class="bk-btn-primary" onclick="bkVal2()">${getBKT().next}</button>
+    <button class="bk-btn-back" onclick="bkGo(1)">${getBKT().back}</button>`;
 }
 function bkPickSvc(btn, label) {
   document.querySelectorAll('#bookingAppRoot .bk-svc-btn').forEach(b=>b.classList.remove('selected'));
@@ -4146,8 +4234,8 @@ function bkVal2() {
 function bkStep3(c) {
   c.innerHTML = `
     <div class="bk-card">
-      <div class="bk-card-title">📅 เลือกวันที่ต้องการนัดหมาย</div>
-      <div class="bk-info-badge">แสดงวันว่าง 1 เดือนข้างหน้า นับจากวันนี้</div>
+      <div class="bk-card-title">📅 ${getBKT().step3_title}</div>
+      <div class="bk-info-badge">${getBKT().cal_badge}</div>
       <div class="bk-month-nav">
         <button class="bk-nav-btn" id="bkBtnPrev" onclick="bkCalPrev()">◀</button>
         <div class="bk-month-title" id="bkMonthTitle"></div>
@@ -4160,11 +4248,11 @@ function bkStep3(c) {
         <div class="bk-legend-item"><div class="bk-legend-dot" style="background:#f5f5f5"></div>ผ่านแล้ว</div>
         <div class="bk-legend-item"><div class="bk-legend-dot" style="background:#1565c0"></div>เลือกอยู่</div>
       </div>
-      <div class="bk-clinic-note"><strong>หมายเหตุ:</strong> คลินิกหยุดทุกวันพฤหัสบดีและศุกร์<br>เปิดบริการ: จันทร์, อังคาร, พุธ, เสาร์, อาทิตย์</div>
+      <div class="bk-clinic-note">${getBKT().closed_note}</div>
       <div class="bk-error" id="bkErrDate">กรุณาเลือกวันที่ต้องการนัด</div>
     </div>
-    <button class="bk-btn-primary" onclick="bkVal3()">ถัดไป →</button>
-    <button class="bk-btn-back" onclick="bkGo(2)">← ย้อนกลับ</button>`;
+    <button class="bk-btn-primary" onclick="bkVal3()">${getBKT().next}</button>
+    <button class="bk-btn-back" onclick="bkGo(2)">${getBKT().back}</button>`;
   bkBuildCal();
 }
 function bkBuildCal() {
@@ -4233,7 +4321,7 @@ function bkStep4(c) {
   const fb=slots.fallback===true;
   c.innerHTML=`
     <div class="bk-card">
-      <div class="bk-card-title">⏰ เลือกเวลาที่สะดวก</div>
+      <div class="bk-card-title">⏰ ${getBKT().step4_title}</div>
       <div style="font-size:13px;color:#546e7a;margin-bottom:14px;font-weight:500;">${dateLabel}</div>
       ${fb?`<div style="background:#fff3e0;border:1px solid #ffcc80;border-radius:8px;padding:10px 14px;font-size:12px;color:#e65100;margin-bottom:12px;">⚠️ ไม่สามารถโหลดข้อมูลเวลาได้ กรุณาโทร <strong>092-359-5963</strong> เพื่อยืนยัน</div>`:''}
       <div class="bk-time-grid">
@@ -4245,8 +4333,8 @@ function bkStep4(c) {
       </div>
       <div class="bk-error" id="bkErrTime">กรุณาเลือกเวลาที่สะดวก</div>
     </div>
-    <button class="bk-btn-primary" onclick="bkVal4()">ถัดไป →</button>
-    <button class="bk-btn-back" onclick="bkGo(3)">← ย้อนกลับ</button>`;
+    <button class="bk-btn-primary" onclick="bkVal4()">${getBKT().next}</button>
+    <button class="bk-btn-back" onclick="bkGo(3)">${getBKT().back}</button>`;
 }
 function bkPickTime(slot,el){
   document.querySelectorAll('#bookingAppRoot .bk-time-btn').forEach(b=>b.classList.remove('selected'));
@@ -4260,16 +4348,16 @@ function bkStep5(c) {
   const dateStr=`วัน${BK_THAI_DAYS_SUN[dow]}ที่ ${d.getDate()} ${BK_THAI_MONTHS_SHORT[d.getMonth()]} พ.ศ. ${beY}`;
   c.innerHTML=`
     <div class="bk-card">
-      <div class="bk-card-title">✅ ยืนยันการนัดหมาย</div>
-      <div class="bk-sum-row"><span class="bk-sum-label">ชื่อ-นามสกุล</span><span class="bk-sum-value">${bkEsc(bkState.name)}</span></div>
-      <div class="bk-sum-row"><span class="bk-sum-label">เบอร์โทรศัพท์</span><span class="bk-sum-value">${bkEsc(bkState.phone)}</span></div>
-      <div class="bk-sum-row"><span class="bk-sum-label">บริการที่ต้องการ</span><span class="bk-sum-value">${bkEsc(bkState.service)}</span></div>
-      <div class="bk-sum-row"><span class="bk-sum-label">วันนัดหมาย</span><span class="bk-sum-value">${dateStr}</span></div>
-      <div class="bk-sum-row"><span class="bk-sum-label">เวลานัดหมาย</span><span class="bk-sum-value">${bkState.selectedTime} น.</span></div>
-      <div class="bk-clinic-note" style="margin-top:16px;">📞 ทีมงานจะโทรยืนยันนัดหมายภายใน 24 ชั่วโมง<br>หากต้องการยกเลิกหรือเปลี่ยนนัด กรุณาโทร <strong>092-359-5963</strong></div>
+      <div class="bk-card-title">✅ ${getBKT().step5_title}</div>
+      <div class="bk-sum-row"><span class="bk-sum-label">${getBKT().sum_name}</span><span class="bk-sum-value">${bkEsc(bkState.name)}</span></div>
+      <div class="bk-sum-row"><span class="bk-sum-label">${getBKT().sum_phone}</span><span class="bk-sum-value">${bkEsc(bkState.phone)}</span></div>
+      <div class="bk-sum-row"><span class="bk-sum-label">${getBKT().sum_service}</span><span class="bk-sum-value">${bkEsc(bkState.service)}</span></div>
+      <div class="bk-sum-row"><span class="bk-sum-label">${getBKT().sum_date}</span><span class="bk-sum-value">${dateStr}</span></div>
+      <div class="bk-sum-row"><span class="bk-sum-label">${getBKT().sum_time}</span><span class="bk-sum-value">${bkState.selectedTime}</span></div>
+      <div class="bk-clinic-note" style="margin-top:16px;">${getBKT().confirm_note}</div>
     </div>
-    <button class="bk-btn-primary" onclick="bkSubmit()">✓ ยืนยันนัดหมาย</button>
-    <button class="bk-btn-back" onclick="bkGo(4)">← ย้อนกลับ</button>`;
+    <button class="bk-btn-primary" onclick="bkSubmit()">${getBKT().confirm_btn}</button>
+    <button class="bk-btn-back" onclick="bkGo(4)">${getBKT().back}</button>`;
 }
 
 // SUBMIT
@@ -4279,7 +4367,7 @@ async function bkSubmit() {
   const bookDate=`${dd}/${mm}/${d.getFullYear()}`;
   const nameForSheet=`(ลงนัดผ่านลิ้งค์) ${bkState.name} เบอร์${bkState.phone} ต้องการนัด${bkState.service}`;
   const payload={ date:bookDate, time:bkState.selectedTime, name:nameForSheet, phone:bkState.phone, treatment:bkState.service };
-  bkShowLoad('กำลังบันทึกนัดหมาย...');
+  bkShowLoad(getBKT().saving);
   try {
     await fetch(BK_WEB_APP_URL,{ method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload) });
   } catch(e){ console.error(e); }
@@ -4294,8 +4382,8 @@ function bkStep6(c) {
     <div class="bk-card">
       <div class="bk-success-box">
         <div class="bk-success-icon">🎉</div>
-        <div class="bk-success-title">นัดหมายสำเร็จ!</div>
-        <div class="bk-success-sub">ระบบได้บันทึกการนัดหมายของท่านเรียบร้อยแล้ว</div>
+        <div class="bk-success-title">${getBKT().success_title}</div>
+        <div class="bk-success-sub">${getBKT().success_sub}</div>
         <div class="bk-appt-card">
           <div class="bk-appt-line">👤 <strong>${bkEsc(bkState.name)}</strong></div>
           <div class="bk-appt-line">📞 ${bkEsc(bkState.phone)}</div>
@@ -4303,11 +4391,11 @@ function bkStep6(c) {
           <div class="bk-appt-line">📅 ${dateStr}</div>
           <div class="bk-appt-line">⏰ ${bkState.selectedTime} น.</div>
         </div>
-        <div class="bk-success-sub">ทีมงานจะโทรยืนยันนัดหมายภายใน 24 ชั่วโมง<br>หากมีข้อสงสัย กรุณาโทร <strong style="color:#1565c0">092-359-5963</strong></div>
+        <div class="bk-success-sub">${getBKT().success_note}<br>📞 <strong style="color:#1565c0">092-359-5963</strong></div>
       </div>
     </div>
-    <button class="bk-btn-primary success" onclick="bkInit()">🏠 กลับหน้าหลัก — นัดหมายใหม่</button>
-    <button class="bk-btn-back" onclick="closeBooking()">✕ ปิดหน้าต่าง</button>`;
+    <button class="bk-btn-primary success" onclick="bkInit()">${getBKT().reset_btn}</button>
+    <button class="bk-btn-back" onclick="closeBooking()">${getBKT().close_btn}</button>`;
 }
 
 // UTILITIES
@@ -4598,6 +4686,9 @@ function setLang(lang) {
   if (bioP) bioP.innerHTML = t.doc_bio;
   const docBtn = document.querySelector('#doctor a.btn-primary, #doctor a[onclick*="openBooking"]');
   if (docBtn) docBtn.textContent = t.doc_btn;
+
+  // Re-render booking if open
+  if(document.getElementById('bookingModal').style.display==='block') bkRenderStep();
 
   // Floating book button
   const floatBtn = document.getElementById('floatBookBtn');
