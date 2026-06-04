@@ -3968,7 +3968,29 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 }
 .lang-btn:hover { border-color: var(--blue); color: var(--blue); background: rgba(21,101,192,0.05); }
 .lang-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
-@media(max-width:900px){ #lang-switcher { display: none !important; } }
+@media(max-width:900px){
+  #lang-switcher {
+    display: flex !important;
+    position: fixed;
+    bottom: 80px;
+    right: 12px;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 300;
+  }
+  .lang-btn {
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+    border-radius: 20px !important;
+    background: white !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15) !important;
+    border: 1px solid rgba(11,27,46,0.12) !important;
+  }
+  .lang-btn.active {
+    background: var(--navy) !important;
+    color: white !important;
+  }
+}
 
 </style>
 
