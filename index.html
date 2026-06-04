@@ -4190,7 +4190,7 @@ function bkRenderStepBar() {
     return `<div class="bk-step-item">
       <div class="bk-step-dot ${cls}">${lbl}</div>
       <span class="bk-step-name ${cls==='active'?'active':''}">${s}</span>
-    </div>${n<BK_STEPS.length?'<span class="bk-step-arrow">›</span>':''}`;
+    </div>${n<5?'<span class="bk-step-arrow">›</span>':''}`;
   }).join('');
 }
 
