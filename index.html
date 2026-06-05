@@ -851,8 +851,8 @@ footer p { font-size: 13px; color: rgba(255,255,255,0.35); }
    LIGHT THEME OVERRIDES
    ════════════════════════════════════════ */
 
-/* BG canvas — lighter grid */
-#bg-canvas { opacity: 0.35; }
+/* BG canvas — cinematic starfield */
+#bg-canvas { opacity: 1.0 !important; }
 
 /* Hero */
 #hero { background: linear-gradient(160deg, #dbeeff 0%, #eef6ff 50%, #d6f0ff 100%); }
@@ -1260,7 +1260,10 @@ nav {
 
 /* ── HERO ── */
 #hero {
-  background: linear-gradient(165deg, #0b1b2e 0%, #1a3a5c 60%, #0d2540 100%) !important;
+  background:
+    radial-gradient(ellipse 95% 70% at 50% 118%, rgba(0,150,170,0.22) 0%, rgba(0,90,120,0.10) 35%, transparent 60%),
+    radial-gradient(ellipse 70% 55% at 50% -12%, rgba(48,104,170,0.28) 0%, transparent 60%),
+    linear-gradient(165deg, #050d18 0%, #0b1b2e 32%, #163a58 64%, #0a1c30 100%) !important;
   padding: 120px 80px 80px !important;
 }
 .hero h1 { line-height: 1.0 !important; }
@@ -1576,6 +1579,15 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
 
 <!-- ══════════════════ HERO ══════════════════ -->
 <section id="hero">
+  <div class="hero-depth"></div>
+  <div class="hero-bokeh">
+    <span class="bk b1"></span><span class="bk b2"></span><span class="bk b3"></span>
+    <span class="bk b4"></span><span class="bk b5"></span><span class="bk b6"></span>
+  </div>
+  <div class="hero-rays"></div>
+  <div class="hero-dust"></div>
+  <div class="hero-scanline"></div>
+  <div class="hero-grain"></div>
   <div class="hero-content reveal">
     <div class="hero-badge">
       <span class="dot"></span>
@@ -2459,71 +2471,115 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
 <!-- ══════════════════ SCRIPTS ══════════════════ -->
 <script>
 // ═══════════════════════════════════════════════
-// 1. BG PARTICLE SYSTEM
+// 1. CINEMATIC BG — Starfield + Nebula + Depth
 // ═══════════════════════════════════════════════
 (function() {
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
+  let W, H;
 
   function resize() {
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  for (let i = 0; i < 120; i++) {
-    particles.push({
-      x: Math.random() * 9999,
-      y: Math.random() * 9999,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      r: Math.random() * 1.8 + 0.4,
-      a: Math.random() * 0.3 + 0.08,
-      color: Math.random() > 0.5 ? '#0288d1' : '#00897b'
-    });
+    initStars();
   }
 
+  // Star layers (parallax depth)
+  let stars = [];
+  function initStars() {
+    stars = [];
+    // Deep stars (small, slow)
+    for(let i=0;i<180;i++) stars.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*0.7+0.2, speed:0.04+Math.random()*0.06, a:Math.random()*0.5+0.1, twinkle:Math.random()*Math.PI*2, layer:0});
+    // Mid stars
+    for(let i=0;i<80;i++) stars.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.0+0.4, speed:0.08+Math.random()*0.1, a:Math.random()*0.6+0.2, twinkle:Math.random()*Math.PI*2, layer:1});
+    // Bright foreground stars
+    for(let i=0;i<25;i++) stars.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.5+0.8, speed:0.15+Math.random()*0.1, a:0.7+Math.random()*0.3, twinkle:Math.random()*Math.PI*2, layer:2, glow:true});
+  }
+
+  // Nebula clouds (static gradient blobs)
+  const nebulae = [
+    {x:0.7, y:0.3, rx:0.35, ry:0.25, color:'rgba(10,40,120,0.07)'},
+    {x:0.2, y:0.7, rx:0.3, ry:0.2, color:'rgba(0,120,160,0.05)'},
+    {x:0.85, y:0.75, rx:0.25, ry:0.18, color:'rgba(5,80,100,0.06)'},
+    {x:0.5, y:0.15, rx:0.4, ry:0.15, color:'rgba(0,60,140,0.04)'},
+  ];
+
+  let t = 0;
   function drawBg() {
     ctx.clearRect(0, 0, W, H);
-    // light blue grid
-    ctx.strokeStyle = 'rgba(21,101,192,0.06)';
-    ctx.lineWidth = 1;
-    const gs = 80;
-    for (let x = 0; x < W; x += gs) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
-    for (let y = 0; y < H; y += gs) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
 
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+    // Draw nebula clouds
+    nebulae.forEach(n => {
+      const grd = ctx.createRadialGradient(n.x*W, n.y*H, 0, n.x*W, n.y*H, n.rx*W);
+      grd.addColorStop(0, n.color);
+      grd.addColorStop(1, 'transparent');
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = p.a;
+      ctx.ellipse(n.x*W, n.y*H, n.rx*W, n.ry*H, 0, 0, Math.PI*2);
+      ctx.fillStyle = grd;
       ctx.fill();
-      ctx.globalAlpha = 1;
     });
 
-    // lines between close particles
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i+1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const d = Math.sqrt(dx*dx + dy*dy);
-        if (d < 120) {
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(21,101,192,${0.07*(1-d/120)})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
-      }
+    // Subtle perspective grid (receding lines)
+    ctx.strokeStyle = 'rgba(0,80,140,0.04)';
+    ctx.lineWidth = 0.8;
+    const gy = H * 0.75; // horizon
+    for(let x=0; x<W; x += W/16) {
+      ctx.beginPath(); ctx.moveTo(W/2, gy); ctx.lineTo(x, H); ctx.stroke();
     }
+    for(let row=0; row<6; row++) {
+      const y = gy + (H-gy)*Math.pow(row/5,2);
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+    }
+
+    // Draw stars
+    t += 0.008;
+    stars.forEach(s => {
+      // Drift slowly
+      s.x -= s.speed;
+      if(s.x < -2) s.x = W + 2;
+
+      // Twinkle
+      const tw = Math.sin(t * 1.5 + s.twinkle);
+      const alpha = s.a * (0.7 + 0.3 * tw);
+
+      if(s.glow) {
+        // Bright star with glow halo
+        const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r*5);
+        g.addColorStop(0, `rgba(180,220,255,${alpha})`);
+        g.addColorStop(0.3, `rgba(100,160,255,${alpha*0.4})`);
+        g.addColorStop(1, 'transparent');
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r*5, 0, Math.PI*2);
+        ctx.fillStyle = g; ctx.fill();
+        // Core
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(220,240,255,${alpha})`;
+        ctx.fill();
+      } else {
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        const brightness = s.layer===0 ? 140 : (s.layer===1 ? 180 : 220);
+        ctx.fillStyle = `rgba(${brightness},${brightness+20},255,${alpha})`;
+        ctx.globalAlpha = 1;
+        ctx.fill();
+      }
+    });
+
+    // Occasional shooting star
+    if(Math.random() < 0.003) {
+      const sx=Math.random()*W, sy=Math.random()*H*0.5;
+      const len = 60+Math.random()*80;
+      const g = ctx.createLinearGradient(sx,sy,sx+len,sy+len*0.3);
+      g.addColorStop(0,'rgba(200,230,255,0)');
+      g.addColorStop(0.5,'rgba(200,230,255,0.6)');
+      g.addColorStop(1,'rgba(200,230,255,0)');
+      ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(sx+len,sy+len*0.3);
+      ctx.strokeStyle=g; ctx.lineWidth=1.5; ctx.stroke();
+    }
+
     requestAnimationFrame(drawBg);
   }
+
+  window.addEventListener('resize', resize);
+  resize();
   drawBg();
 })();
 
@@ -2545,8 +2601,23 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
   renderer.toneMappingExposure = 1.4;
 
   const scene = new THREE.Scene();
+  // Atmospheric depth — distant geometry dissolves into the navy haze (cinematic perspective)
+  scene.fog = new THREE.Fog(0x081626, 8, 22);
   const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
-  camera.position.set(0, 1.5, 9);
+  const camBase = { x: 0, y: 1.5, z: 9 };
+  camera.position.set(camBase.x, camBase.y, camBase.z);
+
+  // Pointer / tilt parallax — gives the scene real volume as you move (trailer-style)
+  const para = { tx: 0, ty: 0, x: 0, y: 0 };
+  window.addEventListener('pointermove', (e) => {
+    para.tx = (e.clientX / window.innerWidth  - 0.5) * 2;
+    para.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+  window.addEventListener('deviceorientation', (e) => {
+    if (e.gamma == null) return;
+    para.tx = Math.max(-1, Math.min(1, e.gamma / 30));
+    para.ty = Math.max(-1, Math.min(1, (e.beta - 45) / 30));
+  }, { passive: true });
 
   // === LIGHTING ===
   scene.add(new THREE.AmbientLight(0xffffff, 0.15));
@@ -2698,11 +2769,11 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
   // === FLOATING DATA PARTICLES ===
   const ptGeo = new THREE.BufferGeometry();
   const ptPos = [];
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 340; i++) {
     ptPos.push(
-      (Math.random() - 0.5) * 14,
-      (Math.random() - 0.5) * 10,
-      (Math.random() - 0.5) * 6
+      (Math.random() - 0.5) * 20,
+      (Math.random() - 0.5) * 13,
+      (Math.random() - 0.5) * 24 - 4
     );
   }
   ptGeo.setAttribute('position', new THREE.Float32BufferAttribute(ptPos, 3));
@@ -2794,6 +2865,14 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
 
     // X-ray plane flicker
     xrayPlane.material.opacity = 0.03 + Math.sin(t * 3) * 0.015;
+
+    // Ease camera toward pointer — parallax depth (subtle dolly + orbit)
+    para.x += (para.tx - para.x) * 0.045;
+    para.y += (para.ty - para.y) * 0.045;
+    camera.position.x = camBase.x + para.x * 1.7;
+    camera.position.y = camBase.y - para.y * 1.05;
+    camera.position.z = camBase.z - Math.abs(para.x) * 0.6;
+    camera.lookAt(0, 0.4, 0);
 
     renderer.render(scene, camera);
   }
@@ -4171,6 +4250,140 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 .lang-skip-btn:hover { background: #f0f4f8; }
 
 /* JS controls visibility via UA detection */
+
+
+/* ── Cinematic Hero Effects ── */
+#hero { position: relative; overflow: hidden; }
+
+/* Deep vignette */
+#hero::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 55% 45%, transparent 30%, rgba(2,5,18,0.55) 70%, rgba(1,3,12,0.9) 100%);
+}
+
+/* God rays — diagonal light beams */
+#hero::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    linear-gradient(125deg, rgba(45,130,200,0.06) 0%, transparent 40%),
+    linear-gradient(105deg, transparent 40%, rgba(0,180,160,0.04) 70%, transparent 100%);
+  animation: godRay 8s ease-in-out infinite alternate;
+}
+@keyframes godRay {
+  0%   { opacity: 0.6; transform: skewX(-1deg) scaleX(1.0); }
+  50%  { opacity: 1.0; transform: skewX(1deg)  scaleX(1.02); }
+  100% { opacity: 0.7; transform: skewX(-0.5deg) scaleX(1.0); }
+}
+
+/* Floating dust/mist layer */
+.hero-dust {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at 30% 70%, rgba(45,80,160,0.08) 0%, transparent 45%),
+    radial-gradient(circle at 75% 25%, rgba(0,200,180,0.05) 0%, transparent 35%),
+    radial-gradient(circle at 10% 30%, rgba(30,60,120,0.07) 0%, transparent 40%);
+  animation: dustFloat 12s ease-in-out infinite alternate;
+}
+@keyframes dustFloat {
+  0%   { transform: translate(0,0) scale(1); }
+  33%  { transform: translate(8px,-6px) scale(1.02); }
+  66%  { transform: translate(-6px,8px) scale(0.99); }
+  100% { transform: translate(4px,-4px) scale(1.01); }
+}
+
+/* Horizontal scan line */
+.hero-scanline {
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,200,180,0.15), rgba(0,160,220,0.25), rgba(0,200,180,0.15), transparent);
+  z-index: 0; pointer-events: none;
+  animation: scanLine 6s linear infinite;
+}
+@keyframes scanLine {
+  0%   { top: -5%; opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 0.5; }
+  100% { top: 105%; opacity: 0; }
+}
+
+/* Film grain overlay */
+.hero-grain {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ── Depth haze: layered atmosphere that recedes (near-dark frame, glowing core) ── */
+.hero-depth {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 42% at 50% 56%, rgba(30,120,165,0.45) 0%, rgba(15,70,110,0.18) 45%, transparent 68%),
+    radial-gradient(ellipse 120% 80% at 50% 122%, rgba(0,180,200,0.18) 0%, transparent 55%);
+  mix-blend-mode: screen;
+  animation: depthPulse 7s ease-in-out infinite alternate;
+}
+@keyframes depthPulse {
+  0%   { opacity: 0.6; transform: scale(0.98); }
+  100% { opacity: 1;   transform: scale(1.06); }
+}
+
+/* ── Bokeh: out-of-focus orbs at varying depth (depth-of-field cue) ── */
+.hero-bokeh { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.hero-bokeh .bk {
+  position: absolute; border-radius: 50%;
+  filter: blur(2px);
+  mix-blend-mode: screen;
+  animation: bokehDrift linear infinite;
+}
+/* Foreground = large + heavily blurred + faster; background = small + sharp + slow */
+.hero-bokeh .b1 { width: 280px; height: 280px; left: 6%;  top: 58%; filter: blur(46px);
+  background: radial-gradient(circle, rgba(0,220,195,0.42), transparent 70%); animation-duration: 24s; }
+.hero-bokeh .b2 { width: 210px; height: 210px; left: 68%; top: 14%; filter: blur(38px);
+  background: radial-gradient(circle, rgba(48,140,255,0.46), transparent 70%); animation-duration: 30s; animation-direction: reverse; }
+.hero-bokeh .b3 { width: 120px; height: 120px; left: 42%; top: 28%; filter: blur(20px);
+  background: radial-gradient(circle, rgba(0,190,255,0.38), transparent 70%); animation-duration: 38s; }
+.hero-bokeh .b4 { width: 60px;  height: 60px;  left: 24%; top: 20%; filter: blur(6px);
+  background: radial-gradient(circle, rgba(140,230,255,0.50), transparent 70%); animation-duration: 46s; animation-direction: reverse; }
+.hero-bokeh .b5 { width: 180px; height: 180px; left: 84%; top: 68%; filter: blur(34px);
+  background: radial-gradient(circle, rgba(0,170,185,0.40), transparent 70%); animation-duration: 28s; }
+.hero-bokeh .b6 { width: 40px;  height: 40px;  left: 58%; top: 10%; filter: blur(3px);
+  background: radial-gradient(circle, rgba(170,245,255,0.60), transparent 70%); animation-duration: 52s; }
+@keyframes bokehDrift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(28px, -34px); }
+  50%  { transform: translate(-22px, -56px); }
+  75%  { transform: translate(-40px, -24px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ── Volumetric light shafts (god rays) sweeping through the haze ── */
+.hero-rays {
+  position: absolute; inset: -20% -10%; z-index: 0; pointer-events: none;
+  background:
+    linear-gradient(102deg, transparent 32%, rgba(130,205,255,0.22) 41%, rgba(180,230,255,0.30) 44%, transparent 50%),
+    linear-gradient(98deg,  transparent 48%, rgba(0,225,205,0.16) 56%, transparent 62%),
+    linear-gradient(108deg, transparent 60%, rgba(90,170,255,0.18) 67%, transparent 73%),
+    linear-gradient(94deg,  transparent 20%, rgba(150,215,255,0.12) 27%, transparent 33%);
+  mix-blend-mode: screen;
+  filter: blur(4px);
+  transform-origin: 50% 0%;
+  animation: rayShift 9s ease-in-out infinite alternate;
+}
+@keyframes rayShift {
+  0%   { opacity: 0.55; transform: translateX(-3%) skewX(-2deg); }
+  50%  { opacity: 1;    transform: translateX(2%)  skewX(2deg); }
+  100% { opacity: 0.6;  transform: translateX(-1%) skewX(-1deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-depth, .hero-bokeh .bk, .hero-rays { animation: none; }
+}
+
+/* Hero content above overlays */
+.hero-content, .hero-3d { position: relative; z-index: 2; }
 
 </style>
 
