@@ -862,7 +862,8 @@ footer p { font-size: 13px; color: rgba(255,255,255,0.35); }
   .hero-sub { font-size: 15px; }
   .hero-btns { flex-direction: column; gap: 12px; }
   .btn-primary, .btn-outline { text-align: center; padding: 13px 24px; }
-  .hero-3d { height: 260px; }
+  .hero-3d { display: none; }
+  .hero-content { max-width: 100%; }
   nav { padding: 12px 16px; }
   .nav-links { display: none; }
   .nav-logo-main { font-size: 18px; }
@@ -873,6 +874,10 @@ footer p { font-size: 13px; color: rgba(255,255,255,0.35); }
   .contact-brand { font-size: 26px; }
   #services, #video-section, #process, #why, #promo, #contact, #gallery { padding: 50px 20px; }
   footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
+  .card-3d-scene { display: none; }
+  #why-canvas { display: none; }
+  .why-3d-wrap { display: none; }
+  .why-layout { grid-template-columns: 1fr; }
 }
 
 /* ════════════════════════════════════════
@@ -5694,20 +5699,25 @@ function setSectionHeader(sectionId, tag, h2, sub) {
 <script>
 function chooseLang(lang) {
   closeLangModal();
+  try { localStorage.setItem('bp_lang_chosen', lang); } catch(e) {}
   try { setLang(lang); } catch(e) { console.error('setLang error:', e); }
 }
 function closeLangModal() {
   const m = document.getElementById('lang-welcome-modal');
   if (m) { m.classList.remove('open'); m.style.display = 'none'; }
+  try { if (!localStorage.getItem('bp_lang_chosen')) localStorage.setItem('bp_lang_chosen', 'th'); } catch(e) {}
 }
-// Show on mobile only, every visit
+// Show on mobile only if user hasn't chosen a language yet
 (function() {
-  // Detect mobile via UA (works regardless of viewport width setting)
+  try {
+    if (localStorage.getItem('bp_lang_chosen')) return; // already chosen, skip
+  } catch(e) {}
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent);
   if (isMobile) {
     setTimeout(() => {
-      document.getElementById('lang-welcome-modal').classList.add('open');
-    }, 500);
+      const m = document.getElementById('lang-welcome-modal');
+      if (m) m.classList.add('open');
+    }, 600);
   }
 })();
 </script>
