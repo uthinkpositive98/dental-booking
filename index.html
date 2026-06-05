@@ -4633,7 +4633,12 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 }
 
 /* Hero content above overlays */
-.hero-content, .hero-3d { position: relative; z-index: 2; }
+.hero-content { position: relative; z-index: 2; }
+.hero-3d { position: relative; z-index: 2; }
+@media (max-width: 768px) {
+  .hero-3d { display: none !important; height: 0 !important; position: static !important; }
+  #tooth-canvas { display: none !important; }
+}
 
 /* Walking dentist mascot overlay */
 #dentist-walker {
@@ -4838,10 +4843,13 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 @media (max-width: 768px) {
   .desktop-only { display: none !important; }
   .desktop-only-flex { display: none !important; }
-  .card-3d-scene { display: none !important; }
+  .hero-3d { display: none !important; height: 0 !important; overflow: hidden !important; }
+  .card-3d-scene { display: none !important; height: 0 !important; }
   #dentist-walker { display: none !important; }
+  #tooth-canvas { display: none !important; }
   .video-canvas-wrap canvas { display: none !important; }
   .video-canvas-wrap { background: linear-gradient(135deg, #0a2d6e, #1565c0); min-height: 200px; }
+  #why-canvas { display: none !important; }
 }
 </style>
 
