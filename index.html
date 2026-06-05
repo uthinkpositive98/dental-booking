@@ -473,6 +473,7 @@ section { position: relative; z-index: 1; }
 .video-canvas-wrap {
   width: 100%; height: 100%;
   position: relative;
+  background: linear-gradient(135deg, #0a2d6e 0%, #1565c0 60%, #0a3d8f 100%);
 }
 .video-canvas-wrap canvas { display: block; width: 100%; height: 100%; }
 
@@ -1582,18 +1583,26 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
 <script>
 // Immediately hide all 3D canvases on mobile before page renders
 (function(){
-  var isMob = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent) || window.innerWidth <= 768;
-  if (!isMob) return;
+  var ua = navigator.userAgent;
+  var isMob = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
+  // Also check screen width - use screen.width (available before layout)
+  var isSmall = (screen.width <= 900) || (window.innerWidth > 0 && window.innerWidth <= 900);
+  if (!isMob && !isSmall) return;
   var style = document.createElement('style');
-  style.textContent = [
-    'canvas:not(#bg-canvas){display:none!important;width:0!important;height:0!important;opacity:0!important;}',
-    '.hero-3d{display:none!important;height:0!important;}',
-    '.card-3d-scene{display:none!important;height:0!important;}',
-    '.video-canvas-wrap canvas{display:none!important;}',
-    '#dentist-walker{display:none!important;}',
-    '#why-canvas{display:none!important;}'
-  ].join('');
+  style.textContent = 
+    'canvas:not(#bg-canvas){display:none!important;visibility:hidden!important;width:0!important;height:0!important;}' +
+    '.desktop-3d-canvas{display:none!important;width:0!important;height:0!important;}' +
+    '.hero-3d{display:none!important;height:0!important;overflow:hidden!important;}' +
+    '.card-3d-scene{display:none!important;height:0!important;overflow:hidden!important;}' +
+    '.video-canvas-wrap{min-height:0!important;}' +
+    '.video-canvas-wrap canvas{display:none!important;width:0!important;height:0!important;}' +
+    '#vid-main,#vid-2,#vid-3{display:none!important;width:0!important;height:0!important;}' +
+    '#dentist-walker{display:none!important;}' +
+    '#why-canvas{display:none!important;}' +
+    '#tooth-canvas{display:none!important;}';
   document.head.appendChild(style);
+  // Also set a global flag for JS guards
+  window.__MOBILE__ = true;
 })();
 </script>
 
@@ -2405,8 +2414,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
   <div class="video-grid reveal">
     <div class="video-main">
       <div class="video-canvas-wrap" style="height:420px">
-        <canvas id="vid-main"></canvas>
-        <div class="vid-mobile-placeholder" style="display:none;width:100%;height:100%;background:linear-gradient(135deg,#0a2d6e 0%,#1565c0 50%,#0a3d8f 100%);position:absolute;inset:0;"></div>
+        <canvas id="vid-main" class="desktop-3d-canvas"></canvas>
         <div class="video-tag">3D ANIMATION</div>
         <div class="play-btn" onclick="this.style.display='none'">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
@@ -2420,8 +2428,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
 
     <div class="video-side">
       <div class="video-thumb" style="flex:1; position:relative;">
-        <canvas id="vid-2" style="width:100%; height:180px; display:block;"></canvas>
-        <div class="vid-mobile-placeholder" style="display:none;width:100%;height:180px;background:linear-gradient(135deg,#006064,#00838f);position:absolute;top:0;left:0;"></div>
+        <canvas id="vid-2" class="desktop-3d-canvas" style="width:100%; height:180px; display:block;"></canvas>
         <div class="video-tag cyan">SCALING 3D</div>
         <div class="play-btn" style="width:48px;height:48px" onclick="this.style.display='none'">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
@@ -2432,8 +2439,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
         </div>
       </div>
       <div class="video-thumb" style="flex:1; position:relative;">
-        <canvas id="vid-3" style="width:100%; height:180px; display:block;"></canvas>
-        <div class="vid-mobile-placeholder" style="display:none;width:100%;height:180px;background:linear-gradient(135deg,#4a148c,#6a1b9a);position:absolute;top:0;left:0;"></div>
+        <canvas id="vid-3" class="desktop-3d-canvas" style="width:100%; height:180px; display:block;"></canvas>
         <div class="video-tag purple">ROOT CANAL 3D</div>
         <div class="play-btn" style="width:48px;height:48px" onclick="this.style.display='none'">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
@@ -2530,7 +2536,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
 // ═══════════════════════════════════════════════
 // MOBILE GUARD — skip all Three.js on mobile
 // ═══════════════════════════════════════════════
-const IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent) || window.innerWidth <= 768;
+const IS_MOBILE = window.__MOBILE__ || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent) || screen.width <= 900;
 
 // 1. CINEMATIC BG — Starfield + Nebula + Depth
 // ═══════════════════════════════════════════════
