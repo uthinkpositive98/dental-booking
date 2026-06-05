@@ -3793,6 +3793,34 @@ setTimeout(() => {
   revealEls.forEach(el => { el.classList.remove('hidden-init'); el.classList.add('visible'); });
 }, 1500);
 
+// ═══════════════════════════════════════════════
+// 7b. SCROLL PARALLAX — depth on lower sections
+//     Feeds --dy (px offset of section centre from viewport
+//     centre) to each section; its ::before/::after orb layers
+//     translate at different rates → layered depth on scroll.
+// ═══════════════════════════════════════════════
+(function() {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+  const secs = document.querySelectorAll('#doctor,#gallery,#services,#process,#why,#contact,#video-section');
+  if (!secs.length) return;
+  let ticking = false;
+  function update() {
+    const vh = window.innerHeight;
+    secs.forEach(s => {
+      const r = s.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) return; // skip off-screen
+      const dy = (r.top + r.height / 2) - vh / 2; // px from viewport centre
+      s.style.setProperty('--dy', dy.toFixed(1));
+    });
+    ticking = false;
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  update();
+})();
+
 
 // ═══════════════════════════════════════════════
 // 8. CARD 3D TILT
@@ -4384,6 +4412,168 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 
 /* Hero content above overlays */
 .hero-content, .hero-3d { position: relative; z-index: 2; }
+
+
+/* ════════════════════════════════════════════════════════════
+   CINEMATIC DEPTH — lower sections (light + colour)
+   Atmosphere wash + drifting bokeh orbs + scroll parallax +
+   layered card elevation. Tuned subtle so navy text & white
+   cards stay crisp. section{} already sets position:relative;z-index:1.
+   ════════════════════════════════════════════════════════════ */
+#doctor, #gallery, #services, #process, #why, #contact, #video-section { overflow: hidden; }
+
+/* Shared layer base (sits behind content) */
+#gallery::before, #services::before, #process::before, #why::before,
+#contact::before, #video-section::before,
+#doctor::after, #gallery::after, #services::after, #process::after,
+#why::after, #contact::after, #video-section::after {
+  content: ''; position: absolute;
+  left: -8%; right: -8%; top: -10%; bottom: -10%;
+  z-index: -1; pointer-events: none; will-change: transform;
+}
+
+/* ── Atmosphere wash (::before) — soft directional light + corner glow ── */
+#gallery::before {
+  background:
+    radial-gradient(38% 30% at 82% 5%, rgba(45,111,164,0.08), transparent 70%),
+    radial-gradient(36% 30% at 8% 96%, rgba(201,169,110,0.08), transparent 70%);
+  transform: translate3d(0, calc(var(--dy,0) * -0.03px), 0);
+}
+#services::before {
+  background:
+    radial-gradient(40% 32% at 14% 4%, rgba(0,150,160,0.07), transparent 70%),
+    radial-gradient(38% 30% at 90% 90%, rgba(45,111,164,0.07), transparent 70%);
+  transform: translate3d(0, calc(var(--dy,0) * -0.03px), 0);
+}
+#process::before {
+  background: radial-gradient(46% 36% at 50% -6%, rgba(45,111,164,0.08), transparent 70%);
+  transform: translate3d(0, calc(var(--dy,0) * -0.03px), 0);
+}
+#why::before {
+  background:
+    radial-gradient(40% 30% at 88% 8%, rgba(201,169,110,0.09), transparent 70%),
+    radial-gradient(40% 34% at 5% 82%, rgba(0,150,160,0.06), transparent 70%);
+  transform: translate3d(0, calc(var(--dy,0) * -0.03px), 0);
+}
+/* colour sections: soft top light + depth vignette at the base */
+#contact::before {
+  background:
+    radial-gradient(60% 40% at 50% -8%, rgba(255,255,255,0.30), transparent 65%),
+    radial-gradient(120% 70% at 50% 118%, rgba(0,60,70,0.22), transparent 60%);
+  transform: translate3d(0, calc(var(--dy,0) * -0.03px), 0);
+}
+#video-section::before {
+  background:
+    radial-gradient(60% 40% at 50% -8%, rgba(255,250,235,0.45), transparent 65%),
+    radial-gradient(120% 70% at 50% 120%, rgba(120,90,20,0.16), transparent 60%);
+  transform: translate3d(0, calc(var(--dy,0) * -0.03px), 0);
+}
+
+/* ── Drifting bokeh orbs (::after) — depth-of-field, parallax + slow drift ── */
+#doctor::after {
+  background:
+    radial-gradient(circle at 16% 26%, rgba(45,111,164,0.07), transparent 20%),
+    radial-gradient(circle at 88% 74%, rgba(201,169,110,0.07), transparent 22%);
+  transform: translate3d(0, calc(var(--dy,0) * 0.05px), 0);
+  animation: depthOrbDrift 30s ease-in-out infinite alternate;
+}
+#gallery::after {
+  background:
+    radial-gradient(circle at 24% 32%, rgba(45,111,164,0.10), transparent 20%),
+    radial-gradient(circle at 80% 70%, rgba(201,169,110,0.10), transparent 22%);
+  transform: translate3d(0, calc(var(--dy,0) * 0.05px), 0);
+  animation: depthOrbDrift 26s ease-in-out infinite alternate;
+}
+#services::after {
+  background:
+    radial-gradient(circle at 78% 24%, rgba(0,150,160,0.10), transparent 20%),
+    radial-gradient(circle at 18% 80%, rgba(45,111,164,0.09), transparent 22%);
+  transform: translate3d(0, calc(var(--dy,0) * 0.05px), 0);
+  animation: depthOrbDrift 30s ease-in-out infinite alternate-reverse;
+}
+#process::after {
+  background:
+    radial-gradient(circle at 30% 60%, rgba(201,169,110,0.09), transparent 22%),
+    radial-gradient(circle at 72% 40%, rgba(45,111,164,0.08), transparent 22%);
+  transform: translate3d(0, calc(var(--dy,0) * 0.05px), 0);
+  animation: depthOrbDrift 28s ease-in-out infinite alternate;
+}
+#why::after {
+  background:
+    radial-gradient(circle at 84% 60%, rgba(0,150,160,0.09), transparent 20%),
+    radial-gradient(circle at 10% 30%, rgba(201,169,110,0.09), transparent 22%);
+  transform: translate3d(0, calc(var(--dy,0) * 0.05px), 0);
+  animation: depthOrbDrift 32s ease-in-out infinite alternate-reverse;
+}
+#contact::after {
+  background:
+    radial-gradient(circle at 20% 28%, rgba(255,255,255,0.16), transparent 22%),
+    radial-gradient(circle at 84% 76%, rgba(180,245,255,0.18), transparent 24%);
+  transform: translate3d(0, calc(var(--dy,0) * 0.06px), 0);
+  animation: depthOrbDrift 24s ease-in-out infinite alternate;
+}
+#video-section::after {
+  background:
+    radial-gradient(circle at 22% 30%, rgba(255,250,235,0.20), transparent 22%),
+    radial-gradient(circle at 82% 72%, rgba(255,225,150,0.18), transparent 24%);
+  transform: translate3d(0, calc(var(--dy,0) * 0.06px), 0);
+  animation: depthOrbDrift 27s ease-in-out infinite alternate-reverse;
+}
+@keyframes depthOrbDrift {
+  0%   { background-position: 0 0, 0 0; }
+  100% { background-position: 4% -3%, -4% 3%; }
+}
+
+/* ── Layered card elevation — more dimensional shadows ── */
+.service-card-3d {
+  box-shadow:
+    0 1px 2px rgba(11,27,46,0.04),
+    0 10px 28px rgba(11,27,46,0.06),
+    0 30px 60px rgba(11,27,46,0.05) !important;
+}
+.service-card-3d:hover {
+  box-shadow:
+    0 2px 6px rgba(11,27,46,0.07),
+    0 22px 56px rgba(11,27,46,0.12),
+    0 40px 90px rgba(45,111,164,0.10) !important;
+}
+.why-item-3d {
+  box-shadow:
+    0 1px 2px rgba(11,27,46,0.03),
+    0 8px 24px rgba(11,27,46,0.05) !important;
+}
+.why-item-3d:hover {
+  box-shadow:
+    0 2px 6px rgba(11,27,46,0.06),
+    0 16px 44px rgba(11,27,46,0.10) !important;
+}
+.contact-item {
+  box-shadow:
+    0 1px 2px rgba(11,27,46,0.05),
+    0 10px 30px rgba(0,40,45,0.12) !important;
+}
+.contact-item:hover {
+  box-shadow:
+    0 2px 6px rgba(11,27,46,0.08),
+    0 18px 48px rgba(0,40,45,0.18) !important;
+}
+.before-after-wrap, .happy-card {
+  box-shadow:
+    0 1px 3px rgba(11,27,46,0.06),
+    0 10px 30px rgba(11,27,46,0.08) !important;
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s !important;
+}
+.before-after-wrap:hover, .happy-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow:
+    0 4px 10px rgba(11,27,46,0.10),
+    0 24px 56px rgba(11,27,46,0.16) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #doctor::after, #gallery::after, #services::after, #process::after,
+  #why::after, #contact::after, #video-section::after { animation: none; }
+}
 
 </style>
 
