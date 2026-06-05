@@ -2186,7 +2186,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
   </div>
 
   <div class="why-layout">
-    <div class="why-3d-wrap reveal" style="position:relative;border-radius:12px;box-shadow:0 8px 48px rgba(0,0,0,0.10);">
+    <div class="why-3d-wrap reveal" style="position:relative;border-radius:12px;box-shadow:0 8px 48px rgba(0,0,0,0.10);margin-top:-45px;">
       <img src="photos/smile_makeover.jpg" alt="Smile Makeover — Bang Pa-in Dental Clinic"
            style="
              width:100%; height:auto;
@@ -4412,6 +4412,35 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 
 /* Hero content above overlays */
 .hero-content, .hero-3d { position: relative; z-index: 2; }
+
+/* ── Hero badge — 2.5× size, 3D font depth + glow ── */
+.hero-badge {
+  font-size: 30px !important;            /* was 12px → 2.5× */
+  padding: 14px 38px !important;
+  letter-spacing: 5px !important;
+  font-weight: 800 !important;
+  border-radius: 8px !important;
+  color: #ffe7ad !important;
+  background: rgba(201,169,110,0.10) !important;
+  border: 1px solid rgba(201,169,110,0.35) !important;
+  text-shadow:
+    0 1px 0 #d8b878,
+    0 2px 0 #b8923f,
+    0 3px 0 #97732a,
+    0 4px 1px #6f5418,
+    0 6px 10px rgba(0,0,0,0.45),          /* cast shadow = depth */
+    0 0 16px rgba(255,212,120,0.9),       /* inner glow */
+    0 0 32px rgba(255,193,84,0.6),
+    0 0 56px rgba(255,180,60,0.4) !important; /* outer halo */
+}
+.hero-badge .dot {
+  width: 13px !important; height: 13px !important;
+  box-shadow: 0 0 14px rgba(255,206,96,0.95), 0 0 26px rgba(255,190,70,0.6) !important;
+}
+@media (max-width: 560px) {
+  .hero-badge { font-size: 18px !important; padding: 9px 20px !important; letter-spacing: 2.5px !important; }
+  .hero-badge .dot { width: 9px !important; height: 9px !important; }
+}
 
 
 /* ════════════════════════════════════════════════════════════
