@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>คลินิกทันตกรรมบางปะอิน | Bangpain Dental Clinic</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -857,13 +857,15 @@ footer p { font-size: 13px; color: rgba(255,255,255,0.35); }
 }
 
 @media (max-width: 480px) {
-  /* Hero — compact, no 3D canvas */
+  /* Hero — 3D canvas as bg overlay, content on top */
   #hero {
     padding: 80px 24px 48px !important;
-    min-height: auto !important;
+    min-height: 100svh !important;
     height: auto !important;
     align-items: flex-start !important;
     justify-content: flex-start !important;
+    position: relative !important;
+    overflow: hidden !important;
   }
   .hero-content { max-width: 100%; width: 100%; }
   .hero h1 { font-size: 38px !important; line-height: 1.15 !important; }
@@ -881,7 +883,15 @@ footer p { font-size: 13px; color: rgba(255,255,255,0.35); }
   .hero-badge { color: #4de8f0 !important; }
   .hero-btns { flex-direction: column; gap: 12px; }
   .btn-primary, .btn-outline { text-align: center; padding: 13px 24px; }
-  .hero-3d, #tooth-canvas { display: none !important; height: 0 !important; }
+  /* hero-3d shown on mobile — overlaid behind content */
+  .hero-3d {
+    position: absolute !important;
+    top: 0 !important; left: 0 !important;
+    width: 100% !important; height: 100% !important;
+    opacity: 0.55 !important;
+    pointer-events: none !important;
+  }
+  #tooth-canvas { display: block !important; width: 100% !important; height: 100% !important; }
   /* Nav */
   nav { padding: 12px 16px !important; }
   .nav-links { display: none !important; }
@@ -1613,16 +1623,14 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
   if (!isMob && !isSmall) return;
   var style = document.createElement('style');
   style.textContent = 
-    'canvas:not(#bg-canvas){display:none!important;visibility:hidden!important;width:0!important;height:0!important;}' +
+    'canvas:not(#bg-canvas):not(#tooth-canvas){display:none!important;visibility:hidden!important;width:0!important;height:0!important;}' +
     '.desktop-3d-canvas{display:none!important;width:0!important;height:0!important;}' +
-    '.hero-3d{display:none!important;height:0!important;overflow:hidden!important;}' +
     '.card-3d-scene{display:none!important;height:0!important;overflow:hidden!important;}' +
     '.video-canvas-wrap{min-height:0!important;}' +
     '.video-canvas-wrap canvas{display:none!important;width:0!important;height:0!important;}' +
     '#vid-main,#vid-2,#vid-3{display:none!important;width:0!important;height:0!important;}' +
     '#dentist-walker{display:none!important;}' +
-    '#why-canvas{display:none!important;}' +
-    '#tooth-canvas{display:none!important;}';
+    '#why-canvas{display:none!important;}';
   document.head.appendChild(style);
   // Also set a global flag for JS guards
   window.__MOBILE__ = true;
@@ -1691,7 +1699,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
     </div>
   </div>
 
-  <div class="hero-3d desktop-only-flex">
+  <div class="hero-3d">
     <canvas id="tooth-canvas"></canvas>
     <div class="hero-3d-labels">
       <div class="floating-label fl-1">🦷 รากเทียม Implant</div>
@@ -2574,78 +2582,164 @@ const IS_MOBILE = window.__MOBILE__ || /Android|webOS|iPhone|iPad|iPod|BlackBerr
     initStars();
   }
 
+  // ── PARALLAX STATE (gyroscope + pointer + touch) ──
+  const para = { tx: 0, ty: 0, x: 0, y: 0 };   // target & smoothed
+  let gyroPermissionGranted = false;
+  let gyroCalibrated = false;
+  let gyroBaseGamma = 0, gyroBaseBeta = 0;
+
+  // Gyroscope — requires permission on iOS 13+
+  function startGyro() {
+    window.addEventListener('deviceorientation', (e) => {
+      if (e.gamma == null) return;
+      if (!gyroCalibrated) {
+        gyroBaseGamma = e.gamma;
+        gyroBaseBeta  = e.beta;
+        gyroCalibrated = true;
+        // Share baseline for other scenes (hero 3D etc.)
+        window.__gyroBase__ = { gamma: e.gamma, beta: e.beta };
+      }
+      // Relative tilt from calibration baseline
+      const dx = e.gamma - gyroBaseGamma;
+      const dy = (e.beta  - gyroBaseBeta);
+      para.tx = Math.max(-1, Math.min(1,  dx / 25));
+      para.ty = Math.max(-1, Math.min(1,  dy / 25));
+    }, { passive: true });
+  }
+
+  // Request permission (iOS 13+), fall back to just listen on Android
+  function requestGyro() {
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission()
+        .then(state => { if (state === 'granted') { gyroPermissionGranted = true; startGyro(); } })
+        .catch(() => {});
+    } else {
+      // Android — no permission needed
+      gyroPermissionGranted = true;
+      startGyro();
+    }
+  }
+
+  // Tap anywhere to trigger iOS permission prompt (must be user gesture)
+  if (IS_MOBILE) {
+    document.addEventListener('touchstart', function _tap() {
+      document.removeEventListener('touchstart', _tap);
+      requestGyro();
+    }, { passive: true, once: true });
+  }
+
+  // Touch drag parallax (fallback / complement to gyro)
+  if (IS_MOBILE) {
+    let lastTouchX = null, lastTouchY = null;
+    window.addEventListener('touchmove', (e) => {
+      const t = e.touches[0];
+      if (lastTouchX !== null) {
+        const dx = (t.clientX - lastTouchX) / W;
+        const dy = (t.clientY - lastTouchY) / H;
+        // Blend with gyro if active, otherwise full drag
+        if (!gyroPermissionGranted) {
+          para.tx = Math.max(-1, Math.min(1, para.tx + dx * 4));
+          para.ty = Math.max(-1, Math.min(1, para.ty + dy * 4));
+        }
+      }
+      lastTouchX = t.clientX; lastTouchY = t.clientY;
+    }, { passive: true });
+    window.addEventListener('touchend', () => { lastTouchX = null; lastTouchY = null; }, { passive: true });
+  }
+
+  // Desktop — mouse pointer parallax
+  if (!IS_MOBILE) {
+    window.addEventListener('pointermove', (e) => {
+      para.tx = (e.clientX / window.innerWidth  - 0.5) * 2;
+      para.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+  }
+
   // Star layers (parallax depth)
   let stars = [];
   function initStars() {
     stars = [];
-    // Deep stars (small, slow)
-    for(let i=0;i<180;i++) stars.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*0.7+0.2, speed:0.04+Math.random()*0.06, a:Math.random()*0.5+0.1, twinkle:Math.random()*Math.PI*2, layer:0});
-    // Mid stars
-    for(let i=0;i<80;i++) stars.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.0+0.4, speed:0.08+Math.random()*0.1, a:Math.random()*0.6+0.2, twinkle:Math.random()*Math.PI*2, layer:1});
-    // Bright foreground stars
-    for(let i=0;i<25;i++) stars.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.5+0.8, speed:0.15+Math.random()*0.1, a:0.7+Math.random()*0.3, twinkle:Math.random()*Math.PI*2, layer:2, glow:true});
+    // Deep stars (small, slow)  — layer 0: parallax scale 0.5
+    for(let i=0;i<180;i++) stars.push({x:Math.random()*W, y:Math.random()*H, ox:Math.random()*W, oy:Math.random()*H, r:Math.random()*0.7+0.2, speed:0.04+Math.random()*0.06, a:Math.random()*0.5+0.1, twinkle:Math.random()*Math.PI*2, layer:0, pScale:0.5});
+    // Mid stars — layer 1: parallax scale 1.5
+    for(let i=0;i<80;i++) stars.push({x:Math.random()*W, y:Math.random()*H, ox:Math.random()*W, oy:Math.random()*H, r:Math.random()*1.0+0.4, speed:0.08+Math.random()*0.1, a:Math.random()*0.6+0.2, twinkle:Math.random()*Math.PI*2, layer:1, pScale:1.5});
+    // Bright foreground stars — layer 2: parallax scale 3.0
+    for(let i=0;i<25;i++) stars.push({x:Math.random()*W, y:Math.random()*H, ox:Math.random()*W, oy:Math.random()*H, r:Math.random()*1.5+0.8, speed:0.15+Math.random()*0.1, a:0.7+Math.random()*0.3, twinkle:Math.random()*Math.PI*2, layer:2, pScale:3.0, glow:true});
   }
 
-  // Nebula clouds (static gradient blobs)
+  // Nebula clouds
   const nebulae = [
-    {x:0.7, y:0.3, rx:0.35, ry:0.25, color:'rgba(10,40,120,0.07)'},
-    {x:0.2, y:0.7, rx:0.3, ry:0.2, color:'rgba(0,120,160,0.05)'},
-    {x:0.85, y:0.75, rx:0.25, ry:0.18, color:'rgba(5,80,100,0.06)'},
-    {x:0.5, y:0.15, rx:0.4, ry:0.15, color:'rgba(0,60,140,0.04)'},
+    {x:0.7, y:0.3, rx:0.35, ry:0.25, color:'rgba(10,40,120,0.07)', pScale:0.3},
+    {x:0.2, y:0.7, rx:0.3, ry:0.2, color:'rgba(0,120,160,0.05)', pScale:0.5},
+    {x:0.85, y:0.75, rx:0.25, ry:0.18, color:'rgba(5,80,100,0.06)', pScale:0.2},
+    {x:0.5, y:0.15, rx:0.4, ry:0.15, color:'rgba(0,60,140,0.04)', pScale:0.4},
   ];
 
   let t = 0;
   function drawBg() {
+    // Smooth parallax (lerp)
+    const lerpSpeed = IS_MOBILE ? 0.04 : 0.08;
+    para.x += (para.tx - para.x) * lerpSpeed;
+    para.y += (para.ty - para.y) * lerpSpeed;
+
     ctx.clearRect(0, 0, W, H);
 
-    // Draw nebula clouds
+    // Draw nebula clouds with parallax offset
     nebulae.forEach(n => {
-      const grd = ctx.createRadialGradient(n.x*W, n.y*H, 0, n.x*W, n.y*H, n.rx*W);
+      const offX = para.x * n.pScale * 30;
+      const offY = para.y * n.pScale * 20;
+      const nx = n.x*W + offX, ny = n.y*H + offY;
+      const grd = ctx.createRadialGradient(nx, ny, 0, nx, ny, n.rx*W);
       grd.addColorStop(0, n.color);
       grd.addColorStop(1, 'transparent');
       ctx.beginPath();
-      ctx.ellipse(n.x*W, n.y*H, n.rx*W, n.ry*H, 0, 0, Math.PI*2);
+      ctx.ellipse(nx, ny, n.rx*W, n.ry*H, 0, 0, Math.PI*2);
       ctx.fillStyle = grd;
       ctx.fill();
     });
 
-    // Subtle perspective grid (receding lines)
+    // Perspective grid (shifts with tilt for depth illusion)
     ctx.strokeStyle = 'rgba(0,80,140,0.04)';
     ctx.lineWidth = 0.8;
-    const gy = H * 0.75; // horizon
+    const horizonShiftX = para.x * 25;
+    const gy = H * 0.75 + para.y * 15;
+    const vanishX = W/2 + horizonShiftX;
     for(let x=0; x<W; x += W/16) {
-      ctx.beginPath(); ctx.moveTo(W/2, gy); ctx.lineTo(x, H); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(vanishX, gy); ctx.lineTo(x, H); ctx.stroke();
     }
     for(let row=0; row<6; row++) {
       const y = gy + (H-gy)*Math.pow(row/5,2);
       ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
     }
 
-    // Draw stars
+    // Draw stars with per-layer parallax offset
     t += 0.008;
     stars.forEach(s => {
-      // Drift slowly
-      s.x -= s.speed;
-      if(s.x < -2) s.x = W + 2;
+      // Drift slowly (drift uses base position)
+      s.ox -= s.speed;
+      if(s.ox < -2) s.ox = W + 2;
+
+      // Apply parallax offset per layer
+      const px = s.ox + para.x * s.pScale * 40;
+      const py = s.oy + para.y * s.pScale * 30;
 
       // Twinkle
       const tw = Math.sin(t * 1.5 + s.twinkle);
       const alpha = s.a * (0.7 + 0.3 * tw);
 
       if(s.glow) {
-        // Bright star with glow halo
-        const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r*5);
+        const g = ctx.createRadialGradient(px, py, 0, px, py, s.r*5);
         g.addColorStop(0, `rgba(180,220,255,${alpha})`);
         g.addColorStop(0.3, `rgba(100,160,255,${alpha*0.4})`);
         g.addColorStop(1, 'transparent');
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r*5, 0, Math.PI*2);
+        ctx.beginPath(); ctx.arc(px, py, s.r*5, 0, Math.PI*2);
         ctx.fillStyle = g; ctx.fill();
-        // Core
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.beginPath(); ctx.arc(px, py, s.r, 0, Math.PI*2);
         ctx.fillStyle = `rgba(220,240,255,${alpha})`;
         ctx.fill();
       } else {
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.beginPath(); ctx.arc(px, py, s.r, 0, Math.PI*2);
         const brightness = s.layer===0 ? 140 : (s.layer===1 ? 180 : 220);
         ctx.fillStyle = `rgba(${brightness},${brightness+20},255,${alpha})`;
         ctx.globalAlpha = 1;
@@ -2677,16 +2771,16 @@ const IS_MOBILE = window.__MOBILE__ || /Android|webOS|iPhone|iPad|iPod|BlackBerr
 // 2. HERO 3D — HI-TECH IMPLANT SCENE
 // ═══════════════════════════════════════════════
 (function() {
-  if (IS_MOBILE) return;
   const canvas = document.getElementById('tooth-canvas');
   if (!canvas) return;
-  const W = canvas.parentElement.offsetWidth || 600;
-  const H = canvas.parentElement.offsetHeight || 600;
+  const W = canvas.parentElement.offsetWidth || (IS_MOBILE ? window.innerWidth : 600);
+  const H = canvas.parentElement.offsetHeight || (IS_MOBILE ? window.innerHeight : 600);
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !IS_MOBILE, alpha: true });
   renderer.setSize(W, H);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.shadowMap.enabled = true;
+  // Lower pixel ratio on mobile to save GPU
+  renderer.setPixelRatio(IS_MOBILE ? Math.min(window.devicePixelRatio, 1.5) : Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = !IS_MOBILE;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.4;
@@ -2704,10 +2798,12 @@ const IS_MOBILE = window.__MOBILE__ || /Android|webOS|iPhone|iPad|iPod|BlackBerr
     para.tx = (e.clientX / window.innerWidth  - 0.5) * 2;
     para.ty = (e.clientY / window.innerHeight - 0.5) * 2;
   }, { passive: true });
+  // Gyro — reuse calibration baseline from bg-canvas gyro setup (window.__gyroBase__)
   window.addEventListener('deviceorientation', (e) => {
     if (e.gamma == null) return;
-    para.tx = Math.max(-1, Math.min(1, e.gamma / 30));
-    para.ty = Math.max(-1, Math.min(1, (e.beta - 45) / 30));
+    const base = window.__gyroBase__ || { gamma: e.gamma, beta: e.beta };
+    para.tx = Math.max(-1, Math.min(1, (e.gamma - base.gamma) / 25));
+    para.ty = Math.max(-1, Math.min(1, (e.beta  - base.beta)  / 25));
   }, { passive: true });
 
   // === LIGHTING ===
@@ -4892,7 +4988,7 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 @media (max-width: 768px) {
   .desktop-only { display: none !important; }
   .desktop-only-flex { display: none !important; }
-  .hero-3d { display: none !important; height: 0 !important; overflow: hidden !important; }
+  /* hero-3d intentionally kept visible — rendered as bg overlay */
   .card-3d-scene { display: none !important; height: 0 !important; }
   #dentist-walker { display: none !important; }
   #tooth-canvas { display: none !important; }
