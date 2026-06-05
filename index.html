@@ -1579,6 +1579,23 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
 
 <!-- BG PARTICLE CANVAS -->
 <canvas id="bg-canvas"></canvas>
+<script>
+// Immediately hide all 3D canvases on mobile before page renders
+(function(){
+  var isMob = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent) || window.innerWidth <= 768;
+  if (!isMob) return;
+  var style = document.createElement('style');
+  style.textContent = [
+    'canvas:not(#bg-canvas){display:none!important;width:0!important;height:0!important;opacity:0!important;}',
+    '.hero-3d{display:none!important;height:0!important;}',
+    '.card-3d-scene{display:none!important;height:0!important;}',
+    '.video-canvas-wrap canvas{display:none!important;}',
+    '#dentist-walker{display:none!important;}',
+    '#why-canvas{display:none!important;}'
+  ].join('');
+  document.head.appendChild(style);
+})();
+</script>
 
 <!-- NAV -->
 <nav>
@@ -2389,6 +2406,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
     <div class="video-main">
       <div class="video-canvas-wrap" style="height:420px">
         <canvas id="vid-main"></canvas>
+        <div class="vid-mobile-placeholder" style="display:none;width:100%;height:100%;background:linear-gradient(135deg,#0a2d6e 0%,#1565c0 50%,#0a3d8f 100%);position:absolute;inset:0;"></div>
         <div class="video-tag">3D ANIMATION</div>
         <div class="play-btn" onclick="this.style.display='none'">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
@@ -2403,6 +2421,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
     <div class="video-side">
       <div class="video-thumb" style="flex:1; position:relative;">
         <canvas id="vid-2" style="width:100%; height:180px; display:block;"></canvas>
+        <div class="vid-mobile-placeholder" style="display:none;width:100%;height:180px;background:linear-gradient(135deg,#006064,#00838f);position:absolute;top:0;left:0;"></div>
         <div class="video-tag cyan">SCALING 3D</div>
         <div class="play-btn" style="width:48px;height:48px" onclick="this.style.display='none'">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
@@ -2414,6 +2433,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
       </div>
       <div class="video-thumb" style="flex:1; position:relative;">
         <canvas id="vid-3" style="width:100%; height:180px; display:block;"></canvas>
+        <div class="vid-mobile-placeholder" style="display:none;width:100%;height:180px;background:linear-gradient(135deg,#4a148c,#6a1b9a);position:absolute;top:0;left:0;"></div>
         <div class="video-tag purple">ROOT CANAL 3D</div>
         <div class="play-btn" style="width:48px;height:48px" onclick="this.style.display='none'">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
@@ -4847,9 +4867,12 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
   .card-3d-scene { display: none !important; height: 0 !important; }
   #dentist-walker { display: none !important; }
   #tooth-canvas { display: none !important; }
-  .video-canvas-wrap canvas { display: none !important; }
-  .video-canvas-wrap { background: linear-gradient(135deg, #0a2d6e, #1565c0); min-height: 200px; }
+  #vid-main, #vid-2, #vid-3 { display: none !important; opacity: 0 !important; }
+  .video-canvas-wrap canvas { display: none !important; opacity: 0 !important; }
+  .video-canvas-wrap { background: linear-gradient(135deg, #0a2d6e, #1565c0); }
+  .vid-mobile-placeholder { display: block !important; }
   #why-canvas { display: none !important; }
+  .card-3d-scene canvas { display: none !important; }
 }
 </style>
 
