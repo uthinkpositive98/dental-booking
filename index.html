@@ -2442,7 +2442,8 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
     <p data-i18n="vid_sub">เข้าใจการรักษาผ่านภาพเคลื่อนไหว 3 มิติ ก่อนตัดสินใจ</p>
   </div>
 
-  <div class="video-grid reveal">
+  <!-- ── DESKTOP: WebGL canvas grid ── -->
+  <div class="video-grid reveal desktop-vid-grid">
     <div class="video-main">
       <div class="video-canvas-wrap" style="height:420px">
         <canvas id="vid-main" class="desktop-3d-canvas"></canvas>
@@ -2456,7 +2457,6 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
         </div>
       </div>
     </div>
-
     <div class="video-side">
       <div class="video-thumb" style="flex:1; position:relative;">
         <canvas id="vid-2" class="desktop-3d-canvas" style="width:100%; height:180px; display:block;"></canvas>
@@ -2481,6 +2481,53 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ── MOBILE: 3 stacked cards with YouTube links ── -->
+  <div class="mobile-vid-list reveal">
+
+    <a class="mvid-card" href="https://www.youtube.com/results?search_query=dental+implant+3d+animation" target="_blank" rel="noopener">
+      <div class="mvid-thumb" style="background:linear-gradient(135deg,#062454 0%,#0a3d8f 50%,#0d5ab5 100%)">
+        <div class="mvid-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+        </div>
+        <div class="mvid-tag">3D ANIMATION</div>
+      </div>
+      <div class="mvid-info">
+        <h4 data-i18n="vid1_title">การฝังรากเทียม Step-by-Step 3D</h4>
+        <p data-i18n="vid1_sub">ดูขั้นตอนการฝังรากเทียม Implant แบบ 3 มิติ • 4:32 นาที</p>
+        <span class="mvid-yt">▶ YouTube</span>
+      </div>
+    </a>
+
+    <a class="mvid-card" href="https://www.youtube.com/results?search_query=teeth+scaling+ultrasonic+3d+animation" target="_blank" rel="noopener">
+      <div class="mvid-thumb" style="background:linear-gradient(135deg,#0a3d8f 0%,#1565c0 50%,#2d6fa4 100%)">
+        <div class="mvid-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+        </div>
+        <div class="mvid-tag" style="background:#2d6fa4">SCALING 3D</div>
+      </div>
+      <div class="mvid-info">
+        <h4 data-i18n="vid2_title">ขูดหินปูน 3D</h4>
+        <p data-i18n="vid2_sub">กำจัดหินปูนอัลตราซาวด์ • 2:15 นาที</p>
+        <span class="mvid-yt">▶ YouTube</span>
+      </div>
+    </a>
+
+    <a class="mvid-card" href="https://www.youtube.com/results?search_query=root+canal+treatment+rotary+3d+animation" target="_blank" rel="noopener">
+      <div class="mvid-thumb" style="background:linear-gradient(135deg,#2d1b69 0%,#5b21b6 50%,#7c3aed 100%)">
+        <div class="mvid-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+        </div>
+        <div class="mvid-tag" style="background:#7c3aed;color:#fff">ROOT CANAL 3D</div>
+      </div>
+      <div class="mvid-info">
+        <h4 data-i18n="vid3_title">รักษารากคลองฟัน 3D</h4>
+        <p data-i18n="vid3_sub">Rotary Root Canal • 3:08 นาที</p>
+        <span class="mvid-yt">▶ YouTube</span>
+      </div>
+    </a>
+
   </div>
 </section>
 
@@ -4999,6 +5046,51 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
   #why-canvas { display: none !important; }
   .card-3d-scene canvas { display: none !important; }
 }
+
+/* ── Mobile video cards ── */
+.mobile-vid-list { display: none; flex-direction: column; gap: 16px; margin-top: 32px; }
+.mvid-card {
+  display: flex; border-radius: 16px; overflow: hidden;
+  text-decoration: none; background: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.mvid-card:active { transform: scale(0.98); }
+.mvid-thumb {
+  width: 120px; min-height: 100px; flex-shrink: 0;
+  position: relative; display: flex; align-items: center; justify-content: center;
+}
+.mvid-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(255,255,255,0.18); border: 2px solid rgba(255,255,255,0.4);
+  display: flex; align-items: center; justify-content: center;
+}
+.mvid-icon svg { margin-left: 4px; }
+.mvid-tag {
+  position: absolute; top: 10px; left: 10px;
+  background: #00e5b0; color: #050e2d;
+  padding: 3px 8px; border-radius: 50px;
+  font-size: 9px; font-weight: 800;
+  font-family: 'Prompt', sans-serif; letter-spacing: 0.8px;
+}
+.mvid-info {
+  padding: 16px 16px; display: flex; flex-direction: column; justify-content: center; gap: 4px;
+}
+.mvid-info h4 {
+  font-family: 'Prompt', sans-serif; font-size: 15px; font-weight: 700;
+  color: #0b1b2e; line-height: 1.3; margin: 0;
+}
+.mvid-info p { font-size: 12px; color: #7a8794; margin: 0; }
+.mvid-yt {
+  display: inline-block; margin-top: 6px;
+  background: #FF0000; color: #fff;
+  font-size: 11px; font-weight: 700; font-family: 'Prompt', sans-serif;
+  padding: 3px 10px; border-radius: 4px; letter-spacing: 0.5px;
+}
+@media (max-width: 768px) {
+  .desktop-vid-grid { display: none !important; }
+  .mobile-vid-list { display: flex !important; }
+}
 </style>
 
 <!-- Loading overlay for booking -->
@@ -5471,7 +5563,6 @@ const TRANSLATIONS = {
   th: {
     nav_services:'บริการ', nav_gallery:'ผลงาน', nav_process:'ขั้นตอน',
     nav_why:'ทำไมเลือกเรา', nav_book:'📅 นัดหมาย',
-    hero_badge:'BANGPAIN DENTAL CLINIC',
     hero_h1_1:'รักษาฟัน', hero_h1_2:'ครบวงจร', hero_h1_3:'ด้วยเทคโนโลยี 3D',
     hero_sub:'ทีมทันตแพทย์ผู้เชี่ยวชาญกว่า <strong>25 ปี</strong><br>รากฟันเทียม · ขูดหินปูน · รักษารากฟัน · อุดฟัน<br>มาตรฐานสากล ราคาคุ้มค่า',
     hero_btn1:'📅 นัดหมายวันนี้', hero_btn2:'ดูบริการทั้งหมด →',
@@ -5530,7 +5621,6 @@ const TRANSLATIONS = {
   en: {
     nav_services:'Services', nav_gallery:'Gallery', nav_process:'Process',
     nav_why:'Why Us', nav_book:'📅 Book Now',
-    hero_badge:'BANGPAIN DENTAL CLINIC',
     hero_h1_1:'Complete', hero_h1_2:'Dental Care', hero_h1_3:'with 3D Technology',
     hero_sub:'Expert dental team with over <strong>25 years</strong><br>Implants · Scaling · Root Canal · Filling<br>International Standards · Affordable Prices',
     hero_btn1:'📅 Book Today', hero_btn2:'View All Services →',
@@ -5589,7 +5679,6 @@ const TRANSLATIONS = {
   zh: {
     nav_services:'服务', nav_gallery:'作品集', nav_process:'流程',
     nav_why:'选择我们', nav_book:'📅 立即预约',
-    hero_badge:'BANGPAIN DENTAL CLINIC',
     hero_h1_1:'全面', hero_h1_2:'牙科护理', hero_h1_3:'3D 技术',
     hero_sub:'超过 <strong>25年</strong> 经验的牙科专家团队<br>种植牙 · 洗牙 · 根管治疗 · 补牙<br>国际标准 · 价格实惠',
     hero_btn1:'📅 立即预约', hero_btn2:'查看所有服务 →',
@@ -5648,7 +5737,6 @@ const TRANSLATIONS = {
   ja: {
     nav_services:'サービス', nav_gallery:'ギャラリー', nav_process:'治療の流れ',
     nav_why:'選ばれる理由', nav_book:'📅 予約する',
-    hero_badge:'BANGPAIN DENTAL CLINIC',
     hero_h1_1:'総合', hero_h1_2:'歯科診療', hero_h1_3:'3Dテクノロジー',
     hero_sub:'<strong>25年以上</strong>の経験を持つ歯科専門チーム<br>インプラント · クリーニング · 根管治療 · 充填<br>国際基準 · リーズナブルな価格',
     hero_btn1:'📅 今すぐ予約', hero_btn2:'すべてのサービス →',
@@ -5708,7 +5796,6 @@ const TRANSLATIONS = {
   ,my: {
     nav_services:'ဝန်ဆောင်မှုများ', nav_gallery:'ဓာတ်ပုံများ', nav_process:'ကုသမှုအဆင့်',
     nav_why:'ကျွန်ုပ်တို့ကိုရွေးချယ်ပါ', nav_book:'📅 ချိန်းဆိုမည်',
-    hero_badge:'BANGPAIN DENTAL CLINIC',
     hero_h1_1:'သွားနှင့်ခံတွင်းကျန်းမာရေး', hero_h1_2:'ပြည့်စုံသောစောင့်ရှောက်မှု', hero_h1_3:'3D နည်းပညာဖြင့်',
     hero_sub:'<strong>၂၅ နှစ်</strong>ကျော် သွားဆရာဝန်အဖွဲ့<br>ကိုက်ကြောငျ်ဆေး · ကျောက်တုံးသန့် · ကျောက်ဆုပ်ကုသ · ဖာထေး<br>နိုင်ငံတကာစံနှုန်း · သင့်တော်သောနှုန်းထား',
     hero_btn1:'📅 ယနေ့ချိန်းဆိုပါ', hero_btn2:'ဝန်ဆောင်မှုများကြည့်ရှုပါ →',
@@ -5782,7 +5869,7 @@ function setLang(lang) {
   setHTML('.line2', t.hero_h1_2);
   setHTML('.line3', t.hero_h1_3);
   setHTML('.hero-sub', t.hero_sub);
-  setHTML('.hero-badge', '<span class="dot"></span>' + (t.hero_badge || 'BANGPAIN DENTAL CLINIC'));
+  setHTML('.hero-badge', '<span class="dot"></span>' + t.hero_badge);
 
   // Section tags & headers
   setSectionHeader('#services', t.svc_tag, t.svc_h2, t.svc_sub);
