@@ -921,8 +921,7 @@ footer p { font-size: 13px; color: rgba(255,255,255,0.35); }
   .contact-brand { font-size: 26px; }
   #services, #video-section, #process, #why, #promo, #contact, #gallery { padding: 50px 20px; }
   footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
-  /* Hide 3D */
-  .card-3d-scene { display: none !important; }
+  /* Hide 3D (card 3D scenes kept visible on mobile) */
   #why-canvas { display: none !important; }
   .why-3d-wrap { display: none !important; }
   .why-layout { grid-template-columns: 1fr; }
@@ -1640,9 +1639,8 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
   if (!isMob && !isSmall) return;
   var style = document.createElement('style');
   style.textContent = 
-    'canvas:not(#bg-canvas):not(#tooth-canvas){display:none!important;visibility:hidden!important;width:0!important;height:0!important;}' +
+    'canvas:not(#bg-canvas):not(#tooth-canvas):not(.card-canvas){display:none!important;visibility:hidden!important;width:0!important;height:0!important;}' +
     '.desktop-3d-canvas{display:none!important;width:0!important;height:0!important;}' +
-    '.card-3d-scene{display:none!important;height:0!important;overflow:hidden!important;}' +
     '.video-canvas-wrap{min-height:0!important;}' +
     '.video-canvas-wrap canvas{display:none!important;width:0!important;height:0!important;}' +
     '#vid-main,#vid-2,#vid-3{display:none!important;width:0!important;height:0!important;}' +
@@ -2155,7 +2153,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
       <div class="card-glow"></div>
       <div class="service-number">01</div>
       <div class="card-3d-scene" id="scene-implant">
-        <canvas id="canvas-implant"></canvas>
+        <canvas id="canvas-implant" class="card-canvas"></canvas>
       </div>
       <div class="service-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-2.2 0-4 1.8-4 4 0 0-2 .8-2 3 0 1.8 1.5 3 1.5 3 0 4.2 1.2 8 2.5 8s2.5-2 2.5-2 1.2 2 2.5 2 2.5-3.8 2.5-8c0 0 1.5-1.2 1.5-3 0-2.2-2-3-2-3 0-2.2-1.8-4-4-4z"/><line x1="12" y1="6" x2="12" y2="9" stroke-width="1"/></svg></div>
       <h3 data-i18n="svc1_name">รากฟันเทียม</h3>
@@ -2177,7 +2175,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
       <div class="card-glow"></div>
       <div class="service-number">02</div>
       <div class="card-3d-scene" id="scene-scaling">
-        <canvas id="canvas-scaling"></canvas>
+        <canvas id="canvas-scaling" class="card-canvas"></canvas>
       </div>
       <div class="service-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"/><path d="M9 17v3h6v-3"/><line x1="9" y1="12" x2="9" y2="14"/><line x1="12" y1="12" x2="12" y2="14"/><line x1="15" y1="12" x2="15" y2="14"/></svg></div>
       <h3 data-i18n="svc2_name">ขูดหินปูน</h3>
@@ -2199,7 +2197,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
       <div class="card-glow"></div>
       <div class="service-number">03</div>
       <div class="card-3d-scene" id="scene-root">
-        <canvas id="canvas-root"></canvas>
+        <canvas id="canvas-root" class="card-canvas"></canvas>
       </div>
       <div class="service-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M9 13l-2 8"/><path d="M15 13l2 8"/><path d="M12 13v8"/></svg></div>
       <h3 data-i18n="svc3_name">รักษารากฟัน</h3>
@@ -2220,7 +2218,7 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
       <div class="card-glow"></div>
       <div class="service-number">04</div>
       <div class="card-3d-scene" id="scene-fill">
-        <canvas id="canvas-fill"></canvas>
+        <canvas id="canvas-fill" class="card-canvas"></canvas>
       </div>
       <div class="service-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
       <h3 data-i18n="svc4_name">อุดฟัน</h3>
@@ -3303,7 +3301,7 @@ const IS_MOBILE = window.__MOBILE__ || /Android|webOS|iPhone|iPad|iPod|BlackBerr
 // 3. SERVICE CARD CANVASES (mini 3D scenes)
 // ═══════════════════════════════════════════════
 function createMiniScene(canvasId, buildFn) {
-  if (IS_MOBILE) return;
+  // Card 3D scenes run on mobile too (full 3D enabled)
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const parent = canvas.parentElement;
@@ -3312,15 +3310,32 @@ function createMiniScene(canvasId, buildFn) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setSize(W, H);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // ── Cinematic color grading: filmic highlight rolloff + correct sRGB ──
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.18;
+  if ('outputEncoding' in renderer) renderer.outputEncoding = THREE.sRGBEncoding;
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, W/H, 0.1, 100);
-  camera.position.set(0, 0, 5);
+  // Atmospheric depth haze — the far side of the model melts into the card
+  scene.fog = new THREE.Fog(0xdfeeff, 6.5, 13);
+  // Slightly longer lens (40mm-ish) = less distortion, more cinematic
+  const camera = new THREE.PerspectiveCamera(40, W/H, 0.1, 100);
+  const camTarget = new THREE.Vector3(0, 0, 0);
+  camera.position.set(0, 0.15, 5.4);
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.5));
   const dl = new THREE.DirectionalLight(0xffffff, 1.5);
   dl.position.set(3,3,3);
   scene.add(dl);
+
+  // Mouse parallax (eased) — a hover dolly that reveals depth like a trailer shot
+  let mx = 0, my = 0, tmx = 0, tmy = 0;
+  parent.addEventListener('pointermove', e => {
+    const r = parent.getBoundingClientRect();
+    tmx = ((e.clientX - r.left) / r.width  - 0.5) * 2;
+    tmy = ((e.clientY - r.top)  / r.height - 0.5) * 2;
+  });
+  parent.addEventListener('pointerleave', () => { tmx = 0; tmy = 0; });
 
   const { group, animate: anim } = buildFn(scene);
   let t = 0;
@@ -3328,6 +3343,20 @@ function createMiniScene(canvasId, buildFn) {
     requestAnimationFrame(loop);
     t += 0.015;
     if (anim) anim(t, group);
+
+    mx += (tmx - mx) * 0.045;
+    my += (tmy - my) * 0.045;
+
+    // Cinematic camera rig: slow orbital sway + breathing dolly + parallax
+    const az     = Math.sin(t * 0.16) * 0.42 + mx * 0.55;
+    const radius = 5.4 + Math.sin(t * 0.11) * 0.45;
+    camera.position.set(
+      Math.sin(az) * radius,
+      0.15 + Math.sin(t * 0.21) * 0.28 - my * 0.7,
+      Math.cos(az) * radius
+    );
+    camera.lookAt(camTarget);
+
     renderer.render(scene, camera);
   }
   loop();
@@ -5043,7 +5072,7 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
   .desktop-only { display: none !important; }
   .desktop-only-flex { display: none !important; }
   /* hero-3d intentionally kept visible — rendered as bg overlay */
-  .card-3d-scene { display: none !important; height: 0 !important; }
+  /* card-3d-scene kept visible on mobile (full 3D enabled) */
   #dentist-walker { display: none !important; }
   #tooth-canvas { display: block !important; }
   #vid-main, #vid-2, #vid-3 { display: none !important; opacity: 0 !important; }
