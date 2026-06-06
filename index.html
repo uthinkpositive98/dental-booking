@@ -3345,20 +3345,33 @@ function createMiniScene(canvasId, buildFn) {
   _startCardLoop();
 }
 
+// Graceful fallback: collapse the empty 3D boxes so a card never shows a blank
+// rectangle (e.g. in Facebook/IG/LINE in-app browsers where WebGL can be broken).
+function _disableCard3D() {
+  _cardLoopRunning = false;
+  document.querySelectorAll('.card-3d-scene').forEach(el => { el.style.display = 'none'; });
+  if (_cardRenderer) { try { _cardRenderer.dispose(); } catch (e) {} _cardRenderer = null; }
+}
+
 function _startCardLoop() {
   if (_cardLoopRunning) return;
   _cardLoopRunning = true;
 
   // Single offscreen GL renderer — preserveDrawingBuffer so we can blit it out
-  _cardRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  try {
+    _cardRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  } catch (err) { _cardRenderer = null; }
+  // No usable WebGL (some in-app browsers) → fall back to a clean, icon-only card
+  if (!_cardRenderer || !_cardRenderer.getContext || !_cardRenderer.getContext()) { _disableCard3D(); return; }
   _cardRenderer.setPixelRatio(_cardDPR);
   _cardRenderer.toneMapping = THREE.ACESFilmicToneMapping;   // filmic highlight rolloff
   _cardRenderer.toneMappingExposure = 1.18;
   if ('outputEncoding' in _cardRenderer) _cardRenderer.outputEncoding = THREE.sRGBEncoding;
 
-  let sizedW = 0, sizedH = 0;
+  let sizedW = 0, sizedH = 0, healthFrames = 0, healthOK = false;
 
   function loop() {
+    if (!_cardLoopRunning) return;
     requestAnimationFrame(loop);
     for (const e of _cardScenes) {
       const rect = e.parent.getBoundingClientRect();
@@ -3398,6 +3411,18 @@ function _startCardLoop() {
       if (e.canvas.height !== pxh) e.canvas.height = pxh;
       e.ctx2d.clearRect(0, 0, pxw, pxh);
       e.ctx2d.drawImage(_cardRenderer.domElement, 0, 0, pxw, pxh);
+
+      // One-time health check: after a few frames, confirm pixels actually drew.
+      // If the canvas is completely empty, WebGL silently failed → fall back.
+      if (!healthOK && ++healthFrames >= 10) {
+        try {
+          const data = e.ctx2d.getImageData(0, 0, pxw, pxh).data;
+          let opaque = 0;
+          for (let i = 3; i < data.length; i += 4 * 53) { if (data[i] > 8 && ++opaque > 4) break; }
+          if (opaque > 4) { healthOK = true; }
+          else { _disableCard3D(); return; }
+        } catch (err) { healthOK = true; } // can't sample → assume fine
+      }
     }
   }
   loop();
