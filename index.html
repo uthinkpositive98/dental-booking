@@ -1645,7 +1645,11 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
     '.video-canvas-wrap canvas{display:none!important;width:0!important;height:0!important;}' +
     '#vid-main,#vid-2,#vid-3{display:none!important;width:0!important;height:0!important;}' +
     '#dentist-walker{display:none!important;}' +
-    '#why-canvas{display:none!important;}';
+    '#why-canvas{display:none!important;}' +
+    // Tie the video toggle to the SAME mobile detection (≤900/UA) as everything
+    // else, so 769–900px devices never show the empty desktop video grid.
+    '.desktop-vid-grid{display:none!important;}' +
+    '.mobile-vid-list{display:flex!important;}';
   document.head.appendChild(style);
   // Also set a global flag for JS guards
   window.__MOBILE__ = true;
@@ -5146,7 +5150,7 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
   .video-canvas-wrap { background: linear-gradient(135deg, #0a2d6e, #1565c0); }
   .vid-mobile-placeholder { display: block !important; }
   #why-canvas { display: none !important; }
-  .card-3d-scene canvas { display: none !important; }
+  /* card-3d-scene canvas kept visible on mobile (full 3D enabled) */
 }
 
 /* ── Mobile video cards ── */
