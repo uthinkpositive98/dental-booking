@@ -1630,11 +1630,6 @@ footer p { color: rgba(255,255,255,0.3) !important; font-size: 12px !important; 
 <!-- BG PARTICLE CANVAS -->
 <canvas id="bg-canvas"></canvas>
 <script>
-// [DIAG] capture any uncaught error as early as possible
-window.__errs__ = [];
-window.addEventListener('error', function(e){
-  window.__errs__.push((e.message||'err') + ' @ ' + (e.filename||'').split('/').pop() + ':' + (e.lineno||'?'));
-});
 // Immediately hide all 3D canvases on mobile before page renders
 (function(){
   var ua = navigator.userAgent;
@@ -6072,33 +6067,6 @@ function closeLangModal() {
     }, 600);
   }
 })();
-</script>
-<script>
-// ════════ TEMPORARY DIAGNOSTIC — remove after debugging ════════
-window.addEventListener('load', function(){
-  setTimeout(function(){
-    var lines = [];
-    lines.push('IS_MOBILE=' + (window.__MOBILE__ ? 'Y' : (typeof IS_MOBILE!=='undefined'?IS_MOBILE:'?')));
-    // WebGL support test
-    var gl=null, glerr='';
-    try { var c=document.createElement('canvas'); gl = c.getContext('webgl')||c.getContext('experimental-webgl'); }
-    catch(ex){ glerr = ex.message; }
-    lines.push('WebGL=' + (gl?'OK':'FAIL') + (glerr?(' ('+glerr+')'):''));
-    lines.push('cards=' + (typeof _cardScenes!=='undefined' ? _cardScenes.length : 'undef'));
-    lines.push('renderer=' + (typeof _cardRenderer!=='undefined' && _cardRenderer ? 'made' : 'no'));
-    var ci = document.getElementById('canvas-implant');
-    lines.push('cv-implant=' + (ci ? (ci.width+'x'+ci.height) : 'missing'));
-    if (ci){ var cs=getComputedStyle(ci); lines.push('cv-disp=' + cs.display + ' vis=' + cs.visibility); }
-    var sc = document.getElementById('scene-implant');
-    lines.push('scene-w=' + (sc ? sc.offsetWidth+'x'+sc.offsetHeight : 'missing'));
-    lines.push('errs=' + (window.__errs__&&window.__errs__.length ? window.__errs__.join(' | ') : 'none'));
-    var d = document.createElement('div');
-    d.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999999;background:rgba(0,0,0,.88);color:#0f0;font:12px/1.5 monospace;padding:10px;white-space:pre-wrap;word-break:break-all;';
-    d.textContent = '🩺 DIAG\n' + lines.join('\n');
-    d.addEventListener('click', function(){ d.remove(); });
-    document.body.appendChild(d);
-  }, 2500);
-});
 </script>
 </body>
 </html>
