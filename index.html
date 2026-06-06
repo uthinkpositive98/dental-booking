@@ -857,7 +857,7 @@ footer p { font-size: 13px; color: rgba(255,255,255,0.35); }
 }
 
 @media (max-width: 480px) {
-  /* Hero — 2-column: text left, 3D canvas right */
+  /* Hero — text left, mini 3D canvas right */
   #hero {
     padding: 80px 18px 40px !important;
     min-height: 100svh !important;
@@ -866,18 +866,18 @@ footer p { font-size: 13px; color: rgba(255,255,255,0.35); }
     flex-direction: row !important;
     align-items: center !important;
     justify-content: space-between !important;
-    gap: 0 !important;
+    gap: 8px !important;
     position: relative !important;
     overflow: hidden !important;
   }
   .hero-content {
     flex: 1 1 0 !important;
-    max-width: 58% !important;
+    max-width: 62% !important;
     width: auto !important;
     z-index: 2 !important;
     position: relative !important;
   }
-  .hero h1 { font-size: 28px !important; line-height: 1.18 !important; }
+  .hero h1 { font-size: 26px !important; line-height: 1.2 !important; }
   .hero h1 .line1, .hero h1 .line2, .hero h1 .line3 {
     -webkit-text-fill-color: initial !important;
     color: #fff !important;
@@ -886,24 +886,24 @@ footer p { font-size: 13px; color: rgba(255,255,255,0.35); }
     font-size: inherit !important;
   }
   .hero h1 .line2 { color: #4de8f0 !important; }
-  .hero h1 .line3 { font-size: 22px !important; color: #fff !important; }
-  .hero-sub { font-size: 13px !important; color: rgba(255,255,255,0.85) !important; }
+  .hero h1 .line3 { font-size: 20px !important; color: #fff !important; }
+  .hero-sub { font-size: 12px !important; color: rgba(255,255,255,0.85) !important; }
   .hero-sub strong { color: #4de8f0 !important; }
-  .hero-badge { font-size: 10px !important; padding: 4px 12px !important; color: #4de8f0 !important; }
-  .hero-btns { flex-direction: column; gap: 10px; }
-  .btn-primary, .btn-outline { text-align: center; padding: 11px 16px; font-size: 13px; }
-  /* 3D canvas — right side, compact */
+  .hero-badge { font-size: 10px !important; padding: 4px 10px !important; color: #4de8f0 !important; margin-bottom: 12px !important; }
+  .hero-btns { flex-direction: column; gap: 8px; margin-top: 14px !important; }
+  .btn-primary, .btn-outline { text-align: center; padding: 10px 14px !important; font-size: 13px !important; }
+  /* 3D canvas — small right panel, non-intrusive */
   .hero-3d {
-    flex: 0 0 42% !important;
-    width: 42% !important;
-    height: 340px !important;
+    flex: 0 0 34% !important;
+    width: 34% !important;
+    height: 220px !important;
     position: relative !important;
     top: auto !important; left: auto !important;
-    opacity: 1 !important;
+    opacity: 0.9 !important;
     pointer-events: none !important;
+    align-self: center !important;
   }
   #tooth-canvas { display: block !important; width: 100% !important; height: 100% !important; }
-  /* floating labels — hide on very small to avoid overflow */
   .hero-3d-labels { display: none !important; }
   /* Nav */
   nav { padding: 12px 16px !important; }
@@ -4794,7 +4794,7 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 .hero-content { position: relative; z-index: 2; }
 .hero-3d { position: relative; z-index: 2; }
 @media (max-width: 768px) {
-  /* hero-3d shown on right side — do NOT hide */
+  /* hero-3d shown as mini right panel — keep visible */
   #tooth-canvas { display: block !important; }
 }
 
@@ -5001,7 +5001,7 @@ document.querySelectorAll('.service-card-3d').forEach(card => {
 @media (max-width: 768px) {
   .desktop-only { display: none !important; }
   .desktop-only-flex { display: none !important; }
-  /* hero-3d visible on mobile as right-side panel */
+  /* hero-3d intentionally kept visible — rendered as bg overlay */
   .card-3d-scene { display: none !important; height: 0 !important; }
   #dentist-walker { display: none !important; }
   #tooth-canvas { display: block !important; }
