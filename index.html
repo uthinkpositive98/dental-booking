@@ -5471,6 +5471,7 @@ const TRANSLATIONS = {
   th: {
     nav_services:'บริการ', nav_gallery:'ผลงาน', nav_process:'ขั้นตอน',
     nav_why:'ทำไมเลือกเรา', nav_book:'📅 นัดหมาย',
+    hero_badge:'BANGPAIN DENTAL CLINIC',
     hero_h1_1:'รักษาฟัน', hero_h1_2:'ครบวงจร', hero_h1_3:'ด้วยเทคโนโลยี 3D',
     hero_sub:'ทีมทันตแพทย์ผู้เชี่ยวชาญกว่า <strong>25 ปี</strong><br>รากฟันเทียม · ขูดหินปูน · รักษารากฟัน · อุดฟัน<br>มาตรฐานสากล ราคาคุ้มค่า',
     hero_btn1:'📅 นัดหมายวันนี้', hero_btn2:'ดูบริการทั้งหมด →',
@@ -5529,6 +5530,7 @@ const TRANSLATIONS = {
   en: {
     nav_services:'Services', nav_gallery:'Gallery', nav_process:'Process',
     nav_why:'Why Us', nav_book:'📅 Book Now',
+    hero_badge:'BANGPAIN DENTAL CLINIC',
     hero_h1_1:'Complete', hero_h1_2:'Dental Care', hero_h1_3:'with 3D Technology',
     hero_sub:'Expert dental team with over <strong>25 years</strong><br>Implants · Scaling · Root Canal · Filling<br>International Standards · Affordable Prices',
     hero_btn1:'📅 Book Today', hero_btn2:'View All Services →',
@@ -5587,6 +5589,7 @@ const TRANSLATIONS = {
   zh: {
     nav_services:'服务', nav_gallery:'作品集', nav_process:'流程',
     nav_why:'选择我们', nav_book:'📅 立即预约',
+    hero_badge:'BANGPAIN DENTAL CLINIC',
     hero_h1_1:'全面', hero_h1_2:'牙科护理', hero_h1_3:'3D 技术',
     hero_sub:'超过 <strong>25年</strong> 经验的牙科专家团队<br>种植牙 · 洗牙 · 根管治疗 · 补牙<br>国际标准 · 价格实惠',
     hero_btn1:'📅 立即预约', hero_btn2:'查看所有服务 →',
@@ -5645,6 +5648,7 @@ const TRANSLATIONS = {
   ja: {
     nav_services:'サービス', nav_gallery:'ギャラリー', nav_process:'治療の流れ',
     nav_why:'選ばれる理由', nav_book:'📅 予約する',
+    hero_badge:'BANGPAIN DENTAL CLINIC',
     hero_h1_1:'総合', hero_h1_2:'歯科診療', hero_h1_3:'3Dテクノロジー',
     hero_sub:'<strong>25年以上</strong>の経験を持つ歯科専門チーム<br>インプラント · クリーニング · 根管治療 · 充填<br>国際基準 · リーズナブルな価格',
     hero_btn1:'📅 今すぐ予約', hero_btn2:'すべてのサービス →',
@@ -5704,6 +5708,7 @@ const TRANSLATIONS = {
   ,my: {
     nav_services:'ဝန်ဆောင်မှုများ', nav_gallery:'ဓာတ်ပုံများ', nav_process:'ကုသမှုအဆင့်',
     nav_why:'ကျွန်ုပ်တို့ကိုရွေးချယ်ပါ', nav_book:'📅 ချိန်းဆိုမည်',
+    hero_badge:'BANGPAIN DENTAL CLINIC',
     hero_h1_1:'သွားနှင့်ခံတွင်းကျန်းမာရေး', hero_h1_2:'ပြည့်စုံသောစောင့်ရှောက်မှု', hero_h1_3:'3D နည်းပညာဖြင့်',
     hero_sub:'<strong>၂၅ နှစ်</strong>ကျော် သွားဆရာဝန်အဖွဲ့<br>ကိုက်ကြောငျ်ဆေး · ကျောက်တုံးသန့် · ကျောက်ဆုပ်ကုသ · ဖာထေး<br>နိုင်ငံတကာစံနှုန်း · သင့်တော်သောနှုန်းထား',
     hero_btn1:'📅 ယနေ့ချိန်းဆိုပါ', hero_btn2:'ဝန်ဆောင်မှုများကြည့်ရှုပါ →',
@@ -5777,7 +5782,7 @@ function setLang(lang) {
   setHTML('.line2', t.hero_h1_2);
   setHTML('.line3', t.hero_h1_3);
   setHTML('.hero-sub', t.hero_sub);
-  setHTML('.hero-badge', '<span class="dot"></span>' + t.hero_badge);
+  setHTML('.hero-badge', '<span class="dot"></span>' + (t.hero_badge || 'BANGPAIN DENTAL CLINIC'));
 
   // Section tags & headers
   setSectionHeader('#services', t.svc_tag, t.svc_h2, t.svc_sub);
