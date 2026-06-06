@@ -879,14 +879,18 @@ footer p { font-size: 13px; color: rgba(255,255,255,0.35); }
   }
   .hero h1 { font-size: 26px !important; line-height: 1.2 !important; }
   .hero h1 .line1, .hero h1 .line2, .hero h1 .line3 {
-    -webkit-text-fill-color: initial !important;
+    -webkit-text-fill-color: #fff !important;
     color: #fff !important;
     background: none !important;
+    background-image: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
     filter: none !important;
     font-size: inherit !important;
   }
-  .hero h1 .line2 { color: #4de8f0 !important; }
-  .hero h1 .line3 { font-size: 20px !important; color: #fff !important; }
+  .hero h1 .line1 { color: #fff !important; -webkit-text-fill-color: #fff !important; }
+  .hero h1 .line2 { color: #4de8f0 !important; -webkit-text-fill-color: #4de8f0 !important; }
+  .hero h1 .line3 { font-size: 20px !important; color: #fff !important; -webkit-text-fill-color: #fff !important; }
   .hero-sub { font-size: 12px !important; color: rgba(255,255,255,0.85) !important; }
   .hero-sub strong { color: #4de8f0 !important; }
   .hero-badge { font-size: 10px !important; padding: 4px 10px !important; color: #4de8f0 !important; margin-bottom: 12px !important; }
