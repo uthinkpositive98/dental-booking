@@ -3300,64 +3300,105 @@ const IS_MOBILE = window.__MOBILE__ || /Android|webOS|iPhone|iPad|iPod|BlackBerr
 // ═══════════════════════════════════════════════
 // 3. SERVICE CARD CANVASES (mini 3D scenes)
 // ═══════════════════════════════════════════════
+// ── Card 3D scenes share ONE WebGL context, blitted onto each card's 2D canvas.
+//    Mobile browsers cap active WebGL contexts (~4-8); four separate renderers
+//    silently go blank. One shared renderer keeps us at a single context, and we
+//    only draw cards that are on screen — full quality, mobile-safe, battery-light.
+const _cardScenes = [];
+let _cardRenderer = null, _cardLoopRunning = false;
+const _cardDPR = Math.min(window.devicePixelRatio || 1, 2);
+
 function createMiniScene(canvasId, buildFn) {
-  // Card 3D scenes run on mobile too (full 3D enabled)
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const parent = canvas.parentElement;
-  const W = parent.offsetWidth || 400;
-  const H = 220;
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setSize(W, H);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  // ── Cinematic color grading: filmic highlight rolloff + correct sRGB ──
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.18;
-  if ('outputEncoding' in renderer) renderer.outputEncoding = THREE.sRGBEncoding;
 
   const scene = new THREE.Scene();
   // Atmospheric depth haze — the far side of the model melts into the card
   scene.fog = new THREE.Fog(0xdfeeff, 6.5, 13);
   // Slightly longer lens (40mm-ish) = less distortion, more cinematic
-  const camera = new THREE.PerspectiveCamera(40, W/H, 0.1, 100);
-  const camTarget = new THREE.Vector3(0, 0, 0);
-  camera.position.set(0, 0.15, 5.4);
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.5));
   const dl = new THREE.DirectionalLight(0xffffff, 1.5);
-  dl.position.set(3,3,3);
+  dl.position.set(3, 3, 3);
   scene.add(dl);
 
+  const { group, animate: anim } = buildFn(scene);
+
+  const entry = {
+    canvas, parent, scene, camera, anim, group,
+    ctx2d: canvas.getContext('2d'),
+    target: new THREE.Vector3(0, 0, 0),
+    mx: 0, my: 0, tmx: 0, tmy: 0, t: 0
+  };
+
   // Mouse parallax (eased) — a hover dolly that reveals depth like a trailer shot
-  let mx = 0, my = 0, tmx = 0, tmy = 0;
   parent.addEventListener('pointermove', e => {
     const r = parent.getBoundingClientRect();
-    tmx = ((e.clientX - r.left) / r.width  - 0.5) * 2;
-    tmy = ((e.clientY - r.top)  / r.height - 0.5) * 2;
-  });
-  parent.addEventListener('pointerleave', () => { tmx = 0; tmy = 0; });
+    entry.tmx = ((e.clientX - r.left) / r.width  - 0.5) * 2;
+    entry.tmy = ((e.clientY - r.top)  / r.height - 0.5) * 2;
+  }, { passive: true });
+  parent.addEventListener('pointerleave', () => { entry.tmx = 0; entry.tmy = 0; });
 
-  const { group, animate: anim } = buildFn(scene);
-  let t = 0;
+  _cardScenes.push(entry);
+  _startCardLoop();
+}
+
+function _startCardLoop() {
+  if (_cardLoopRunning) return;
+  _cardLoopRunning = true;
+
+  // Single offscreen GL renderer — preserveDrawingBuffer so we can blit it out
+  _cardRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  _cardRenderer.setPixelRatio(_cardDPR);
+  _cardRenderer.toneMapping = THREE.ACESFilmicToneMapping;   // filmic highlight rolloff
+  _cardRenderer.toneMappingExposure = 1.18;
+  if ('outputEncoding' in _cardRenderer) _cardRenderer.outputEncoding = THREE.sRGBEncoding;
+
+  let sizedW = 0, sizedH = 0;
+
   function loop() {
     requestAnimationFrame(loop);
-    t += 0.015;
-    if (anim) anim(t, group);
+    for (const e of _cardScenes) {
+      const rect = e.parent.getBoundingClientRect();
+      // Skip cards that aren't near the viewport (saves GPU + battery on mobile)
+      if (rect.bottom < -120 || rect.top > window.innerHeight + 120) continue;
 
-    mx += (tmx - mx) * 0.045;
-    my += (tmy - my) * 0.045;
+      const w = Math.max(1, e.parent.offsetWidth || 400);
+      const h = 220;
 
-    // Cinematic camera rig: slow orbital sway + breathing dolly + parallax
-    const az     = Math.sin(t * 0.16) * 0.42 + mx * 0.55;
-    const radius = 5.4 + Math.sin(t * 0.11) * 0.45;
-    camera.position.set(
-      Math.sin(az) * radius,
-      0.15 + Math.sin(t * 0.21) * 0.28 - my * 0.7,
-      Math.cos(az) * radius
-    );
-    camera.lookAt(camTarget);
+      e.t += 0.015;
+      if (e.anim) e.anim(e.t, e.group);
 
-    renderer.render(scene, camera);
+      e.mx += (e.tmx - e.mx) * 0.045;
+      e.my += (e.tmy - e.my) * 0.045;
+
+      // Cinematic camera rig: slow orbital sway + breathing dolly + parallax
+      const az     = Math.sin(e.t * 0.16) * 0.42 + e.mx * 0.55;
+      const radius = 5.4 + Math.sin(e.t * 0.11) * 0.45;
+      e.camera.position.set(
+        Math.sin(az) * radius,
+        0.15 + Math.sin(e.t * 0.21) * 0.28 - e.my * 0.7,
+        Math.cos(az) * radius
+      );
+      e.camera.aspect = w / h;
+      e.camera.updateProjectionMatrix();
+      e.camera.lookAt(e.target);
+
+      if (w !== sizedW || h !== sizedH) {
+        _cardRenderer.setSize(w, h, false);
+        sizedW = w; sizedH = h;
+      }
+      _cardRenderer.render(e.scene, e.camera);
+
+      // Blit the shared GL canvas onto this card's own 2D canvas
+      const pxw = Math.floor(w * _cardDPR), pxh = Math.floor(h * _cardDPR);
+      if (e.canvas.width !== pxw)  e.canvas.width  = pxw;
+      if (e.canvas.height !== pxh) e.canvas.height = pxh;
+      e.ctx2d.clearRect(0, 0, pxw, pxh);
+      e.ctx2d.drawImage(_cardRenderer.domElement, 0, 0, pxw, pxh);
+    }
   }
   loop();
 }
