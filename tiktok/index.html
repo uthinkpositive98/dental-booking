@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post to TikTok | Bang Pa-in Dental Clinic</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b1b2e; --blue:#1a3a5c; --cyan:#2d6fa4; --gold:#c9a96e; --gold-light:#e8d5a3;
+  --bg:#f7f6f3; --card:#fff; --line:#e6e3dc; --muted:#7a8794; --text:#2c3e50;
+  --ok:#1f8a5b; --err:#c0392b; --warn:#b7791f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sarabun',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+h1,h2,h3,button,.btn{font-family:'Prompt',system-ui,sans-serif}
+a{color:var(--cyan)}
+
+header{background:var(--navy);color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none}
+.brand img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+.brand b{display:block;font-family:'Prompt';font-weight:600;font-size:16px;letter-spacing:.02em}
+.brand small{color:var(--gold-light);font-size:12px}
+header .back{color:var(--gold-light);font-size:14px;text-decoration:none}
+
+main{flex:1;width:100%;max-width:760px;margin:0 auto;padding:32px 20px 48px}
+.intro h1{font-size:28px;color:var(--navy);margin-bottom:6px}
+.intro p{color:var(--muted);margin-bottom:24px;line-height:1.6}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 18px rgba(0,0,0,.04)}
+.card h2{font-size:18px;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.step{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--gold-light);font-size:13px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:12px 20px;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;transition:opacity .15s,transform .05s}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn-tiktok{background:#000;color:#fff;padding:14px 26px;font-size:16px}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--line);padding:8px 14px;font-size:13px}
+
+.banner{padding:12px 16px;border-radius:10px;margin-bottom:18px;font-size:14px;display:none}
+.banner.show{display:block}
+.banner.err{background:#fdecea;color:var(--err)}
+.banner.ok{background:#e8f6ef;color:var(--ok)}
+.banner.warn{background:#fff6e5;color:var(--warn)}
+
+.account{display:flex;align-items:center;gap:14px}
+.account img{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#eee}
+.account .name{font-family:'Prompt';font-weight:600;font-size:17px;color:var(--navy)}
+.account .sub{color:var(--muted);font-size:13px}
+.account .spacer{flex:1}
+.posting-to{margin-top:14px;padding:10px 14px;background:#f3f6f9;border-radius:8px;font-size:14px}
+
+label.field{display:block;font-weight:600;font-size:14px;color:var(--navy);margin:18px 0 8px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+input[type=file]{width:100%;padding:14px;border:2px dashed var(--line);border-radius:10px;background:#fafafa;cursor:pointer}
+textarea,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:15px;background:#fff;color:var(--text)}
+textarea{min-height:96px;resize:vertical}
+select:invalid{color:var(--muted)}
+.preview{margin-top:12px;display:none}
+.preview video{width:100%;max-height:420px;border-radius:10px;background:#000}
+.counter{text-align:right;font-size:12px;color:var(--muted);margin-top:4px}
+
+.checks{display:flex;flex-wrap:wrap;gap:10px 22px}
+.check{display:flex;align-items:center;gap:8px;font-size:15px;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--navy)}
+.check.disabled{color:#b5b5b5;cursor:not-allowed}
+
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
+.toggle-row .t{font-weight:600;color:var(--navy);font-size:14px}
+.toggle-row .d{font-size:12.5px;color:var(--muted)}
+.switch{position:relative;width:46px;height:26px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:#cfd6dd;border-radius:26px;cursor:pointer;transition:.2s}
+.slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.switch input:checked+.slider{background:var(--navy)}
+.switch input:checked+.slider:before{transform:translateX(20px)}
+.disclosure{display:none;margin-top:12px;padding:14px;border:1px solid var(--line);border-radius:10px;background:#fbfaf7}
+.disclosure.show{display:block}
+.disclosure .check{margin-bottom:8px;align-items:flex-start}
+.disclosure .check small{display:block;color:var(--muted);font-size:12.5px}
+.label-note{margin-top:8px;font-size:13px;color:var(--cyan);font-weight:600}
+
+.consent{margin:22px 0 14px;font-size:13.5px;color:var(--muted);line-height:1.6}
+.post-wrap{position:relative;display:inline-block}
+.progress{display:none;margin-top:18px}
+.progress.show{display:block}
+.bar{height:8px;background:#eceae5;border-radius:8px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold));transition:width .3s}
+.progress p{font-size:14px;margin-top:8px}
+
+.result{display:none;text-align:center;padding:10px 0}
+.result.show{display:block}
+.result .big{font-size:44px}
+.result h3{font-size:20px;color:var(--ok);margin:6px 0}
+.result p{color:var(--muted);font-size:14px;line-height:1.6}
+
+.modal-bg{position:fixed;inset:0;background:rgba(11,27,46,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:14px;max-width:420px;width:100%;padding:24px}
+.modal h3{color:var(--navy);margin-bottom:10px}
+.modal ul{margin:10px 0 18px 18px;font-size:14px;line-height:1.7}
+.modal .actions{display:flex;gap:10px;justify-content:flex-end}
+
+footer{padding:20px;text-align:center;font-size:13px;color:var(--muted);border-top:1px solid var(--line)}
+footer a{color:var(--muted);margin:0 8px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="/">
+    <img src="/photos/clinic-logo.jpg" alt="Bang Pa-in Dental Clinic logo">
+    <span><b>BANG PA-IN DENTAL</b><small>TikTok Publisher · คลินิกทันตกรรมบางปะอิน</small></span>
+  </a>
+  <a class="back" href="/">← Back to clinic website</a>
+</header>
+
+<main>
+  <div class="intro">
+    <h1>Post to TikTok</h1>
+    <p>Publish the clinic's own original videos (dental tips, clinic news and promotions) to the clinic's TikTok account.
+       Connect your TikTok account, choose a video, review the post settings, and confirm.</p>
+  </div>
+
+  <div id="banner" class="banner"></div>
+
+  <!-- STEP 1: CONNECT -->
+  <section class="card" id="connectCard">
+    <h2><span class="step">1</span> Connect your TikTok account</h2>
+    <div id="loggedOut">
+      <p style="margin-bottom:18px;line-height:1.6">Log in with TikTok to allow this app to read your basic profile (nickname and avatar)
+        and to publish videos you choose to your TikTok account. Nothing is posted without your confirmation.</p>
+      <a class="btn btn-tiktok" href="/api/tiktok/login" id="loginBtn">Login with TikTok</a>
+    </div>
+    <div id="loggedIn" class="hidden">
+      <div class="account">
+        <img id="avatar" alt="">
+        <div>
+          <div class="name" id="displayName">—</div>
+          <div class="sub" id="username"></div>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn btn-ghost" id="logoutBtn">Disconnect</button>
+      </div>
+      <div class="posting-to">Videos will be posted to the TikTok account: <b id="postingTo">—</b></div>
+    </div>
+    <p id="loading" class="hint">Checking connection…</p>
+  </section>
+
+  <!-- STEP 2: COMPOSE -->
+  <section class="card hidden" id="composeCard">
+    <h2><span class="step">2</span> Create your post</h2>
+
+    <form id="postForm" novalidate>
+      <label class="field" for="video">Video</label>
+      <input type="file" id="video" accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm">
+      <p class="hint" id="videoHint">MP4, MOV or WebM.</p>
+      <div class="preview" id="preview"><video id="previewVideo" controls playsinline></video></div>
+
+      <label class="field" for="title">Title / caption</label>
+      <textarea id="title" maxlength="2200" placeholder="Write a caption… #dentaltips"></textarea>
+      <div class="counter"><span id="titleCount">0</span> / 2200</div>
+
+      <label class="field" for="privacy">Who can view this video</label>
+      <select id="privacy" required>
+        <option value="" disabled selected>Select privacy level</option>
+      </select>
+      <p class="hint" id="privacyHint"></p>
+
+      <label class="field">Allow users to</label>
+      <div class="checks">
+        <label class="check" id="lblComment"><input type="checkbox" id="allowComment"> Comment</label>
+        <label class="check" id="lblDuet"><input type="checkbox" id="allowDuet"> Duet</label>
+        <label class="check" id="lblStitch"><input type="checkbox" id="allowStitch"> Stitch</label>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="t">Disclose video content</div>
+          <div class="d">Turn on to disclose that this video promotes goods or services in exchange for something of value.</div>
+        </div>
+        <label class="switch"><input type="checkbox" id="discloseToggle"><span class="slider"></span></label>
+      </div>
+      <div class="disclosure" id="disclosure">
+        <label class="check"><input type="checkbox" id="yourBrand">
+          <span>Your brand<small>You are promoting yourself or your own business. This video will be classified as Brand Organic.</small></span></label>
+        <label class="check" id="lblBranded"><input type="checkbox" id="brandedContent">
+          <span>Branded content<small>You are promoting another brand or a third party. This video will be classified as Branded Content.</small></span></label>
+        <div class="label-note" id="labelNote"></div>
+      </div>
+
+      <p class="consent" id="consent"></p>
+
+      <span class="post-wrap" id="postWrap">
+        <button type="submit" class="btn btn-primary" id="postBtn" disabled>Post to TikTok</button>
+      </span>
+      <p class="hint" id="postHint"></p>
+    </form>
+
+    <div class="progress" id="progress">
+      <div class="bar"><i id="barFill"></i></div>
+      <p id="progressText">Preparing…</p>
+    </div>
+
+    <div class="result" id="result">
+      <div class="big">✅</div>
+      <h3 id="resultTitle">Posted successfully</h3>
+      <p id="resultText">Your video was sent to TikTok. Processing can take a few minutes, so it may not appear on your profile right away.</p>
+      <p style="margin-top:6px">Status: <b id="statusText">—</b></p>
+      <button class="btn btn-ghost" style="margin-top:14px" id="anotherBtn">Post another video</button>
+    </div>
+  </section>
+</main>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-bg" id="confirmModal">
+  <div class="modal">
+    <h3>Confirm post</h3>
+    <p style="font-size:14px">This video will be sent to TikTok and posted to <b id="cfAccount"></b> with these settings:</p>
+    <ul id="cfList"></ul>
+    <div class="actions">
+      <button class="btn btn-ghost" id="cfCancel">Cancel</button>
+      <button class="btn btn-primary" id="cfOk">Confirm &amp; post</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © Bang Pa-in Dental Clinic · คลินิกทันตกรรมบางปะอิน
+  <br><a href="/privacy/">Privacy Policy</a>·<a href="/terms/">Terms of Service</a>·<a href="/">Clinic website</a>
+</footer>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const MB = 1024 * 1024;
+const PROXY_MAX = 4 * MB; // Vercel function body limit is ~4.5MB
+const PRIVACY_LABELS = {
+  PUBLIC_TO_EVERYONE: 'Everyone',
+  MUTUAL_FOLLOW_FRIENDS: 'Friends (followers you follow back)',
+  FOLLOWER_OF_CREATOR: 'Followers',
+  SELF_ONLY: 'Only me',
+};
+const MUSIC = '<a href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en" target="_blank" rel="noopener">Music Usage Confirmation</a>';
+const BC = '<a href="https://www.tiktok.com/legal/page/global/bc-policy/en" target="_blank" rel="noopener">Branded Content Policy</a>';
+
+let state = { creator: null, canPost: false, durationOk: false, file: null, posting: false };
+
+function banner(msg, kind) {
+  const b = $('banner');
+  b.className = 'banner show ' + (kind || 'err');
+  b.textContent = msg;
+}
+
+// ── load connection state ──
+async function loadMe() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('error')) banner('TikTok login failed: ' + params.get('error'));
+  if (params.get('connected')) banner('TikTok account connected.', 'ok');
+  if (params.toString()) history.replaceState(null, '', location.pathname);
+
+  try {
+    const r = await fetch('/api/tiktok/me', { credentials: 'same-origin' });
+    const me = await r.json();
+    $('loading').classList.add('hidden');
+    if (!me.connected) { $('loggedOut').classList.remove('hidden'); return; }
+    renderAccount(me);
+  } catch (e) {
+    $('loading').textContent = 'Could not check the connection. Please refresh the page.';
+  }
+}
+
+function renderAccount(me) {
+  const c = me.creator || {};
+  const u = me.user || {};
+  const nickname = c.creator_nickname || u.display_name || 'TikTok account';
+  $('loggedOut').classList.add('hidden');
+  $('loggedIn').classList.remove('hidden');
+  $('composeCard').classList.remove('hidden');
+  const av = c.creator_avatar_url || u.avatar_url;
+  if (av) $('avatar').src = av; else $('avatar').style.visibility = 'hidden';
+  $('displayName').textContent = nickname;
+  $('username').textContent = c.creator_username ? '@' + c.creator_username : '';
+  $('postingTo').textContent = nickname + (c.creator_username ? ' (@' + c.creator_username + ')' : '');
+  $('cfAccount').textContent = $('postingTo').textContent;
+
+  state.creator = me.creator;
+  state.canPost = !!me.creator && !me.creator_error;
+  if (me.creator_error) {
+    banner('This TikTok account cannot post right now (' + (me.creator_error.message || me.creator_error.code) +
+      '). Please try again later.', 'warn');
+  }
+
+  // privacy options come only from creator_info — no default selection
+  const sel = $('privacy');
+  (c.privacy_level_options || []).forEach((v) => {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = PRIVACY_LABELS[v] || v;
+    sel.appendChild(o);
+  });
+
+  // interaction settings disabled in the creator's TikTok app are greyed out
+  [['comment_disabled', 'allowComment', 'lblComment'],
+   ['duet_disabled', 'allowDuet', 'lblDuet'],
+   ['stitch_disabled', 'allowStitch', 'lblStitch']].forEach(([flag, input, label]) => {
+    if (c[flag]) {
+      $(input).disabled = true; $(input).checked = false;
+      $(label).classList.add('disabled');
+      $(label).title = 'Turned off in your TikTok privacy settings';
+    }
+  });
+
+  if (c.max_video_post_duration_sec) {
+    $('videoHint').textContent = 'MP4, MOV or WebM. Maximum length for this account: ' +
+      formatDur(c.max_video_post_duration_sec) + '.';
+  }
+  refresh();
+}
+
+function formatDur(s) {
+  s = Math.round(s);
+  return s >= 60 ? (Math.floor(s / 60) + ' min ' + (s % 60 ? (s % 60) + ' s' : '')).trim() : s + ' s';
+}
+
+// ── video selection + preview + duration check ──
+$('video').addEventListener('change', () => {
+  const f = $('video').files[0];
+  state.file = f || null; state.durationOk = false;
+  const v = $('previewVideo');
+  if (!f) { $('preview').style.display = 'none'; refresh(); return; }
+  v.src = URL.createObjectURL(f);
+  $('preview').style.display = 'block';
+  v.onloadedmetadata = () => {
+    const max = state.creator && state.creator.max_video_post_duration_sec;
+    if (max && v.duration > max) {
+      banner('This video is ' + formatDur(v.duration) + ' long. The maximum for this account is ' + formatDur(max) + '.');
+      state.durationOk = false;
+    } else {
+      $('banner').className = 'banner';
+      state.durationOk = true;
+    }
+    refresh();
+  };
+  v.onerror = () => { state.durationOk = true; refresh(); }; // some formats can't preview in every browser
+});
+
+$('title').addEventListener('input', () => { $('titleCount').textContent = $('title').value.length; });
+['privacy', 'discloseToggle', 'yourBrand', 'brandedContent'].forEach((id) => $(id).addEventListener('change', refresh));
+
+// ── rules for disclosure / privacy / consent / post button ──
+function refresh() {
+  const disclose = $('discloseToggle').checked;
+  $('disclosure').classList.toggle('show', disclose);
+  if (!disclose) { $('yourBrand').checked = false; $('brandedContent').checked = false; }
+
+  const yours = $('yourBrand').checked;
+  const branded = $('brandedContent').checked;
+  const privacy = $('privacy').value;
+
+  // Branded content can only be public or friends: block "Only me" (and followers-only)
+  [...$('privacy').options].forEach((o) => {
+    if (o.value === 'SELF_ONLY' || o.value === 'FOLLOWER_OF_CREATOR') {
+      o.disabled = branded;
+      o.title = branded ? 'Branded content visibility cannot be set to private.' : '';
+      o.textContent = PRIVACY_LABELS[o.value] + (branded ? ' — not available for branded content' : '');
+    }
+  });
+  const privateSel = privacy === 'SELF_ONLY' || privacy === 'FOLLOWER_OF_CREATOR';
+  $('brandedContent').disabled = privateSel;
+  $('lblBranded').classList.toggle('disabled', privateSel);
+  $('lblBranded').title = privateSel ? 'Branded content visibility cannot be set to private.' : '';
+  if (privateSel && branded) $('brandedContent').checked = false;
+
+  // label notice
+  let note = '';
+  if (disclose && ($('brandedContent').checked)) note = 'Your photo/video will be labeled as "Paid partnership".';
+  else if (disclose && yours) note = 'Your photo/video will be labeled as "Promotional content".';
+  $('labelNote').textContent = note;
+
+  // consent declaration
+  $('consent').innerHTML = $('brandedContent').checked
+    ? 'By posting, you agree to TikTok\'s ' + BC + ' and ' + MUSIC + '.'
+    : 'By posting, you agree to TikTok\'s ' + MUSIC + '.';
+
+  // post button
+  let reason = '';
+  if (!state.canPost) reason = 'This account cannot post right now. Please try again later.';
+  else if (!state.file) reason = 'Choose a video to post.';
+  else if (!state.durationOk) reason = 'The video is too long for this account.';
+  else if (!privacy) reason = 'Select who can view this video.';
+  else if (disclose && !yours && !$('brandedContent').checked)
+    reason = 'You need to indicate if your content promotes yourself, a third party, or both.';
+  $('postBtn').disabled = !!reason || state.posting;
+  $('postWrap').title = reason;
+  $('postHint').textContent = reason;
+}
+
+// ── confirm → post ──
+$('postForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  if ($('postBtn').disabled) return;
+  const items = [
+    'Video: ' + state.file.name + ' (' + (state.file.size / MB).toFixed(1) + ' MB)',
+    'Caption: ' + ($('title').value.trim() || '(none)'),
+    'Who can view: ' + PRIVACY_LABELS[$('privacy').value],
+    'Comments: ' + ($('allowComment').checked ? 'on' : 'off') + ' · Duet: ' + ($('allowDuet').checked ? 'on' : 'off') +
+      ' · Stitch: ' + ($('allowStitch').checked ? 'on' : 'off'),
+  ];
+  if ($('discloseToggle').checked) items.push('Content disclosure: ' + [$('yourBrand').checked && 'Your brand', $('brandedContent').checked && 'Branded content'].filter(Boolean).join(' + '));
+  $('cfList').innerHTML = items.map((t) => '<li>' + t.replace(/</g, '&lt;') + '</li>').join('');
+  $('confirmModal').classList.add('show');
+});
+$('cfCancel').onclick = () => $('confirmModal').classList.remove('show');
+$('cfOk').onclick = () => { $('confirmModal').classList.remove('show'); post(); };
+
+function progress(pct, text) {
+  $('progress').classList.add('show');
+  $('barFill').style.width = pct + '%';
+  $('progressText').textContent = text;
+}
+
+function contentType(f) {
+  if (f.type) return f.type;
+  const ext = f.name.split('.').pop().toLowerCase();
+  return ext === 'mov' ? 'video/quicktime' : ext === 'webm' ? 'video/webm' : 'video/mp4';
+}
+
+async function post() {
+  state.posting = true; refresh();
+  $('postForm').querySelectorAll('input,textarea,select').forEach((el) => el.disabled = true);
+  const f = state.file;
+  try {
+    progress(5, 'Starting upload to TikTok…');
+    const r = await fetch('/api/tiktok/init', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        video_size: f.size,
+        title: $('title').value,
+        privacy_level: $('privacy').value,
+        allow_comment: $('allowComment').checked,
+        allow_duet: $('allowDuet').checked,
+        allow_stitch: $('allowStitch').checked,
+        brand_organic_toggle: $('yourBrand').checked,
+        brand_content_toggle: $('brandedContent').checked,
+        consent: true,
+      }),
+    });
+    const init = await r.json();
+    if (!r.ok) throw new Error((init.error && (init.error.message || init.error.code)) || 'Could not start the post');
+
+    const { upload_url, publish_id, chunk_size, total_chunk_count } = init;
+    const type = contentType(f);
+    for (let i = 0; i < total_chunk_count; i++) {
+      const start = i * chunk_size;
+      const end = i === total_chunk_count - 1 ? f.size : start + chunk_size;
+      const range = 'bytes ' + start + '-' + (end - 1) + '/' + f.size;
+      const blob = f.slice(start, end);
+      progress(10 + Math.round((i / total_chunk_count) * 75), 'Uploading video… ' + Math.round((start / f.size) * 100) + '%');
+      let resp;
+      if (f.size <= PROXY_MAX) {
+        resp = await fetch('/api/tiktok/upload', {
+          method: 'PUT', body: blob,
+          headers: { 'Content-Type': type, 'X-Upload-Url': upload_url, 'X-Content-Range': range },
+        });
+      } else {
+        resp = await fetch(upload_url, { method: 'PUT', body: blob, headers: { 'Content-Type': type, 'Content-Range': range } });
+      }
+      if (!resp.ok && resp.status !== 206 && resp.status !== 201) throw new Error('Upload failed (HTTP ' + resp.status + ')');
+    }
+
+    progress(90, 'Uploaded. TikTok is processing your video…');
+    showResult('PROCESSING_UPLOAD');
+    pollStatus(publish_id, 0);
+  } catch (e) {
+    banner('Post failed: ' + (e.message === 'Failed to fetch' ? 'network error while uploading. Try a smaller video (under 4 MB) or try again.' : e.message));
+    state.posting = false;
+    $('postForm').querySelectorAll('input,textarea,select').forEach((el) => el.disabled = false);
+    $('progress').classList.remove('show');
+    renderDisabledInteractions();
+    refresh();
+  }
+}
+
+function renderDisabledInteractions() {
+  const c = state.creator || {};
+  if (c.comment_disabled) $('allowComment').disabled = true;
+  if (c.duet_disabled) $('allowDuet').disabled = true;
+  if (c.stitch_disabled) $('allowStitch').disabled = true;
+}
+
+const STATUS_TEXT = {
+  PROCESSING_UPLOAD: 'Processing upload',
+  PROCESSING_DOWNLOAD: 'Processing',
+  SEND_TO_USER_INBOX: 'Sent to your TikTok inbox',
+  PUBLISH_COMPLETE: 'Published',
+  FAILED: 'Failed',
+};
+
+function showResult(status) {
+  $('postForm').classList.add('hidden');
+  $('result').classList.add('show');
+  $('statusText').textContent = STATUS_TEXT[status] || status;
+}
+
+async function pollStatus(id, n) {
+  try {
+    const r = await fetch('/api/tiktok/status', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ publish_id: id }),
+    });
+    const s = await r.json();
+    if (s.status) $('statusText').textContent = STATUS_TEXT[s.status] || s.status;
+    if (s.status === 'PUBLISH_COMPLETE') {
+      progress(100, 'Done');
+      $('resultTitle').textContent = 'Posted successfully';
+      $('resultText').textContent = 'Your video has been published to TikTok. It may take a few minutes to appear on your profile.';
+      return;
+    }
+    if (s.status === 'FAILED') {
+      $('result').querySelector('.big').textContent = '⚠️';
+      $('resultTitle').textContent = 'TikTok could not publish this video';
+      $('resultTitle').style.color = 'var(--err)';
+      $('resultText').textContent = 'Reason: ' + (s.fail_reason || 'unknown') + '. Please check the video and try again.';
+      return;
+    }
+  } catch (e) { /* keep polling */ }
+  if (n < 40) setTimeout(() => pollStatus(id, n + 1), 4000);
+}
+
+$('anotherBtn').onclick = () => location.reload();
+$('logoutBtn').onclick = async () => {
+  await fetch('/api/tiktok/logout', { method: 'POST' });
+  location.reload();
+};
+
+refresh();
+loadMe();
+</script>
+</body>
+</html>
